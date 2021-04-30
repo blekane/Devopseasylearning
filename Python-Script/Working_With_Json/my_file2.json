@@ -1,0 +1,32 @@
+[
+    {
+        "Name_1": "Narendra",
+        "skills_Narendra": [
+            "Python",
+            "Azue",
+            "yaml",
+            "AWS"
+        ],
+        "Name2": "Paul",
+        "skills_Paul": [
+            "Java",
+            "Ansible",
+            "Git",
+            "Jenkins"
+        ],
+        "Name3": "Jhon",
+        "skills_Jhon": [
+            "Nginx",
+            "Kubernets",
+            "Docker",
+            "Maven"
+        ],
+        "Name4": "Tom",
+        "skills_Tom": [
+            "C#",
+            "Nagios",
+            "SVN",
+            "TOMCAT"
+        ]
+    }
+]

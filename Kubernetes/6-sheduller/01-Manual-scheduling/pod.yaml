@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Pod 
+metadata:
+  name: myapp-pod 
+  labels: 
+    app: myapp   
+    tier: front-end     
+spec:
+  containers: 
+    - name: myapp 
+      image: nginx
+      ports:
+        - containerPort: 80 
+  nodeName: node02
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+  nodeName: kube-01
+
+  
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  nodeName: kube-01
+  - name: nginx
+    image: nginx
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  nodeName: master
+  - name: nginx
+    image: nginx
+  
+
+
+apiVersion: v1
+kind: Binding
+metadata:
+  name: nginx
+target:
+  apiVersion: v1
+  kind: Node
+  name: node02
+
+  curl --header "Content-Type:application/json" --request POST --data '{"apiVersion":"v1", "kind": "Binding“ .... }http://$SERVER/api/v1/namespaces/default/pods/$PODNAME/binding/

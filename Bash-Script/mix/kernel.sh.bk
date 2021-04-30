@@ -1,0 +1,47 @@
+#!/bin/bash
+
+
+
+
+
+sp()
+{
+sleep 4
+}
+
+
+
+echo "***WARNING***" 
+echo "For security purpose, the kernel need to be updated now!!!" 
+sp
+wget http://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.0.7.tar.xz
+tar xvf linux-5.0.7.tar.xz
+cd linux-5.0.7
+echo "Now installing all the depedencies and modules"
+sp
+yum groupinstall "Development Tools" -y
+yum install openssl* -y
+yum install libncurses5-dev -y
+yum install ncurses-devel -y
+yum install gcc* -y
+yum install elfutils-libelf-devel -y
+yum install centos-release-scl -y
+yum-config-manager --enable rhel-server-rhscl-7-rpms
+yum install devtoolset-7 -y
+scl enable devtoolset-7 bash &
+make defconfig
+make
+make modules
+make modules_install
+make install
+sed -i 's/default=1/default=0/g' /etc/grub.conf
+
+echo "The kernel has been updated successfully!!!"
+sp
+echo "Thank you"
+sp
+
+echo "The system is going to reboot now!!!"
+sp
+
+reboot

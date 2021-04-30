@@ -1,0 +1,4 @@
+Server Name,Java Version,Git version,Momery Available,Disk Usage
+DB server,1.8,2.6,5,6000
+Web server,1.8,2.0,8,7000
+Test Server,1.9,6.0,2,5000

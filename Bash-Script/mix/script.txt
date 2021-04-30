@@ -1,0 +1,505 @@
+#!/bin/bash
+cat << END
+
+      *=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*==*=*
+      *                    **** Warning ***                                      *
+      *  This computer system is the private property of Data Service Group INC  *
+      *  It is for authorized use only.                                          *
+      *                                                                          *
+      *  Unauthorized or improper use of this system may result in civil and     *
+      *  criminal penalties and administrative or disciplinary action,as         *
+      *  appropriate. By continuing to use this system you indicate your         *
+      *  awareness of and consent to these terms and conditions of use. LOG OFF  *
+      *  IMMEDIATELY if you do not agree to the conditions stated in this        *
+      *  warning!!!!!                                                            *
+      *=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*==*=*
+
+END
+-------------------------------------------------------------------------------------------------------------------------------------------------
+#!/bin/sh
+
+echo ""
+echo  '/------------------------------------------------------------------------\'
+echo "|                    **** Warning ***                                    |"
+echo "| This computer system is the private property of Data Service Group INC |"
+echo "| It is for authorized use only.                                         |"
+echo "|                                                                        |"
+echo "| Unauthorized or improper use of this system may result in civil and    |"
+echo "| criminal penalties and administrative or disciplinary action,as        |"
+echo "| appropriate. By continuing to use this system you indicate your        |"
+echo "| awareness of and consent to these terms and conditions of use. LOG OFF |"
+echo "| IMMEDIATELY if you do not agree to the conditions stated in this       |"
+echo "| warning!!!!!                                                           |"
+echo '\------------------------------------------------------------------------/'
+echo ""
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+#! /usr/bin/bash
+
+# VLC AND GOOGLE CHROME INSTALLATION  ON CENTOS 7
+
+# root privilege if the user is not root, he will be prompt for password
+if [ "$(whoami)" != "root" ]
+then
+    sudo -s "$0"
+    exit
+fi
+
+# VLC packages
+yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+yum -y install https://download1.rpmfusion.org/free/el/rpmfusion-free-release-7.noarch.rpm
+yum -y install vlc
+
+# google packages
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+yum -y install ./google-chrome-stable_current_*.rpm
+
+# To remove google chrome setup
+rm -rf "google-chrome-stable_current_x86_64.rpm"
+
+echo "Installation of VLC and Google Chrome Copmpleted"
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+#! /bin/bash
+
+# this script will create a user account
+
+# root privilege if the user is not root
+if [ "$(whoami)" != "root" ]
+then
+    sudo -s "$0"
+    exit
+fi
+
+
+read -p "Enter the first name: " FIRST_NAME 
+read -p "Enter the last name: " LAST_NAME
+#read -p "Enter the office number: " OFFICE_NUMBER
+#read -p "Enter the celphone number: " CELPHONE
+#read -p "Enter the home phone number: " HOMEPHONE
+
+useradd $FIRST_NAME
+echo "Enter you password and confirm"
+passwd $FIRST_NAME
+
+read FIRST SECOND
+chfn -f $LAST_NAME + $FIRST_NAME $FIRST_NAME
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+#! /usr/bin/bash
+
+echo
+
+echo "hello world"
+
+# A list of the commonly used system variables in Linux
+echo
+echo The bash version is: $BASH_VERSION
+echo The name of the your computer is: $HOSTNAME
+echo Your home directory is :$HOME
+echo Your present working directory is: $PWD
+echo echo The Shell being used by the user $SHELL
+echo You path is: $PATH
+echo The user who is curently login is: $USER
+echo The user ID is: $UID
+echo The Default terminal emulator is: $TERM
+echo your current language is: $LANG
+echo
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+#!/usr/bin/env bash
+
+# this script will update the system, Upgrade the kernel and install some softwares.
+
+# root privilege if the user is not root
+
+if [ "$(whoami)" != "root" ]
+then
+    sudo -s "$0"
+    exit
+fi
+
+
+function Update_Centos() {
+  yum update -y
+}
+
+
+function centos_7_kernel_upgrade() {
+  # All the Upgrade packages
+  rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+  rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
+  yum -y --enablerepo=elrepo-kernel install kernel-lt
+  yum -y --enablerepo=elrepo-kernel install kernel-ml
+  grub2-set-default 0  # to set new kernel as default
+
+  # awk -F\' '$1=="menuentry " {print $2}' /etc/grub2.cfg : List the Kernel Entries in GRUB2 file
+}
+
+
+function Google_installation() {
+  # google packages
+  wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+  yum -y install ./google-chrome-stable_current_*.rpm
+
+  # To remove google chrome setup
+  rm -rf "google-chrome-stable_current_x86_64.rpm"
+  echo "Installation of Google chrome Copmpleted"
+}
+
+
+function VLC_installation() {
+  # VLC packages
+  yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+  yum -y install https://download1.rpmfusion.org/free/el/rpmfusion-free-release-7.noarch.rpm
+  yum -y install vlc
+  echo "Installation of VLC Copmpleted"
+}
+
+
+function atom_installation() {
+  echo "installing git."
+  yum install wget git -y
+  echo "Downloading atom packages from https://atom.io/"
+  wget https://github.com/atom/atom/releases/download/v1.18.0/atom.x86_64.rpm # to download atom
+  echo "Installing atom package"
+  yum localinstall atom.x86_64.rpm -y # to install atom
+
+  # atom will setup will be safe in the same directory with the script
+  rm -rf "atom.x86_64.rpm" # to remove atom from home directory
+
+  echo "Type Atom in your terminal to launch the Text Editor or go to application- programming and launch atom"
+  echo "Enjoy Atom!"
+}
+
+
+function softwares_installation() {
+  yum -y install shadow-utils
+  yum -y install tmux
+  yum -y install screen
+  yum -y install openssh-server
+  yum -y install tree
+  yum -y install gnome-system-monitor
+  yum -y install system-config-users
+  yum -y install nano
+}
+
+
+function Shutdown() {
+  echo "Upgrade Copmpleted."
+  echo "Server will restart in 1 minute. Please save your work."
+
+  # To reboot the Server
+  shutdown -r +1
+}
+
+
+#calling the functions
+
+Update_Centos  # to update all applications
+centos_7_kernel_upgrade
+VLC_installation
+atom_installation
+Google_installation
+softwares_installation
+Shutdown # this will be the last function to run when everything is Copmpleted
+exit 0
+-------------------------------------------------------------------------------------------------------------------------------------------------
+# system inventoriy
+#!/bin/bash
+
+#Description: This script is to do an inventory of our system and install some dependencies
+
+#Autor:SS10
+
+OS=$(lsb_release -a | grep Description | awk -F":" '{print $2}' | awk  '{print $1 " "  $3}')
+
+VERS=$((uname -a | awk '{print $3}') | awk -F"-" '{print$1}' | awk -F"." '{print$1 "." $2}')
+
+FM=$(free -m | grep Mem | awk '{print$4}')
+
+TM=$(free -m | grep Mem | awk '{print$2}')
+
+DS=$(fdisk -l | grep GB | grep sda | awk '{print$3}')
+
+
+echo
+echo "Now making the inventory of the system"
+sleep 2
+echo
+echo "Checking the Os Version,please wait..."
+sleep 4
+echo
+
+echo "The Os version of the system is ${OS}"
+sleep 2
+echo
+
+echo "Checking the kernel version..."
+sleep 4
+echo
+
+echo "The kernel version is ${VERS}"
+sleep 4
+echo
+echo "Checking the hardwares components..."
+sleep 3
+echo
+echo "The available memory space is ${FM}Mb out of ${TM}Mb for total space"
+echo
+sleep 2
+echo "The disk size is ${DS}GB"
+sleep 6
+echo
+echo "We are now installing some packages..."
+sleep 3
+echo
+echo "Checking,downloading and installing packages, please wait and relax while drinking your coffee..."
+echo
+yum install samba -y
+yum install httpd -y
+yum install mysql -y
+yum install gcc* -y
+yum install finger -y
+yum install git -y
+echo
+
+echo "All your packages are now installed. Thank you!"
+echo
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+# bashrc_file
+echo -n "Uptime: "; uptime
+echo ""
+
+MYNAME='Kevin Skoglund'
+export MYNAME
+
+export LESS='-M'
+# must use double-quotes when calling a shell variable
+export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
+
+export HISTSIZE=10000                      # 500 is default
+export HISTFILESIZE=1000000
+export HISTTIMEFORMAT='%b %d %I:%M %p '    # using strftime format
+export HISTCONTROL=ignoreboth              # ignoredups:ignorespace
+export HISTIGNORE="history:pwd:exit:df:ls:ls -la:ll"
+
+export PS1="\W > "
+
+alias ll='ls -lahG'
+alias home='cd ~'
+alias up='cd ..'
+alias h='history'
+
+# can also redefine a command to add options
+alias mv='mv -i'
+alias cp='cp -i'
+alias rm='rm -i'
+alias df='df -h'
+alias du='du -h'
+alias mkdir='mkdir -p'
+
+# can be used to fix common typos you make
+alias pdw='pwd'
+
+# GREP color codes
+# Attributes:   Text color:    Background:
+#   0 reset all   30 black       40 black
+#   1 bright      31 red         41 red
+#   2 dim         32 green       42 green
+#   4 underscore  33 yellow      43 yellow
+#   5 blink       34 blue        44 blue
+#   7 reverse     35 purple      45 purple
+#   8 hidden      36 cyan        46 cyan
+#                 37 white       47 white
+# Separate with ";"
+# I love black and green
+export GREP_COLOR="30;46"
+
+# Specify options grep should use by default
+# color = auto means the colo will display only in the terminal and not when i redirect the output to a  file.
+# color = never means it will never display the color.
+# color =always means it will always display the color.
+export GREP_OPTIONS="--color=auto"
+-------------------------------------------------------------------------------------------------------------------------------------------------
+# badlogin_with_date
+#! /usr/bin/bash
+
+# root privilege to cat /var/log/secure
+if [ "$(whoami)" != "root" ]
+then
+    sudo -s "$0"
+    exit
+fi
+
+# cat the log, print column 9, remove duplicate with sort command and redirect the result to users.txt  
+cat /var/log/secure | grep "input_userauth_request" | awk '{print $1,$2,$3,$9}' > ~/users.txt
+
+# change to home directory
+cd ~
+
+# add execute permission
+chmod +x users.txt
+
+# for line
+wc -l users.txt
+
+# this append the text at the beginning of the line
+sed  -i '1i # List of unathorize users with date and time:' users.txt
+
+# sed  -i '3i List of unathorize users' users.txt # this append the text at the third line 
+# echo  "List of unathorize users" >> users.txt # this append the text at the end of the line
+
+# display the result on the screen
+cat users.txt | less
+
+# delete the file in the home directory 
+rm -rf ~/users.txt
+-------------------------------------------------------------------------------------------------------------------------------------------------
+# all_users.
+#! /bin/bash
+
+#This script will pull all the users from /etc/passwd and display the output.
+
+sed -n '/tcpdump/, /print still the end/p' /etc/passwd | awk -F":" '{print$1}' | sed '/tcpdump/d'| sort -u | less -NM > ~/users.txt
+
+cd ~
+
+sed -i '1i This is the all the usernames on this server.' users.txt
+
+cat users.txt | less -NM
+
+rm -f users.txt
+
+exit 0
+-------------------------------------------------------------------------------------------------------------------------------------------------
+# system_varibles
+#! /usr/bin/bash
+
+echo
+
+echo "hello world"
+
+# A list of the commonly used system variables in Linux
+echo
+echo The bash version is: $BASH_VERSION
+echo The name of the your computer is: $HOSTNAME
+echo Your home directory is :$HOME
+echo Your present working directory is: $PWD
+echo echo The Shell being used by the user $SHELL
+echo You path is: $PATH
+echo The user who is curently login is: $USER
+echo The user ID is: $UID
+echo The Default terminal emulator is: $TERM
+echo your current language is: $LANG
+echo
+-------------------------------------------------------------------------------------------------------------------------------------------------
+# packages installation
+#! /usr/bin/bash
+
+echo "We will be installing some few packages and this will take a while......"
+
+sleep 5
+echo "Installing samba"
+yum install samba -y
+
+sleep 5
+echo "Installing httpd"
+yum install httpd -y # to apache or webserver
+
+sleep 5
+echo "Installing mysql"
+yum install mysql -y # for database
+
+sleep 5
+echo "Installing gcc*"
+yum install gcc* -y # * to install all packages that start with gcc
+
+sleep 5
+echo "Installing finger"
+yum install finger -y # use to check user account on the system
+
+sleep 5
+echo "Installing git"
+yum install git -y
+
+echo "The installation was successful........."
+
+exit 50
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+

@@ -1,0 +1,2 @@
+---
+environment : "prod" # All resources are named using this value
