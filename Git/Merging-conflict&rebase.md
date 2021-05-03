@@ -36,4 +36,4 @@ In git, there 2 ways to integrate changes from one branch to another branch
 - Re-writes the project history
 - We get much cleaner and linear project history
 
-![](/images/rebase.JPG)
+❮img src="images/rebase.JPG.png" width="300" ❯
