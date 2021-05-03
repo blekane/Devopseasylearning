@@ -1,7 +1,4 @@
 # Git merge workflow
-
-- [Git branching model](https://nvie.com/files/Git-branching-model.pdf)
-
 - [Gitflow Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow#:~:text=A%20release%20branch%20is%20created,merged%20into%20develop%20and%20master)
 
 - [Creating Pull Request](https://www.youtube.com/watch?v=TQlhf1OMeA4&list=RDCMUCuFg53ZTr6maqBC-4i9o4-w&index=4)
@@ -28,13 +25,11 @@
 8. The release branch can be deleted and we can restart the cycle
 
 
-### Case 1
+### Case 2
 **Naming convenction:** master, develop, dev1, dev2, dev3, qa1, qa2, stg1, stg2, prod1, prod1, feature/EC-3000, release1.4, feature/ON-680 etc.
 
-
-    + These branches are used to deploy the app/service's code to a particular environment. Once a developer is ready to deploy to an environment, they will put in a ***pull request*** from the **develop** branch to that environment. Depending on the environment, team members will review the code and approve the PR. Once the code is merged a deployment will start. 
-
-    + **NB:** EC-3000 or ON-680 is the ticket number for the new feature to be develop
+- These branches are used to deploy the app/service's code to a particular environment. Once a developer is ready to deploy to an environment, they will raise a ***pull request*** from the **develop**. Depending on the environment, team members will review the code and approve the PR. Once the code is merged a deployment will start. 
+- **NB:** EC-3000 or ON-680 is the ticket number for the new feature to be develop
 
 
 ### Staging, Qa and Production environments
@@ -55,7 +50,6 @@ For smaller companies (it's not clear how big yours might be), three environment
 ```
 ### What is a Master Branch?
 The master branch is the branch that reflects what currently running is production
-
 
 ### What is a Feature Branch?
 **A feature branch** is simply a separate branch in your Git repo used to implement a single feature in your project. When “using feature branches,” you are creating a new branch for each new feature you develop, instead of just checking in all your changes into the master branch (which is typically the name given for the main development branch).
@@ -90,15 +84,8 @@ If your pull request is approved, the maintainer will merge your changes into th
 A difference that occurs between merged branches. **Merge conflicts** happen when people make different changes to the same line of the same file, or when one person edits a file and another person deletes the same file. The merge conflict must be resolved before you can merge the branches.
 
 
-Summary
-Here we discussed the Gitflow Workflow. Gitflow is one of many styles of Git workflows you and your team can utilize.
-
-Some key takeaways to know about Gitflow are:
-
-The workflow is great for a release-based software workflow.
-Gitflow offers a dedicated channel for hotfixes to production.
- 
-**The overall flow of Gitflow is:**
+### The overall flow of Gitflow is:
+- [Git branching model](https://nvie.com/files/Git-branching-model.pdf)
 
 1. A develop branch is created from master
 2. A release branch is created from develop
@@ -107,3 +94,6 @@ Gitflow offers a dedicated channel for hotfixes to production.
 5. When the release branch is done it is merged into develop and master
 6. If an issue in master is detected a hotfix branch is created from master
 7. Once the hotfix is complete it is merged to both develop and master
+
+![](/images/git-worflow.JPG)
+

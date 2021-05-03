@@ -202,8 +202,7 @@ git fetch  origin
 git fetch  origin_git
 git fetch  origin_bitbucket 
 ```
-
-
+```
 mkdir git-test
 git init
 echo "This is file 1" >> file1.txt
@@ -214,5 +213,5 @@ git log --oneline
 
 git reset --hard a2c5577
 git reset --hard HEAD~1
-
+```
 
