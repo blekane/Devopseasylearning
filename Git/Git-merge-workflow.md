@@ -60,7 +60,7 @@ The master branch is the branch that reflects what currently running is producti
 
 
 ### What is the release branch?
-*A release branch* will be created when all development for a particular deployment is complete and we are ready to start testing for that deployment. This branch will be a snapshot of the develop branch and will be the branch that is promoted through environments unless there is a requirement to use develop
+**A release branch** will be created when all development for a particular deployment is complete and we are ready to start testing for that deployment. This branch will be a snapshot of the develop branch and will be the branch that is promoted through environments unless there is a requirement to use develop
 
 ### What is Git Merge?
 Merge is a command used in Git to move the changes in branch to another. Usually, the new features are developed in the dev branch and merged into the master branch after finishing the development. All the changes in the dev branch is added to the master branch on the merge. but the dev branch will be unaffected.
@@ -85,7 +85,7 @@ If your pull request is approved, the maintainer will merge your changes into th
 A difference that occurs between merged branches. **Merge conflicts** happen when people make different changes to the same line of the same file, or when one person edits a file and another person deletes the same file. The merge conflict must be resolved before you can merge the branches.
 
 
-### The overall flow of Gitflow is:
+### The overall flow of Git Workflow
 - [Git branching model](https://nvie.com/files/Git-branching-model.pdf)
 
 1. A develop branch is created from master

@@ -107,72 +107,6 @@ rm -rf <file name>
 rm -rf file.txt
 ```
 
-### What is the difference between git reset and git revert?
-- Git reset will revert the changes and delete all the commits in the log while git revert will revert the changes, required and new commits and keep all the commits in the log so that we can still revert to any commit as needed.
-- We can get any change back with git revert because it going to create a new commit ID while git reset will not create any `commit ID`
-- **NB:** Git reset hard is a restricted command because changes will be going for ever from the working directory, staging, local repository and log file. 
-
-
-**Git reset command**
-git reset --hard HEAD~2 : to reset the first 2 commit
-git reset --hard HEAD~1 : to reset the first commit
-git reset --hard HEAD~n : to reset the first n commit
-
-
-**We have 3 type of reset in git:**
-- **Hard reset:** change will be wiped out from the working directory, staging area and local repository. 
-```
-git reset --hard HEAD~1
-```
-- **Soft reset:** change will be wiped out from the local repository and you will have the copy of your files in your working directory and staging area.
-```
-git reset --soft HEAD~1
-```
-- **Mixed reset:** change will be wiped out from the local repository, staging area and you will have the copy of your files only in your working directory. 
-**NB:** This is the default command if we type git reset command without specifying any option.
-```
-git reset --mixed HEAD~1
-git reset HEAD~1
-```
-
-### Git reset command
-git reset --hard HEAD~2 : to reset the first 2 commit
-git reset --hard HEAD~1 : to reset the first commit
-git reset --hard HEAD~n : to reset the first n commit
-
-
-
-### Local Git - Reverting
-```
-git log
-git revert <hash>
-git revert a80df29cc709e25db49cdfed11c0c1b0399d4a72
-```
-
-```
-mkdir git-test
-git init
-echo "This is file 1" >> file1.txt
-git add .
-git commit -m "file 1 added"
-git ls-files
-git push -u origin master
-
-echo "This is file 2" >> file2.txt
-git add .
-git commit -m "file 2 added"
-git ls-files
-git push -u origin master
-
-git log --oneline
-git revert <file 1 added commit ID>
-git log --oneline
-ls
-git ls-files
-git status
-git push -u origin master
-```
-
 ### What's the difference between git fetch and git pull?
 [git fetch and git pull](https://www.git-tower.com/learn/git/faq/difference-between-git-fetch-git-pull/)
 
@@ -202,16 +136,3 @@ git fetch  origin
 git fetch  origin_git
 git fetch  origin_bitbucket 
 ```
-```
-mkdir git-test
-git init
-echo "This is file 1" >> file1.txt
-git add .
-git commit -m "file 1 added"
-git ls-files
-git log --oneline
-
-git reset --hard a2c5577
-git reset --hard HEAD~1
-```
-

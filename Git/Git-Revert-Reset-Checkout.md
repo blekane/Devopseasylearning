@@ -66,7 +66,7 @@ git log --oneline
 git revert 5fa9842
 git log --oneline
 git status
-ls: change will be gone also from the working area
+ls: changes will be gone also from the working area
 ```
 
 ### What is the difference between git reset and git revert?
