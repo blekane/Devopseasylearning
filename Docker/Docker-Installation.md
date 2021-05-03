@@ -45,7 +45,7 @@ apt-get update
 apt-get install docker.io
 ```
 
-### Docker Installation on AWS CentOs Instance
+### Docker Installation on AWS CentOs EC2 Instance
 ```
 sudo su -
 Or
