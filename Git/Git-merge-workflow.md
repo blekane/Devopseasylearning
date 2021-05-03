@@ -72,6 +72,7 @@ Merge is a command used in Git to move the changes in branch to another. Usually
 [About pull request reviews](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-request-reviews#required-reviews)
 
 **How do I get changes approved with a pull request?**
+
 After **forking the repository** on the remote hosting service and cloning it to your local machine, you can start working on making changes to the code.
 
 After you’re happy with the changes, you can push the work up to your fork and open a pull request that will signal the main repo. This pull request asks the maintainer(s) to review your work, provide comments, request edits, etc.
