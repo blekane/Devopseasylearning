@@ -78,7 +78,7 @@ TOMCAT: /usr/local/tomcat/webapps/
 ```
 
 
-## Create a web content for NGINX and mount the container
+## Create a web content for NGINX and mount the container with volume mount
 
 1. Create a web content for nginx
 
@@ -126,7 +126,7 @@ vim /var/lib/docker/volumes/nginx_volume/_data/index.html
 </html>
 ```
 
-## Create a web content for HTTPD OR APACHE and mount the container
+## Create a web content for HTTPD OR APACHE and mount the container with volume mount
 1. Create a web content for for httpd
 ```
 cd /var/lib/docker/volumes/httpd_volume/_data/
@@ -150,7 +150,7 @@ http://10.0.0.94:8020/
 /var/lib/docker/volumes/httpd_volume/_data/index.html
 ```
 
-## Create a web content for HTTPD OR APACHE and mount the container
+## Create a web content for HTTPD OR APACHE and mount the container with volume mount
 1. Create a web content for Tomcat
 ```
 cd /var/lib/docker/volumes/tomcat_volume/_data/
@@ -172,12 +172,21 @@ http://<IP>:8030/happy_new_year
 http://10.0.0.94:8030/happy_new_year
 ```
 
+### Volume mount using the mount instead of -v:
+```
+docker volume create tomcat2_volume
+cd /var/lib/docker/volumes/tomcat2_volume/_data/
+wget https://linux-devops-course.s3.amazonaws.com/warfiles/addressbook.war
+```
+```
+docker run -d --name my-tomcat2 -p 8050:8080 --mount type=volume,source=tomcat2_volume,target=/usr/local/tomcat/webapps/ tomcat:latest
+```
+```
+http://<IP>:8050/addressbook
+http://10.0.0.94:8050/addressbook
+```
 
-
-
-
-
-## Create a web content for HTTPD OR APACHE and mount the container
+## Create a web content for HTTPD OR APACHE and mount the container with bind mount
 1. Create a web content for for httpd
 ```
 mkdir /covid-19
@@ -190,15 +199,16 @@ rm -rf covid19
 2. Run the container and mount the volume for httpd
 v = volume
 ```
-docker run -d --name my-httpd -p 8020:80 -v httpd_volume:/usr/local/apache2/htdocs/ httpd:latest
+docker run -d --name covid19 -p 8040:80 --mount type=bind,source=/covid-19,target=/usr/local/apache2/htdocs/ httpd:latest
 ```
 3. Test it
 ```
-http://<IP>:8020/
-http://10.0.0.94:8020/
+http://<IP>:8040/
+http://10.0.0.94:8040/
 ```
 
 4. Modify the content and refresh the browser
 ```
-/var/lib/docker/volumes/httpd_volume/_data/index.html
+cd /covid-19
+vim index.html 
 ```
