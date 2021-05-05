@@ -244,7 +244,7 @@ docker cp /file1.txt <container ID>:/tmp/file2.txt
 docker cp /file1.txt my-centos:/tmp/file2.txt
 docker exec -it 5d9c798d0d44 bash
 ```
-![](/images/ccopy-from-host-to-container.JPG)
+![](/images/copy-from-host-to-container.JPG)
 
 
 
