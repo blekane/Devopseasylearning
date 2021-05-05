@@ -101,6 +101,7 @@ cat /var/lib/docker/volumes/nginx_volume/_data/index.html
 ```
 
 **2. Run the container and mount the volume for NGINX**
+
 v = volume
 ```
 docker run -d --name my-nginx -p 8015:80 -v nginx_volume:/usr/share/nginx/html nginx:latest
@@ -135,6 +136,7 @@ cp -R static-website-example/* .
 rm -rf static-website-example
 ```
 **2. Run the container and mount the volume for httpd**
+
 v = volume
 ```
 docker run -d --name my-httpd -p 8020:80 -v httpd_volume:/usr/local/apache2/htdocs/ httpd:latest
@@ -158,6 +160,7 @@ wget https://linux-devops-course.s3.amazonaws.com/warfiles/happy_new_year.war
 ```
 
 **2. Run the container and mount the volume for httpd**
+
 v = volume
 ```
 docker run -d --name my-tomcat -p 8030:8080 -v tomcat_volume:/usr/local/tomcat/webapps/ tomcat:latest
@@ -197,6 +200,7 @@ cp -R covid19/* .
 rm -rf covid19
 ```
 **2. Run the container and mount the volume for httpd**
+
 v = volume
 ```
 docker run -d --name covid19 -p 8040:80 --mount type=bind,source=/covid-19,target=/usr/local/apache2/htdocs/ httpd:latest
