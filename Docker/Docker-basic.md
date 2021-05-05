@@ -90,7 +90,7 @@ docker run -it -d <image name> image name:tag or ID /bin/bash
 docker run -itd my-centos centos:latest bash
 ```
 
-### List all the running container
+### List all the running containers
 ``` 
 docker ps
 ```
@@ -153,7 +153,7 @@ docker rm + the beginning of the container ID
 docker rm ebcb e07c e3e68 6df8 3e55 bdae 73d1
 ```
 
-### Force and delete running container
+### Force and delete running containers
 ```
 docker rm -f <container ID>
 ```
@@ -183,7 +183,6 @@ This is important if you want to save any modification or any change that you ma
 ```
 docker commit <container ID or name> <name-for-new-image>
 ```
-
 
 ### Tag an image 
 Tag an image is the same as renameming the image. This is usefull when create a new image and you want to push it to docker hub or to make the copy of your image
@@ -251,9 +250,3 @@ docker exec -it 5d9c798d0d44 bash
 
 
 
-
-
-Home directory of docker where docker stored everything
-# find / -name docker
-/var/lib/docker
-# cd /var/lib/docker
