@@ -64,7 +64,8 @@ http://10.0.0.94:8889/
 **-P (uppercase)** will expose the container to a random port
 **-p (lowercase)** will expose the container to a specific port
 
-
+```
+```
 ### What is the difference between binding port forwarding and free port forwarding?
 *free port forwarding* will expose the container to a random port while *binding port forwarding* will expose the container to a specific port.
 
