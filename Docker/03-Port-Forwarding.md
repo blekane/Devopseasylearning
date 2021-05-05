@@ -12,7 +12,7 @@ Port forwarding might be disable on docker host and we need to enable first. Add
 net.ipv4.ip_forward=1
 ```
 
-restarted the network service and validated the setting
+**restarted the network service and validated the setting**
 ```
 systemctl restart network
 sysctl net.ipv4.ip_forward
@@ -24,13 +24,15 @@ We have 3 types of port forwarding in docker
 - Free port forwarding 
 - Binding port forwarding 
 
-1. Not port forwarding 
+**1. Not port forwarding**
+
 The container will not be accessible from outside.
 ```
 docker run -d nginx
 ```
 
-2. Free port forwarding 
+**2. Free port forwarding**
+
 In this case, docker will automatically assign a random range from  `30000-65535`
 ```
 docker run -d -P nginx
@@ -43,7 +45,8 @@ http://<ID>:32770/
 http://10.0.0.94:32770/
 ```
 
-1. Binding port forwarding 
+**1. Binding port forwarding**
+
 **NB:** To bind a port, the port most  be expose in the docker file
 In this case, we can specify a particular port that we want to use.
 ```
@@ -61,6 +64,7 @@ http://10.0.0.94:8889/
 **-P (uppercase)** will expose the container to a random port
 **-p (lowercase)** will expose the container to a specific port
 
+
 ### What is the difference between binding port forwarding and free port forwarding?
 *free port forwarding* will expose the container to a random port while *binding port forwarding* will expose the container to a specific port.
 
@@ -73,3 +77,5 @@ http://10.0.0.94:8889/
 
 ### Port Fowarding Example 3
 ![](/images/Port-Fowarding-Example-3.JPG)
+
+
