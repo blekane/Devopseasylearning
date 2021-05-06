@@ -1,5 +1,14 @@
 # DOCKER LOAD AND SAVE
 
+### Saving Images and Containers as Tar Files for Sharing
+Imagine a scenario where you have built Docker images and containers that you would be interested to keep and share it with your other collaborators or colleagues. The below methods shall help you achieve it.
+
+**Four basic Docker CLI comes into action:**
+- **The docker export**: Export a container’s filesystem as a tar archive
+- **The docker import**: Import the contents a container’s and create a filesystem image
+- **The docker save**: Save one or more images to a tar archive
+- **The docker load**: Load an image from a tar archive
+
 ### Pull 2 images down
 ```
 docker pull ubuntu
@@ -78,3 +87,12 @@ docker save my-ubuntu:my_tag |gzip > tia_image.tar.gz
 ```
 docker load < tia_image.tar.gz
 ```
+
+### What is the difference between save and export in Docker?
+[Learn more here](https://stackoverflow.com/questions/22655867/what-is-the-difference-between-save-and-export-in-docker)
+
+**There are two main differences between `save` and `export` commands.**
+
+1. save command saves whole image with history and metadata but export command exports only files structure (without history and metadata). So the exported tar file will be smaller then the saved one.
+
+2. When you use exported file system for creating a new image then this new image will not contain any `USER, EXPOSE, RUN` etc. commands from your `Dockerfile`. Only file structure will be transferred. So when you are using mentioned keywords in your Dockerfile then you cannot use export command for transferring image to another machine - **you need always use save command.**

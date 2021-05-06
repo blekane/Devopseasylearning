@@ -20,3 +20,5 @@ cat /var/jenkins_home/secrets/initialAdminPassword
 ctrl <p> <q>
 e887a1976710453f922c1aaa50de7d47
 ```
+![](/images/jenkins-key.JPG)
+
