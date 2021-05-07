@@ -120,23 +120,23 @@ docker push 788210522308.dkr.ecr.us-east-1.amazonaws.com/aws-ecr-docker:covid19
 - Verify the vulnerability scan results. 
 
 ## Clean up, pull image from ECR and test it
-0. Clean up
+**1. Clean up**
 ```
 for cont in $(docker ps -a |awk '{print$1}'); do docker stop $cont; docker rm -f $cont; done
 
 for im in $(docker images |awk '{print$3}'); do docker rmi -f $im; done
 ```
 
-1. Login first 
+**2. Login first** 
 ```
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 788210522308.dkr.ecr.us-east-1.amazonaws.com/aws-ecr-docker
 ```
-2. Pull the image down
+**3. Pull the image down**
 ```
 docker pull 788210522308.dkr.ecr.us-east-1.amazonaws.com/aws-ecr-docker:covid19
 ```
 
-3. Run the image and test
+**4. Run the image and test**
 ```
 docker run --name covid19 -p 8010:80 -d 788210522308.dkr.ecr.us-east-1.amazonaws.com/aws-ecr-docker:covid19
 ```
