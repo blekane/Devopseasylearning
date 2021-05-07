@@ -36,20 +36,77 @@ FROM ubuntu:latest
 ```
 
 **2. COPY**
-COPY
+
 The Dockerfile COPY command copies one or more files from the Docker host (the computer building the Docker image from the Dockerfile) into the Docker image. The COPY command can copy both a file or a directory from the Docker host to the Docker image. Here are some Dockerfile COPY examples:
 ```
 COPY /myapp/target/myapp.jar /myapp/myapp.jar
 ```
-This example copies a single file call `myapp.jar` from the Docker host at /myapp/target/myapp.jar to the Docker image at /myapp/myapp.jar. The first argument is the Docker host path (where to copy from) and the second argument is the Docker image path (where to copy to).
+This example copies a single file call `myapp.jar` from the Docker host at `/myapp/target/myapp.jar` to the Docker image at `/myapp/myapp.jar.` The first argument is the Docker host path (where to copy from) and the second argument is the Docker image path (where to copy to).
 
 
-```
+```docker
 COPY /myapp/target/* /myapp/
 ```
-This example copies all single files and directories from the Docker host at /myapp/target/ to the Docker image at /myapp/. The first argument is the Docker host path (where to copy from) and the second argument is the Docker image path (where to copy to).
+This example copies all single files and directories from the Docker host at `/myapp/target/` to the Docker image at `/myapp/`. The first argument is the Docker host path (where to copy from) and the second argument is the Docker image path (where to copy to).
 
 
+
+**3. RUN**
+
+The RUN command is executed during build time of the Docker image, so `RUN` commands are only **executed once**. The RUN command can be used to extract files, to download files, to install packages, to run all shell command or other command line activities which are necessary to run while building the docker image.
+
+```Dockerfile
+RUN apt-get install some-needed-app
+RUN yum -y install git
+RUN mkdir -p /tmp/file
+```
+
+```Dockerfile
+RUN apt -y update
+RUN apt -y install wget
+RUN apt -y install unzip
+
+OR
+
+RUN apt -y update && \
+    apt -y install wget && \
+    apt -y install unzip
+```
+
+```Dockerfile
+RUN cd /usr/local/apache2/htdocs && \
+RUN rm -rf * && \
+RUN wget https://linux-devops-course.s3.amazonaws.com/WEB+SIDE+HTML/covid19.zip && \
+RUN unzip covid19.zip && \
+RUN rm -rf covid19.zip 
+RUN rm -rf covid19
+RUN cp -R covid19/* . 
+
+OR 
+
+RUN cd /usr/local/apache2/htdocs && \
+    rm -rf * && \
+    wget https://linux-devops-course.s3.amazonaws.com/WEB+SIDE+HTML/covid19.zip && \
+    unzip covid19.zip && \
+    rm -rf covid19.zip 
+    rm -rf covid19
+    cp -R covid19/* . 
+```
+
+
+
+
+
+
+
+**3. CMD**
+
+The CMD command specifies the command line command to execute when a Docker container starts. can be used for executing a specific command within the container
+
+
+Here are a few Dockerfile CMD examples:
+CMD echo Docker container started.
+CMD sh script.sh
 
 
 
