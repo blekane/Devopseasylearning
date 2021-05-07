@@ -17,6 +17,7 @@
 ## Step-01: What are we going to learn?
 - We are going build a Docker image 
 - Push to ECR Repository
+- And run the image to test the application
 
 ## Step-02: ECR Terminology
  - **Registry:** An  ECR registry is provided to each AWS account; we can create image repositories in our registry and store images in them. 
@@ -37,7 +38,10 @@ AWS Access Key ID: ****
 AWS Secret Access Key: ****
 Default region name: us-east-1
 Default output format: json
+```
 
+**Test the connection**
+```
 aws s3 ls
 ```   
 
