@@ -31,7 +31,7 @@ The Dockerfile FROM command specifies the base image of your Docker images.
 **A base image** is the image that is used to create all of your container images. Your base image can be an official Docker image, such as Centos, or you can modify an official Docker image to suit your needs, or you can create your own base image from scratch.
 
 If you want to start with a bare Linux image, you can use this FROM command:
-```
+```Dockerfile
 FROM ubuntu:latest
 ```
 
@@ -44,7 +44,7 @@ COPY /myapp/target/myapp.jar /myapp/myapp.jar
 This example copies a single file call `myapp.jar` from the Docker host at `/myapp/target/myapp.jar` to the Docker image at `/myapp/myapp.jar.` The first argument is the Docker host path (where to copy from) and the second argument is the Docker image path (where to copy to).
 
 
-```docker
+```Dockerfile
 COPY /myapp/target/* /myapp/
 ```
 This example copies all single files and directories from the Docker host at `/myapp/target/` to the Docker image at `/myapp/`. The first argument is the Docker host path (where to copy from) and the second argument is the Docker image path (where to copy to).
@@ -74,13 +74,14 @@ RUN apt -y update && \
 ```
 
 ```Dockerfile
-RUN cd /usr/local/apache2/htdocs && \
-RUN rm -rf * && \
-RUN wget https://linux-devops-course.s3.amazonaws.com/WEB+SIDE+HTML/covid19.zip && \
-RUN unzip covid19.zip && \
+RUN cd /usr/local/apache2/htdocs
+RUN rm -rf * 
+RUN wget https://linux-devops-course.s3.amazonaws.com/WEB+SIDE+HTML/covid19.zip 
+RUN unzip covid19.zip 
+RUN cp -R covid19/* . 
 RUN rm -rf covid19.zip 
 RUN rm -rf covid19
-RUN cp -R covid19/* . 
+
 
 OR 
 
@@ -88,9 +89,9 @@ RUN cd /usr/local/apache2/htdocs && \
     rm -rf * && \
     wget https://linux-devops-course.s3.amazonaws.com/WEB+SIDE+HTML/covid19.zip && \
     unzip covid19.zip && \
-    rm -rf covid19.zip 
-    rm -rf covid19
-    cp -R covid19/* . 
+    cp -R covid19/* .
+    rm -rf covid19.zip && \
+    rm -rf covid19 && \ 
 ```
 
 
@@ -109,18 +110,50 @@ CMD echo Docker container started.
 CMD sh script.sh
 
 
+## Dockerfile Example 1
+```
+vim Dockerfile
+```
+```Dockerfile
+FROM httpd
+LABEL maintainer="Tia M"
+RUN apt -y update && \
+    apt -y install wget && \
+    apt -y install unzip
 
+WORKDIR /usr/local/apache2/htdocs/
 
+RUN rm -rf * && \
+    wget https://linux-devops-course.s3.amazonaws.com/WEB+SIDE+HTML/covid19.zip && \
+    unzip covid19.zip && \
+    cp -R covid19/* . && \
+    rm -rf covid19.zip && \
+    rm -rf covid19
 
+USER root
+CMD ["httpd-foreground"]
+EXPOSE 80
+```
 
+**Biuld and test**
+```
+docker build -t <username>/<repository name>:tag
+docker build -t leonardtia/devops_repo:covid19 .
+docker run --name covid19 -p 8010:80 -d leonardtia/devops_repo:covid19 
+docker login
+docker push leonardtia/devops_repo:covid19
+```
 
+**Access Application locally**
+```
+http://<IP>:8010/
+http://10.0.0.94:8010/
+```
 
+## Dockerfile Example 2
 
-
-
-
-
-
+docker run --name covid19-3 -p 8030:80 -d leonardtia/devops_repo:covid19-3 
+http://10.0.0.94:8030/
 
 
 

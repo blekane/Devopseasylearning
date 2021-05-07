@@ -3,6 +3,71 @@
 #NGINX: /usr/share/nginx/html/
 #TOMCAT: /usr/local/tomcat/webapps/
 
+# -------------------------------------------------------------------------
+FROM httpd
+LABEL maintainer="Tia M"
+RUN apt -y update && \
+    apt -y install wget && \
+    apt -y install unzip
+
+WORKDIR /usr/local/apache2/htdocs/
+
+RUN rm -rf * && \
+    wget https://linux-devops-course.s3.amazonaws.com/WEB+SIDE+HTML/covid19.zip && \
+    unzip covid19.zip && \
+    cp -R covid19/* . && \
+    rm -rf covid19.zip && \
+    rm -rf covid19
+
+USER root
+ENTRYPOINT ["httpd-foreground"]
+EXPOSE 80
+
+# OR 
+
+FROM httpd
+LABEL maintainer="Tia M"
+USER root
+RUN apt -y update && \
+    apt -y install wget && \
+    apt -y install unzip && \
+    cd /usr/local/apache2/htdocs/ && \
+    rm -rf * && \
+    wget https://linux-devops-course.s3.amazonaws.com/WEB+SIDE+HTML/covid19.zip && \
+    unzip covid19.zip && \
+    cp -R covid19/* . && \
+    rm -rf covid19.zip && \
+    rm -rf covid19 
+
+ENTRYPOINT ["httpd-foreground"]
+EXPOSE 80
+
+# OR 
+
+FROM httpd
+LABEL maintainer="Tia M"
+USER root
+RUN apt -y update 
+RUN apt -y install wget 
+RUN apt -y install unzip 
+RUN cd /usr/local/apache2/htdocs/ 
+RUN rm -rf * 
+RUN wget https://linux-devops-course.s3.amazonaws.com/WEB+SIDE+HTML/covid19.zip 
+RUN unzip covid19.zip 
+RUN cp -R covid19/* . 
+RUN rm -rf covid19.zip 
+RUN rm -rf covid19 
+
+CMD ["httpd-foreground"]
+EXPOSE 80
+
+# -------------------------------------------------------------------------
+
+
+
+
+
+
 
 FROM httpd
 LABEL maintainer="Tia M"
