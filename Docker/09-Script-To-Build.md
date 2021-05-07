@@ -72,7 +72,7 @@ else
 fi
 ```
 
-## Build and push into 3 environment such as NONPROD, PROD AND QA (Senior guy)
+## Build and push into 3 environments such as NONPROD, PROD AND QA (Senior guy)
 
 ```sh
 #!/bin/bash
