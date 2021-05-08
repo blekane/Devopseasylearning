@@ -121,7 +121,7 @@ vim /var/lib/docker/volumes/nginx_volume/_data/index.html
 <body style="background-color:rgb(217, 250, 210);">
 
 <h1>Welcome to DevOps Easy Learning</h1>
-<h3>This is to test Nginx Web server at devopseasylearning.com by TIA and some awesome students</h3>
+<h3>This is to test Nginx Web server at devopseasylearning.com with TIA and some awesome students</h3>
 
 </body>
 </html>

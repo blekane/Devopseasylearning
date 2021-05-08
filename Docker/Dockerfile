@@ -1,7 +1,45 @@
+
 #Web content location in the container for HTTPD, NGINX AND TOMCAT
 #HTTPD: /usr/local/apache2/htdocs/
 #NGINX: /usr/share/nginx/html/
 #TOMCAT: /usr/local/tomcat/webapps/
+
+
+# -------------------------------------------------------------------------
+FROM centos:latest
+LABEL maintainer="Tia M"
+RUN yum -y update && \
+    yum -y install httpd
+
+USER root
+COPY index.html /var/www/html/
+ENTRYPOINT ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+EXPOSE 80
+
+# OR 
+
+FROM centos:latest
+LABEL maintainer="Tia M"
+RUN yum -y update && \
+    yum -y install httpd
+
+USER root
+ADD index.html /var/www/html/
+ENTRYPOINT ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+EXPOSE 80
+
+# OR 
+
+FROM centos:latest
+LABEL maintainer="Tia M"
+RUN yum -y install httpd
+COPY index.html /var/www/html/
+USER root
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+EXPOSE 80
+# -------------------------------------------------------------------------
+
+
 
 # -------------------------------------------------------------------------
 FROM httpd
@@ -27,7 +65,6 @@ EXPOSE 80
 
 FROM httpd
 LABEL maintainer="Tia M"
-USER root
 RUN apt -y update && \
     apt -y install wget && \
     apt -y install unzip && \
@@ -39,6 +76,7 @@ RUN apt -y update && \
     rm -rf covid19.zip && \
     rm -rf covid19 
 
+USER root
 ENTRYPOINT ["httpd-foreground"]
 EXPOSE 80
 
@@ -46,7 +84,6 @@ EXPOSE 80
 
 FROM httpd
 LABEL maintainer="Tia M"
-USER root
 RUN apt -y update 
 RUN apt -y install wget 
 RUN apt -y install unzip 
@@ -58,6 +95,7 @@ RUN cp -R covid19/* .
 RUN rm -rf covid19.zip 
 RUN rm -rf covid19 
 
+USER root
 CMD ["httpd-foreground"]
 EXPOSE 80
 
@@ -65,40 +103,7 @@ EXPOSE 80
 
 
 
-
-
-
-
-FROM httpd
-LABEL maintainer="Tia M"
-RUN apt -y update
-RUN apt -y install wget
-RUN apt -y install unzip
-WORKDIR /usr/local/apache2/htdocs/
-RUN rm -rf *
-RUN wget https://linux-devops-course.s3.amazonaws.com/WEB+SIDE+HTML/crypto.zip 
-RUN unzip crypto.zip 
-RUN cp -R crypto/* . 
-CMD ["httpd-foreground"]
-EXPOSE 80
-
-
-FROM httpd
-LABEL maintainer="Tia M"
-RUN apt -y update
-RUN apt -y install wget
-RUN apt -y install unzip
-WORKDIR /usr/local/apache2/htdocs/
-RUN rm -rf *
-RUN wget https://linux-devops-course.s3.amazonaws.com/WEB+SIDE+HTML/covid19.zip
-RUN unzip covid19.zip 
-RUN cp -R covid19/* . 
-CMD ["httpd-foreground"]
-EXPOSE 80
-
-
-
-
+# -------------------------------------------------------------------------
 FROM httpd
 LABEL maintainer="Tia M"
 RUN apt -y update && \
@@ -108,35 +113,82 @@ RUN apt -y update && \
 WORKDIR /usr/local/apache2/htdocs/
 
 RUN rm -rf * && \
-    wget https://linux-devops-course.s3.amazonaws.com/WEB+SIDE+HTML/covid19.zip && \
-    unzip covid19.zip && \
-    cp -R covid19/* . 
+    wget https://linux-devops-course.s3.amazonaws.com/WEB+SIDE+HTML/static-website-example.zip && \
+    unzip static-website-example.zip && \
+    cp -R static-website-example/* . && \
+    rm -rf static-website-example.zip && \
+    rm -rf static-website-example
 
-CMD ["httpd-foreground"]
+USER root
+ENTRYPOINT ["httpd-foreground"]
 EXPOSE 80
 
-
+# OR 
 
 FROM httpd
 LABEL maintainer="Tia M"
-RUN apt -y update
-RUN apt -y install wget
-RUN apt -y install unzip
-WORKDIR /usr/local/apache2/htdocs/
-RUN rm -rf *
+RUN apt -y update && \
+    apt -y install wget && \
+    apt -y install unzip && \
+    cd /usr/local/apache2/htdocs/ && \
+    rm -rf * && \
+    wget https://linux-devops-course.s3.amazonaws.com/WEB+SIDE+HTML/static-website-example.zip && \
+    unzip static-website-example.zip && \
+    cp -R static-website-example/* . && \
+    rm -rf static-website-example.zip && \
+    rm -rf static-website-example
+
+USER root
+ENTRYPOINT ["httpd-foreground"]
+EXPOSE 80
+
+# OR 
+
+FROM httpd
+LABEL maintainer="Tia M"
+RUN apt -y update 
+RUN apt -y install wget 
+RUN apt -y install unzip 
+RUN cd /usr/local/apache2/htdocs/ 
+RUN rm -rf * 
 RUN wget https://linux-devops-course.s3.amazonaws.com/WEB+SIDE+HTML/static-website-example.zip
-RUN unzip static-website-example.zip
+RUN unzip static-website-example.zip 
 RUN cp -R static-website-example/* . 
+RUN rm -rf static-website-example.zip 
+RUN rm -rf static-website-example
+
+USER root
 CMD ["httpd-foreground"]
 EXPOSE 80
+
+# -------------------------------------------------------------------------
+
+
+
+# -------------------------------------------------------------------------
+FROM tomcat
+LABEL maintainer="Tia M"
+ADD https://warfiles-for-docker.s3.amazonaws.com/addressbook.war /usr/local/tomcat/webapps/
+ENTRYPOINT ["catalina.sh", "run"]
+EXPOSE 8080
 
 
 FROM tomcat
 LABEL maintainer="Tia M"
 WORKDIR /usr/local/tomcat/webapps
 RUN wget https://warfiles-for-docker.s3.amazonaws.com/addressbook.war
-CMD "catalina.sh" "run"
+CMD ["catalina.sh", "run"]
 EXPOSE 8080
+
+FROM tomcat
+LABEL maintainer="Tia M"
+RUN cd /usr/local/tomcat/webapps && \
+    wget https://warfiles-for-docker.s3.amazonaws.com/addressbook.war
+CMD ["catalina.sh", "run"]
+EXPOSE 8080
+
+# -------------------------------------------------------------------------
+
 
 
 FROM tomcat:latest
@@ -153,14 +205,6 @@ RUN cd /opt && rm -rf pebble
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
 
-
-
-FROM centos:latest
-LABEL maintainer="Tia M"
-RUN yum -y install httpd
-COPY index.html /var/www/html/
-CMD ["httpd-foreground"]
-EXPOSE 80
 
 
 
