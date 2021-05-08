@@ -17,6 +17,7 @@ Before we construct our Dockerfile, you need to understand what makes up the fil
 - VOLUME 
 - WORKDIR 
 - LABEL
+- ARG
 
 ## Ways to Create a Custom Image
 They are 2 ways to create a custom images
@@ -50,7 +51,7 @@ COPY /myapp/target/* /myapp/
 This example copies all single files and directories from the Docker host at `/myapp/target/` to the Docker image at `/myapp/`. The first argument is the Docker host path (where to copy from) and the second argument is the Docker image path (where to copy to).
 
 
-**3.ADD**
+**3. ADD**
 
 The Dockerfile `ADD` instruction works in the same way as the `COPY` instruction with a few minor differences:
 - The `ADD` instruction can copy and extract TAR files from the Docker host to the Docker image.
@@ -149,7 +150,31 @@ USER sets username of the user which is to run the container. By default, contai
 USER root
 ```
 
-**10. CMD && ENTRYPOINT**
+**10. ARG**
+
+[dockerfile-jenkins/Dockerfile](https://github.com/stakater/dockerfile-jenkins/blob/master/Dockerfile)
+
+The Dockerfile `ARG` instruction lets you define an argument which can be passed to Docker when you build the Docker image from the Dockerfile. `ARG` wroks the same as variable. It is like defining a variable in Dockerfile. 
+
+```Dockerfile
+ARG user=jenkins
+ARG group=jenkins
+ARG uid=1000
+ARG gid=1000
+ARG http_port=8080
+ARG JENKINS_HOME=/var/jenkins_home
+
+RUN mkdir -p $JENKINS_HOME \
+  && chown ${uid}:${gid} $JENKINS_HOME \
+  && groupadd -g ${gid} ${group} \
+  && useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
+
+VOLUME $JENKINS_HOME
+USER ${user}
+EXPOSE ${http_port}
+```
+
+**11. CMD && ENTRYPOINT**
 
 Both are used to execution commands when the container start or during the creation of the container. We can use `CMD && ENTRYPOINT` to start the process when the container start or to run a script when the container start.
 
@@ -312,6 +337,95 @@ http://10.0.0.94:8020/
 vim Dockerfile
 ```
 ```Dockerfile
+FROM httpd
+
+ARG WEB_DIRECTORY=static-website-example
+
+LABEL maintainer="Tia M"
+RUN apt -y update && \
+    apt -y install wget && \
+    apt -y install unzip
+
+WORKDIR /usr/local/apache2/htdocs/
+
+RUN rm -rf * && \
+    wget https://linux-devops-course.s3.amazonaws.com/WEB+SIDE+HTML/$WEB_DIRECTORY.zip && \
+    unzip $WEB_DIRECTORY.zip && \
+    cp -R $WEB_DIRECTORY/* . && \
+    rm -rf $WEB_DIRECTORY.zip && \
+    rm -rf $WEB_DIRECTORY
+
+USER root
+ENTRYPOINT ["httpd-foreground"]
+EXPOSE 80
+```
+
+**Biuld and test**
+```
+docker build -t <username>/<repository name>:tag
+docker build -t leonardtia/devops_repo:static-website-example .
+docker run --name static-website-example -p 8020:80 -d leonardtia/devops_repo:static-website-example
+docker login
+docker push leonardtia/devops_repo:static-website-example
+```
+
+**Access Application locally**
+```
+http://<IP>:8020/
+http://10.0.0.94:8020/
+```
+
+
+## Dockerfile Example 5
+
+```
+vim Dockerfile
+```
+```Dockerfile
+FROM httpd
+
+ARG WEB_DIRECTORY=covid19 
+
+LABEL maintainer="Tia M"
+RUN apt -y update && \
+    apt -y install wget && \
+    apt -y install unzip
+
+WORKDIR /usr/local/apache2/htdocs/
+
+RUN rm -rf * && \
+    wget https://linux-devops-course.s3.amazonaws.com/WEB+SIDE+HTML/$WEB_DIRECTORY.zip && \
+    unzip $WEB_DIRECTORY.zip && \
+    cp -R $WEB_DIRECTORY/* . && \
+    rm -rf $WEB_DIRECTORY.zip && \
+    rm -rf $WEB_DIRECTORY
+
+USER root
+ENTRYPOINT ["httpd-foreground"]
+EXPOSE 80
+```
+**Biuld and test**
+```
+docker build -t <username>/<repository name>:tag
+docker build -t leonardtia/devops_repo:covid19 .
+docker run --name covid19 -p 8010:80 -d leonardtia/devops_repo:covid19 
+docker login
+docker push leonardtia/devops_repo:covid19
+```
+
+**Access Application locally**
+```
+http://<IP>:8010/
+http://10.0.0.94:8010/
+```
+
+
+## Dockerfile Example 6
+
+```
+vim Dockerfile
+```
+```Dockerfile
 FROM tomcat
 LABEL maintainer="Tia M"
 ADD https://warfiles-for-docker.s3.amazonaws.com/addressbook.war /usr/local/tomcat/webapps/
@@ -334,4 +448,28 @@ http://<IP>:8050/addressbook
 http://10.0.0.94:8050/addressbook
 ```
 
+## Dockerfile Example 7
+```
+vim Dockerfile
+```
+```Dockerfile
+FROM centos
+ARG user=jenkins
+ARG group=jenkins
+ARG uid=1000
+ARG gid=1000
+ARG JENKINS_HOME=/var/jenkins_home
 
+ENV TIA_HOME /var/jenkins_home/Tia
+
+RUN mkdir -p $JENKINS_HOME \
+  && chown ${uid}:${gid} $JENKINS_HOME \
+  && groupadd -g ${gid} ${group} \
+  && useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
+
+USER ${user}
+```
+
+id
+env
+echo $JENKINS_HOME
