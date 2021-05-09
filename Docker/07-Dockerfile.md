@@ -202,6 +202,63 @@ CMD ["catalina.sh", "run"]
 ENTRYPOINT ["catalina.sh", "run"]
 ```
 
+## What is the difference between CMD and ENTRYPOINT (practical)
+
+**You can write Docker `CMD/ENTRYPOINT` instructions in both forms:**
+
+```Dockerfile
+CMD ["script.sh"]
+CMD ["/bin/bash", "-c", "script.sh"]
+CMD ["echo", "Hello World"] 
+
+
+ENTRYPOINT ["script.sh"] 
+ENTRYPOINT ["/bin/bash", "-c", "script.sh"]
+ENTRYPOINT ["echo", "Hello World"] 
+```
+
+**CMD**
+```
+vim Dockerfile
+```
+
+```Dockerfile
+```Dockerfile
+FROM ubuntu
+MAINTAINER Tia
+RUN apt-get update -y
+CMD ["/bin/bash", "-c", "uname -a"]
+```
+
+```
+sudo docker build -t cmd .
+sudo docker run -it cmd:latest
+sudo docker run -it cmd:latest uname -r
+sudo docker run -it cmd:latest ls -la 
+```
+![](/images/cmd.JPG)
+
+
+
+**ENTRYPOINT**
+```
+vim Dockerfile
+```
+
+```Dockerfile
+FROM ubuntu
+MAINTAINER Tia
+RUN apt-get update -y
+ENTRYPOINT ["/bin/bash", "-c", "uname -a"]
+```
+```
+sudo docker build -t entripoint .
+sudo docker run -it entripoint:latest
+sudo docker run -it entripoint:latest uname -r
+sudo docker run -it entripoint:latest ls -la 
+```
+![](/images/entripoint.JPG)
+
 
 ### Differences between a Dockerfile, Docker Image and Docker Container
 - **A Dockerfile** is a recipe for creating Docker images
