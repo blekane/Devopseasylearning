@@ -25,9 +25,10 @@ They are 2 ways to create a custom images
 - From Dockerfile (standard way use by companies out there)
 
 ## Instruction in Dockerfile
+
 **1. FROM**
 
-The Dockerfile FROM command specifies the base image of your Docker images.
+The Dockerfile `FROM` command specifies the base image of your Docker images.
 
 **A base image** is the image that is used to create all of your container images. Your base image can be an official Docker image, such as Centos, or you can modify an official Docker image to suit your needs, or you can create your own base image from scratch.
 
@@ -67,7 +68,7 @@ ADD https://warfiles-for-docker.s3.amazonaws.com/addressbook.war /usr/local/tomc
 
 **4. RUN**
 
-The RUN command is executed during build time of the Docker image, so `RUN` commands are only **executed once**. The RUN command can be used to extract files, to download files, to install packages, to run all shell command or other command line activities which are necessary to run while building the docker image.
+The Dockerfile `RUN` instruction is executed during build time of the Docker image, so `RUN` commands are only **executed once**. The RUN command can be used to extract files, to download files, to install packages, to run all shell command or other command line activities which are necessary to run while building the docker image.
 
 ```Dockerfile
 RUN apt-get install some-needed-app
@@ -133,9 +134,10 @@ The Dockerfile `VOLUME` instruction creates a directory inside the Docker image 
 VOLUME /data
 ```
 
-**8- LABEL**
+**8- LABEL and MAINTAINER**
 
-LABEL allows you to add a label or metadata to your docker image.
+The Dockerfile `MAINTAINER` instruction has been deprecated dockerfile and it has been replaced by `LABEL` instruction instead.
+The Dockerfile `LABEL` instruction allows you to add a label or metadata to your docker image.
 
 ```Dockerfile
 LABEL maintainer="devopseasylearning.com"
@@ -144,7 +146,7 @@ LABEL build_date="2017-09-05"
 
 **9. USER**
 
-USER sets username of the user which is to run the container. By default, containers **run as root**. 
+The Dockerfile `USER` instruction sets username of the user which is to run the container. By default, containers **run as root**. 
 
 ```Dockerfile
 USER root
@@ -208,11 +210,12 @@ ENTRYPOINT ["catalina.sh", "run"]
 
 ```Dockerfile
 CMD ["script.sh"]
+CMD ["/home/tia/script.sh"]
 CMD ["/bin/bash", "-c", "script.sh"]
 CMD ["echo", "Hello World"] 
 
-
 ENTRYPOINT ["script.sh"] 
+ENTRYPOINT ["/home/tia/script.sh"] 
 ENTRYPOINT ["/bin/bash", "-c", "script.sh"]
 ENTRYPOINT ["echo", "Hello World"] 
 ```
@@ -221,8 +224,6 @@ ENTRYPOINT ["echo", "Hello World"]
 ```
 vim Dockerfile
 ```
-
-```Dockerfile
 ```Dockerfile
 FROM ubuntu
 MAINTAINER Tia
@@ -237,7 +238,6 @@ sudo docker run -it cmd:latest uname -r
 sudo docker run -it cmd:latest ls -la 
 ```
 ![](/images/cmd.JPG)
-
 
 
 **ENTRYPOINT**
@@ -289,7 +289,6 @@ vim index.html
 ```
 vim Dockerfile
 ```
-
 ```Dockerfile
 FROM centos:latest
 LABEL maintainer="Tia M"
