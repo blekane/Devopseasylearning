@@ -239,8 +239,26 @@ RUN cd /usr/local/tomcat/webapps && \
 CMD ["catalina.sh", "run"]
 EXPOSE 8080
 
-# -------------------------------------------------------------------------
 
+# -------------------------------------------------------------------------
+FROM centos
+ARG user=jenkins
+ARG group=jenkins
+ARG uid=1000
+ARG gid=1000
+ARG JENKINS_HOME=/var/jenkins_home
+
+ENV TIA_HOME /var/tia/devops
+
+RUN mkdir -p $JENKINS_HOME \
+  && chown ${uid}:${gid} $JENKINS_HOME \
+  && groupadd -g ${gid} ${group} \
+  && useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -s /bin/bash ${user}
+
+USER ${user}
+
+
+# -------------------------------------------------------------------------
 
 
 FROM tomcat:latest
@@ -259,6 +277,7 @@ CMD ["catalina.sh", "run"]
 
 
 # -------------------------------------------------------------------------
+
 
 FROM stakater/oracle-jdk:8u152-alpine-3.7
 

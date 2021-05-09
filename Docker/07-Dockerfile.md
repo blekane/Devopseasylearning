@@ -150,9 +150,11 @@ USER sets username of the user which is to run the container. By default, contai
 USER root
 ```
 
-**10. ARG**
+**10. ARG and ENV**
 
 [dockerfile-jenkins/Dockerfile](https://github.com/stakater/dockerfile-jenkins/blob/master/Dockerfile)
+
+The Dockerfile `ENV` instruction lets set you set and environment variable to be used by the system. The is a system variable and not a use define variable. The command `env` will list all environemt variables in Linux.
 
 The Dockerfile `ARG` instruction lets you define an argument which can be passed to Docker when you build the Docker image from the Dockerfile. `ARG` wroks the same as variable. It is like defining a variable in Dockerfile. 
 
@@ -164,14 +166,22 @@ ARG gid=1000
 ARG http_port=8080
 ARG JENKINS_HOME=/var/jenkins_home
 
+ENV TIA_HOME /var/tia/devops
+
 RUN mkdir -p $JENKINS_HOME \
   && chown ${uid}:${gid} $JENKINS_HOME \
   && groupadd -g ${gid} ${group} \
-  && useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
+  && useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -s /bin/bash ${user}
 
 VOLUME $JENKINS_HOME
 USER ${user}
 EXPOSE ${http_port}
+```
+```
+-d = home directory
+-u = user ID
+-g = group ID
+-s = shell
 ```
 
 **11. CMD && ENTRYPOINT**
@@ -460,16 +470,27 @@ ARG uid=1000
 ARG gid=1000
 ARG JENKINS_HOME=/var/jenkins_home
 
-ENV TIA_HOME /var/jenkins_home/Tia
+ENV TIA_HOME /var/tia/devops
 
 RUN mkdir -p $JENKINS_HOME \
   && chown ${uid}:${gid} $JENKINS_HOME \
   && groupadd -g ${gid} ${group} \
-  && useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
+  && useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -s /bin/bash ${user}
 
 USER ${user}
 ```
-
+```
+-d = home directory
+-u = user ID
+-g = group ID
+-s = shell
+```
+```
+docker build -t env .
+docker run -it env:latest bash
 id
 env
 echo $JENKINS_HOME
+```
+![](/images/env.JPG)
+
