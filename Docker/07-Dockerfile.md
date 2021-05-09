@@ -137,6 +137,7 @@ VOLUME /data
 **8- LABEL and MAINTAINER**
 
 The Dockerfile `MAINTAINER` instruction has been deprecated dockerfile and it has been replaced by `LABEL` instruction instead.
+
 The Dockerfile `LABEL` instruction allows you to add a label or metadata to your docker image.
 
 ```Dockerfile
