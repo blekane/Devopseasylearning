@@ -3,9 +3,9 @@
 Let's take a quick look at the standard for the filesystem to better understand how things are organized.
 The filesystem starts with a **roo**t represented by a **slash**. The root is the highest level of the organizational hierarchy of the filesystem. Each system only has **one filesystem**, and everything else, folders, external hard drives, network shares, is represented within it. 
 
-![](/images/filesystem.JPG.JPG)
+![](/images/filesystem.JPG)
 
-- The **ROOT** subdirectory: it's like a C drive in windows. It can read, write or execute any program
+- **ROOT (/)** it's like a C drive in windows. It can read, write or execute any program
 - HOME: That's where the regular user's home folders are stored. Root is where the root's home folder is stored.
 - **ETC:** it is where most programs keep their configuration files
 - **BIN:** it is where rigular user commands are store (executable programs are stored in BIN AND SBIN)
