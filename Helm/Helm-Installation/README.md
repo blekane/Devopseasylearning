@@ -9,7 +9,7 @@ sudo apt-get update
 sudo apt-get install helm
 ```
 
-### Install helm 2.17 on CentOs
+### Install helm 2.17 on CentOs and Ubuntu
 ```
 cd /tmp 
 wget https://get.helm.sh/helm-v2.17.0-linux-amd64.tar.gz -O /tmp/helm.tar.gz ; \
@@ -18,7 +18,7 @@ mv linux-amd64/helm /usr/local/bin/
 helm version --short
 ```
 
-### Install Helm 3 on CentOs
+### Install Helm 3 on CentOs and Ubuntu
 * [Helm release](https://github.com/helm/helm/releases)
 * [Helm Website](https://helm.sh/)
 * [Quickstart Guide](https://helm.sh/docs/intro/quickstart/)

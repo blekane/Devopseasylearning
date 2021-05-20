@@ -13,10 +13,13 @@ helm lint ./my-first-release/
 ```
 
 ### Check how you manifest will looks like after Helm install 
-* This command will show you all the values will be replaced
+* * This command will show all the manifest file with values from the value file
 ```
 helm install --dry-run --debug ./[chart folder name]/ --generate-name
+helm install --dry-run --debug ./[chart folder name] --generate-name
+
 helm install --dry-run --debug ./my-first-chart/ --generate-name
+helm install --dry-run --debug ./my-first-chart --generate-name
 ```
 
 ### Helm install command

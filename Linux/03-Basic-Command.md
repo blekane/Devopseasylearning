@@ -391,6 +391,13 @@ scp -r ~/Download/devops-course tia@52.91.239.56:/tmp/devops
 scp -r devops-course tia@52.91.239.56:/tmp/devops
 ```
 
+### Install and update software with a package manager
+**Debian** and distros like **Ubuntu** use the **APT** package manager. APT stands for Advanced Package Tool. Red Hat and CentOS use the YUM package manager.
+
+**Fedora** uses **DNF**. **SUSE** uses **YaST**, and Arch uses **Pacman**. Generally speaking the tools all work in a similar way. 
+
+![](/images/package.JPG)
+
 ### Update linux system
 ```
 yum update -y
@@ -511,27 +518,3 @@ killall + name
 
 
 
-### How to change Jenkins Default home directory
-- a : Preserve the specified attributes such as directory and file mode, ownership, timestamps, if possible additional attributes: context, links, xattr, all.
-- v : Verbose output.
-- r : Copy directories recursively.
-```sh
-systemctl stop jenkins
-mkdir /jenkins_home
-chown jenkins:jenkins /jen_kinshome
-cat /etc/passwd |grep jenkins
-usermod -d /jenkins_home jenkins
-cat /etc/passwd |grep jenkins
-rsync -av /var/lib/jenkins /jenkins_home/
-```
-* Change the default home in `/etc/sysconfig/jenkins`
-```
-vim /etc/sysconfig/jenkins
-JENKINS_HOME="/jenkins_home" (:wq)
-systemctl restart jenkins
-```
-* Copy jobs and restart Jenkins
-```
-cp -av /var/lib/jenkins/jobs /jenkinshome/jobs
-systemctl restart jenkins
-```

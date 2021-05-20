@@ -6,7 +6,7 @@ The filesystem starts with a **roo**t represented by a **slash**. The root is th
 ![](/images/filesystem.JPG)
 
 - **ROOT (/)** it's like a C drive in windows. It can read, write or execute any program
-- HOME: That's where the regular user's home folders are stored. Root is where the root's home folder is stored.
+- **HOME:** That's where the regular user's home folders are stored. Root is where the root's home folder is stored.
 - **ETC:** it is where most programs keep their configuration files
 - **BIN:** it is where rigular user commands are store (executable programs are stored in BIN AND SBIN)
 - **SBIN:** it is where rigular root user commands are store (executable programs are stored in BIN AND SBIN)
@@ -18,5 +18,5 @@ The filesystem starts with a **roo**t represented by a **slash**. The root is th
 - **lIB:** it is where 32 bit programs are installed
 - **lIB64:** it is where 64 bit programs are installed
 
-
 ![](/images/filesystem-2.JPG)
+
