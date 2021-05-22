@@ -28,20 +28,20 @@ INTEGER1 is not equal to INTEGER2
 
 ## Function syntax
 ```yml
-{{ if PIPELINE }}
+{{- if PIPELINE }}
   # Do something
-{{ else if OTHER_PIPELINE }}
+{{- else if OTHER_PIPELINE }}
   # Do something else
-{{ else }}
+{{- else }}
   # Default case
-{{ end }}
+{{- end }}
 
 
-{{ if .Values.debug }}
+{{- if .Values.debug }}
   # Do something
-{{ else }}
+{{- else }}
   # Do something else
-{{ end }}
+{{- end }}
 ```
 
 ## Testing Equality and Inequality of Values
@@ -58,11 +58,11 @@ INTEGER1 is not equal to INTEGER2
 ... 
 {{- end }}
 
-{{ if not ... }}
+{{- if not ... }}
 ... 
-{{ end }}
+{{- end }}
 
-{{ if not .Values.myApp.something }}
+{{- if not .Values.myApp.something }}
 ... 
 {{ end }}
 
@@ -70,7 +70,7 @@ INTEGER1 is not equal to INTEGER2
    ...
 {{- end }}
 
-{{ if and .Values.appearance .Values.appearance.color }} 
+{{- if and .Values.appearance .Values.appearance.color }} 
    ...
 {{- end }}
 ```
@@ -248,3 +248,99 @@ data:
   example1: 1
   example2: "leonardtia/devops-test-repo:covid19"
 ```
+
+
+### Example 4
+```yml
+environment: prod
+replicaCount:
+  dev: 1
+  qa: 1
+  prod: 3
+``
+
+```yml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-restapp
+  labels:
+    app: backend-restapp
+    tier: backend
+spec:
+  {{- if eq .Values.environment "dev" }}
+  replicas: {{ .Values.replicaCount.dev}}
+  {{- else if eq .Values.environment "qa" }}
+  replicas: {{ .Values.replicaCount.qa }}
+  {{- else if eq .Values.environment "prod" }}
+  replicas: {{ .Values.replicaCount.prod}}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: backend-restapp
+  template:
+    metadata:
+      labels:
+        app: backend-restapp
+        tier: backend
+    spec:
+      containers:
+        - name: backend-restapp
+          image: leonardtia/devops-pro-repos:contactform
+          ports:
+          - containerPort: 8080
+```
+OR
+```yml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+spec:
+  {{ if eq .Values.environment "dev" }}
+  replicas: {{ .Values.replicaCount.dev}}
+  {{ else if eq .Values.environment "qa" }}
+  replicas: {{ .Values.replicaCount.qa }}
+  {{ else if eq .Values.environment "prod" }}
+  replicas: {{ .Values.replicaCount.prod}}
+  {{ end }}
+```
+
+**Result**
+```yml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: demo-configmap
+data:
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-restapp
+  labels:
+    app: backend-restapp
+    tier: backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend-restapp
+  template:
+    metadata:
+      labels:
+        app: backend-restapp
+        tier: backend
+    spec:
+      containers:
+        - name: backend-restapp
+          image: leonardtia/devops-pro-repos:contactform
+          ports:
+          - containerPort: 8080
+```
+

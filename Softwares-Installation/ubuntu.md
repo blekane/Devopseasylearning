@@ -1,8 +1,8 @@
-apt-get update -y
-apt-get install curl -y
-apt-get install -y git
-apt-get install -y vim
-
+### How to Install Visual Studio Code on Ubuntu 20.04
+```
+sudo snap install --classic code
+snap install --classic code
+```
 
 ### AWS CLI
 ```sh
@@ -29,13 +29,22 @@ kubectx --help
 kubens --help
 ```
 
-### Docker installation
+### How to install docker on ubuntu
 ```sh
-install docker
 sudo apt-get update && \
     sudo apt-get install docker.io -y
 ```
 
+OR 
+
+```
+sudo apt-get update
+apt-get remove docker docker-engine docker.io
+apt install docker.io
+systemctl start docker
+systemctl enable docker
+docker --version
+```
 
 ### Install Kind
 * 1- Golang tool installation
@@ -66,4 +75,13 @@ tar -zxvf helm-v3.5.0-linux-amd64.tar.gz
 mv linux-amd64/helm /usr/local/bin/helm
 helm version --short
 helm repo add stable https://charts.helm.sh/stable
+```
+
+### Install helm 2.17
+```
+cd /tmp 
+wget https://get.helm.sh/helm-v2.17.0-linux-amd64.tar.gz -O /tmp/helm.tar.gz ; \
+tar xf helm.tar.gz ; \
+mv linux-amd64/helm /usr/local/bin/
+helm version --short
 ```
