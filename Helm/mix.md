@@ -66,12 +66,19 @@ helm create mychart
 ```
 
 ### Check how you manifest will looks like after Helm install 
-* This command will show all the manifest file with values from the value file
+* This command will show all the manifest file with values from the value file with `helm 3`
+
 ```
 helm install --dry-run --debug ./[chart folder name] --generate-name
 helm install --dry-run --debug ./[chart folder name]/ --generate-name
 helm install --dry-run --debug ./mychart --generate-name
 helm install --dry-run --debug ./mychart/ --generate-name
+```
+
+* This command will show all the manifest file with values from the value file with `helm 2`
+```
+helm install --dry-run --debug ./[chart folder name]/ --name [release name]
+helm install --dry-run --debug ./mychart/ --name demo
 ```
 
 ### Install a default chart

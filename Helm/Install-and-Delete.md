@@ -57,5 +57,5 @@ helm delete jenkins-test --purge
 ```
 helm install [release name] ./[chart folder name]/ -n [namespace]
 helm install demo ./mychart/ -n default
-helm uninstall demo -n default
+helm uninstall demo -n default 
 ```

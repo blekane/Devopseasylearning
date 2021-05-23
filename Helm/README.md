@@ -12,3 +12,16 @@
 [Sprig Function Documentation](http://masterminds.github.io/sprig/)
 [Template Functions and Pipelines](https://helm.sh/docs/chart_template_guide/functions_and_pipelines/)
 
+
+### 
+**Helm 3**
+```
+helm install --dry-run --debug ./[chart folder name] --generate-name
+helm install --dry-run --debug ./mychart --generate-name
+```
+
+**Helm 2**
+```
+helm install --dry-run --debug ./[chart folder name]/ --name [release name]
+helm install --dry-run --debug ./mychart/ --name demo
+```
