@@ -28,5 +28,5 @@ To learn more about the release, try:
    $ helm uninstall demo
 root@ubuntu:~# helm uninstall demo
 release "demo" uninstalled
-``
+```
 

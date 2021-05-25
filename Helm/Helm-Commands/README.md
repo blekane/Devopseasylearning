@@ -129,7 +129,7 @@ helm upgrade nginx my-first-chart
 
 ### To rollback a release
 ```
-helm rollback [release name] [release version]
+helm rollback [release name] [release revirson]
 helm rollback nginx 1
 ```
 
@@ -139,8 +139,6 @@ helm package [chart folder name]
 helm package [chart folder name] --force
 helm package my-first-chart --force
 ```
-
-
 
 
 ### Uninstall a chart

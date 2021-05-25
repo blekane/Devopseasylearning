@@ -1,7 +1,11 @@
 ### Helm Documentation Links
 
+* [Helm Charts Github](https://github.com/helm/charts/tree/master/stable)
+
 * [Helm release](https://github.com/helm/helm/releases)
+
 * [Helm Website](https://helm.sh/)
+
 * [Quickstart Guide](https://helm.sh/docs/intro/quickstart/)
 
 * [phcollignon/helm3](https://github.com/phcollignon/helm3)

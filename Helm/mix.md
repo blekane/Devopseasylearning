@@ -2,7 +2,6 @@
 This is where we have some public chart. It is the same like docker hub
 [Helm Public Respository](https://artifacthub.io/)
 
-
 ## Install jenkins from helm hub
 [Jenkins stable repo](https://artifacthub.io/packages/helm/jenkinsci/jenkins)
 
