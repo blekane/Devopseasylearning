@@ -14,6 +14,8 @@
 
 * [Helm Public Respository](https://artifacthub.io/)
 
+* [Helm chart stable repository](https://github.com/viveksinghggits/charts/tree/master/stable)
+
 ## Function
 [Sprig Function Documentation](http://masterminds.github.io/sprig/)
 [Template Functions and Pipelines](https://helm.sh/docs/chart_template_guide/functions_and_pipelines/)

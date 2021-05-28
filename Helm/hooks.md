@@ -9,30 +9,39 @@ Hooks are not **directly applied to the Kubernetes environment** during standard
 Helm hooks have several annotation values that are used to specify when a hook should be executed. Overall, there are nine places where a hook could be called.
 
 **pre-install**
+
 Executes after templates are rendered, but before any resources are created in Kubernetes
 
-**post-install**	
+**post-install**
+
 Executes after all resources are loaded into Kubernetes
 
-**pre-delete**	
+**pre-delete**
+
 Executes on a deletion request before any resources are deleted from Kubernetes
 
 **post-delete**	
+
 Executes on a deletion request after all of the release's resources have been deleted
 
 **pre-upgrade**	
+
 Executes on an upgrade request after templates are rendered, but before any resources are updated
 
-**post-upgrade**	
+**post-upgrade**
+
 Executes on an upgrade request after all resources have been upgraded
 
-**pre-rollback**	
+**pre-rollback**
+
 Executes on a rollback request after templates are rendered, but before any resources are rolled back
 
-**post-rollback**	
+**post-rollback**
+
 Executes on a rollback request after all resources have been modified
 
-**test**	
+**test**
+	
 Executes when the Helm test subcommand is invoked 
 
 - [Example Test](https://helm.sh/docs/topics/chart_tests/)

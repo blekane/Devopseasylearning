@@ -78,8 +78,8 @@ helm install --dry-run --debug ./mychart/ --generate-name
 
 * This command will show all the manifest file with values from the value file with `helm 2`
 ```
-helm install --dry-run --debug ./[chart folder name]/ --name [release name]
-helm install --dry-run --debug ./mychart/ --name demo
+helm install [release name] --dry-run --debug ./[chart folder name]/ 
+helm install demo --dry-run --debug ./mychart/
 ```
 
 ### Install a default chart
