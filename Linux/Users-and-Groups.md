@@ -169,11 +169,11 @@ passwd --status <username>
 OR
 passwd -S <username>
 ```
-Check for the flag *PS* in the below command output which indicates that the account is not locked. Also `$` in front of the password means the password is not locked and the password.
+Check for the flag **PS** in the below command output which indicates that the account is not locked. Also `$` in front of the password means the password is not locked and the password.
 ![](/images/u7.JPG)
 
 
-Check for the flag *LK* in the below command output which indicates that the account is locked. Also `!!` in front of the password mean the password is locked.
+Check for the flag **LK** in the below command output which indicates that the account is locked. Also `!!` in front of the password mean the password is locked.
 ```
 passwd -l <username>
 Or
@@ -199,14 +199,14 @@ passwd -l john
 usermod -L mike: to lock mike account
 usermod -U mike: to unlock mike account
 ```
-![](/images/10.JPG)
+![](/images/u10.JPG)
 
 ### How to check if the user password is expired or not in linux?
 ```
 chage -l <username>
 chage -l john
 ```
-![](/images/11.JPG)
+![](/images/u11.JPG)
 
 ### How to expire the user account?
 ```
@@ -215,7 +215,7 @@ Or
 passwd --expire <username> 
 ```
 **Example:** john --expire 
-![](/images/12.JPG)
+![](/images/u12.JPG)
 
 
 
