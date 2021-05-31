@@ -30,9 +30,9 @@ yum install vim -y
 
 **:qa! Or :q!:** to quit without saving
 
-**:wq** write and quit
+**:wq**: write and quit
 
-**:x:** write and quit
+**:x**: write and quit
 
 **:wq! Or :x!:** to force write and quit even though you do not have the permission
 
