@@ -1,5 +1,3 @@
-
-
 ## Network Configuration on CentOs 7 and 8
 
 ### Network configuration using nmtui command

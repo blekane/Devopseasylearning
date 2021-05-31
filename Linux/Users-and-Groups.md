@@ -117,7 +117,10 @@ vim /etc/passwd <change the shell>
 ```
 usermod -s /sbin/nologin <username>
 usermod -s /sbin/nologin ruth
+```
 Or
+
+```
 usermod -s /sbin/false <username>
 usermod -s /sbin/nfalse ruth
 ```
@@ -138,11 +141,81 @@ gpasswd -d <username> <group name>
 ### Example using usermod: 
 ```
 groupadd finance; groupadd HR; groupadd manager; groupadd sysadmin
-useradd tom
-
+useradd tim
+```
+```
 usermod -s /sbin/nologin -u 1500 -g HR -G sysadmin -aG manager,finance -c "tim smith" tim
-
-groups tom
+```
+```
+groups tim
 tail /etc/group
 ```
 ![](/images/u4.JPG)
+
+## Common Password Options
+![](/images/u5.JPG)
+
+### How do I check if the user password is set?
+```
+passwd --status <username>
+OR
+passwd -S <username>
+```
+![](/images/u6.JPG)
+
+### How do I check if the user account is locked or not?
+```
+passwd --status <username>
+OR
+passwd -S <username>
+```
+Check for the flag *PS* in the below command output which indicates that the account is not locked. Also `$` in front of the password means the password is not locked and the password.
+![](/images/u7.JPG)
+
+
+Check for the flag *LK* in the below command output which indicates that the account is locked. Also `!!` in front of the password mean the password is locked.
+```
+passwd -l <username>
+Or
+usermod -L <username>
+```
+![](/images/u8.JPG)
+
+### How to delete a user password?
+
+```
+passwd -d <username>
+```
+![](/images/u9.JPG)
+
+### How to lock and unlock the user password or account?
+To lock a user's account use the command usermod `-L` or passwd `-l`. Both the commands add an exclamation mark `!` in the second field of the file `/etc/passwd`.
+```
+usermod -L <username>
+passwd -l john
+```
+### Example: 
+```
+usermod -L mike: to lock mike account
+usermod -U mike: to unlock mike account
+```
+![](/images/10.JPG)
+
+### How to check if the user password is expired or not in linux?
+```
+chage -l <username>
+chage -l john
+```
+![](/images/11.JPG)
+
+### How to expire the user account?
+```
+chage -E0 <username>
+Or
+passwd --expire <username> 
+```
+**Example:** john --expire 
+![](/images/12.JPG)
+
+
+
