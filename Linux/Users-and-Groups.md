@@ -65,10 +65,15 @@ groups  <username>
 
 
 **-u =** user ID of the new account
+
 **-aG =** append the user to a supplementary group
+
 **-G =** add the user to a secondary group
+
 **-c =** comment or a user's full name at the 5 column
+
 **-l** = new value of the login name or to change the login name
+
 **-e =** set account expiration date 
 
 ### To change login name
