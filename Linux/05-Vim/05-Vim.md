@@ -30,9 +30,11 @@ yum install vim -y
 
 **:qa! Or :q!:** to quit without saving
 
-**:wq ou :x:** write and quit
+**:wq** write and quit
 
-**:wq! ou :x!:** to force write and quit even though you do not have the permission
+**:x:** write and quit
+
+**:wq! Or :x!:** to force write and quit even though you do not have the permission
 
 **:w:** write without quitting
 
@@ -79,7 +81,7 @@ yum install vim -y
 **:%s/can/tia/g:** to search and substitute the word can by tia in the whole text (g=global)
 
 
-**Create a .vimrc if it does not exist**
+## Create a .vimrc if it does not exist
 ```
 touch ~/.vimrc
 vim ~/.vimrc
