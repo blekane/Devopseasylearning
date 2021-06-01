@@ -16,12 +16,10 @@ Always use these commands to edit sudoers file
 sudo visudo: for sudo sudoers users
 visudo: for root users
 ```
-
 ![](/images/sudoers2.JPG)
 
-
 ### Editing sudoers file with visudo
-What will happened if 2 admins want to edit the sudoers at the same time using visudo?
+What will happened if 2 admins want to edit the sudoers file at the same time using visudo?
 
 **Admin 1**
 
@@ -33,11 +31,11 @@ The sudoers is going to open without any issue
 As we use `visudo` to open the file, we will be notified that someone else is editing the sudoers file already because only one user can edit the file at the same time to avoid `system lock off`.
 ![](/images/sudoers4.JPG)
 
-### What will happened if 2 admins want to edit the sudoers at the same time using vim?
+### What will happened if 2 admins want to edit the sudoers file at the same time using vim?
 system lock off or block
 
 ### Default time for sudoers 
-man sudoers and search for /timestamp: you will find out that the default timestamp_timeout is `5 min` for CentOs and `15 min` for Ubuntu. 
+man sudoers and search for `/timestamp`: you will find out that the default timestamp_timeout is `5 min` for CentOs and `15 min` for Ubuntu. 
 
 ### All users will be prompt to enter their password after 5 min that they user sudo
 ```
@@ -95,4 +93,19 @@ ansadmin        ALL=(ALL)       NOPASSWD: ALL
 Add a group called helpdesk and add all helpdesk users that you want them to rest users' password. Then add the following to the sudoers file.
 ```
 %helpdesk ALL=/usr/bin/passwd
+```
+
+### This means user aryan will be able to change leo and tia password
+```
+aryan ALL=(root) /usr/bin/passwd/tia, /usr/bin/passwd leo 
+```
+
+### This means aryan can start, stop and check a status of sshd daemon for CentOs 6
+```
+aryan ALL=(root) /sbin/service sshd stop, /sbin/service sshd start, /sbin/service sshd status
+```
+```
+sudo service sshd status
+sudo service sshd start
+sudo service sshd stop
 ```
