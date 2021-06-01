@@ -29,4 +29,6 @@ To change or to recover the root password, we take the system to maintenance mod
 
 At the grub menu: tap `e` for edit mode
 ![](/images/p1.JPG)
+
+**Recap Of All commands**
 ![](/images/p2.JPG)
