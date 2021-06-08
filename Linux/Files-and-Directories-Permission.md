@@ -35,11 +35,10 @@ Consider a scenario where you have to write permission on file but do not have w
 
 - **Execute:** In Windows, an executable program usually has an extension `.exe` and which you can easily run. In Unix/Linux, you cannot run a program unless **the execute permission is set**. If the execute permission is not set, you might still be able to see/modify the program code, **but not run it**.
 
-## Let's see file permissions in Linux with examples:
+## Let's see file permissions in Linux with examples 1:
 ![](/images/lp1.JPG)
 
-![](/images/files1.JPG)
 
-
-
+## Let's see file permissions in Linux with examples 2:
+![](/images/lp2.JPG)
 
