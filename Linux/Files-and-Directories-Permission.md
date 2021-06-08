@@ -50,11 +50,17 @@ chmod [permissions] [file/directory name]
 ```
 
 **There are 2 ways to use the command**
-- Absolute(Numeric) Mode
+- Absolute(Numeric or Octal) Mode
 - Symbolic Mode
-
 
 ## Absolute(Numeric) Mode
 In this mode, file permissions are not represented as characters but a **three-digit octal number**.
 The table below gives numbers for all for permissions types.
 ![](/images/files3.JPG)
+
+## Symbolic Mode
+In the Absolute mode, you change permissions for all 3 owners. In the symbolic mode, you can modify permissions of a specific owner. It makes use of mathematical symbols to modify the Unix file permissions.
+
+![](/images/files4.JPG)
+
+![](/images/files5.JPG)
