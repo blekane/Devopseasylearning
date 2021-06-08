@@ -64,3 +64,56 @@ In the Absolute mode, you change permissions for all 3 owners. In the symbolic m
 ![](/images/files4.JPG)
 
 ![](/images/files5.JPG)
+
+
+# Special Types of Permission in Linux
+There is 4 types of special permission in linux:
+- SGID (set group ID)
+- SUID (set user ID)
+- Sticky bir
+- ACL (Access Control List)
+
+**Command to check special permission:**
+```
+getfalcl  [file or directory name]
+ls -l  [file or directory name]
+```
+
+![](/images/files6.JPG)
+
+**NB:**
+- Uppercase **S** means the execute permission is not being set
+- Lowercase **s** means the execute permission is being set
+- Uppercase **T** means the execute permission is not being set
+- Lowercase **t** means the execute permission is being set
+
+# SUID
+**SUID:** it's a special permission assigned to a file. These permissions allow the file being executed with the **privileges** (permissions) of the owner of the file. For example, if a file was owned by the root user and has the SUID being set, no matter who executed the file it would always run with root user privileges.
+
+### Octal (numbers) representation
+
+**4 set the SUID**
+```
+chmod 4[permission] [file or directory name]
+```
+**Example:**
+```
+chmod 4766 hr 
+```
+
+### Symbolic representation
+```
+chmod u+s [file or directory name] 
+```
+**Example:**
+```
+chmod u+s hr
+Or
+chmod u+s,a+rwx hr
+
+chmod u=rws,g=rw,o=rw hr
+Or
+chmod u=rwS,g=rw,o=r hr
+```
+**Users are able to change their password in Linux because the SUID is being set on the `passwd` command**
+![](/images/files7.JPG)
