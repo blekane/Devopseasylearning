@@ -42,3 +42,19 @@ Consider a scenario where you have to write permission on file but do not have w
 ## Let's see file permissions in Linux with examples 2:
 ![](/images/files2.JPG)
 
+
+## Changing file/directory permissions with 'chmod' command
+We can use the `chmod` command which stands for **change mode**. Using the command, we can set permissions (read, write, execute) on a file/directory for the owner, group and the world. Syntax:
+```
+chmod [permissions] [file/directory name]
+```
+
+**There are 2 ways to use the command**
+- Absolute(Numeric) Mode
+- Symbolic Mode
+
+
+## Absolute(Numeric) Mode
+In this mode, file permissions are not represented as characters but a **three-digit octal number**.
+The table below gives numbers for all for permissions types.
+![](/images/files3.JPG)
