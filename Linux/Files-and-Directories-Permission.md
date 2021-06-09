@@ -117,3 +117,47 @@ chmod u=rwS,g=rw,o=r hr
 ```
 **Users are able to change their password in Linux because the SUID is being set on the `passwd` command**
 ![](/images/files7.JPG)
+
+
+# SGID
+**SGID:** it's defined as giving temporary permissions to a user to run a program/file with the permissions of the file group permissions to become a member of that group to execute the file. In simple words, users will get file Group's permissions when executing a Folder/file/program/command.
+
+### Octal (numbers) representation
+**2 set the SGID**
+```
+chmod 2[permission] [file or directory name]
+```
+**Example:**
+```
+chmod 2766 hr 
+```
+
+### Symbolic representation
+```
+chmod g+s [file or directory name] 
+```
+**Example:**
+```
+chmod g+s hr
+Or
+chmod g+s,a+rwx hr
+
+chmod u=rwx,g=rws,o=rw hr
+Or
+chmod u=rwx,g=rwS,o=r hr
+```
+**Example:**
+```
+cd /home
+sudo mkdir accounting
+sudo groupadd accounting_employees
+sudo chgrp accounting_employes accounting
+sudo chmod 2770 accounting
+sudo useradd -G accounting lucas
+```
+# STICKY BIT
+**STICKY BIT:** it's a special permission assigned to a file
+
+It is a permission bit that is set on a file or a directory that lets only the owner of the file/directory or the root user to delete or rename the file. No other user is given privileges to delete the file created by some other user.
+
+
