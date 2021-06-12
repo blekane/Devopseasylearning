@@ -10,6 +10,7 @@ chkconfig sshd on
 ```
 ifconfig
 ip a
+
 ```
 
 ### Connect into a server using ssh
@@ -18,6 +19,7 @@ ssh [username]@[server IP]
 ssh -p 22 [username]@[server IP]
 ssh tia@10.0.0.8
 ssh root@192.168.1.98
+ssh [username]@[ser IP] -i [key path]  # if connecting using and existing ssh key 
 ```
 
 ### Get help
@@ -25,6 +27,7 @@ ssh root@192.168.1.98
 man
 man [command]
 info [command]
+[command] --help
 ```
 
 ### Check the OS distribution
@@ -32,6 +35,7 @@ info [command]
 cat /etc/os-release
 OR 
 cat /etc/*release
+cat /etc/*rel*/
 ```
 
 ### List Directory
@@ -73,7 +77,7 @@ uptime
 history
 ```
 
-### Claer the screen
+### Clear the screen
 ```
 clear
 ctrl + l
@@ -187,6 +191,7 @@ grep error error.txt
 who
 who | grep janet 
 w | grep janet
+id
 ```
 
 ### empty a file
@@ -209,7 +214,8 @@ rm -rf
 
 ### Delete a directory
 ```
-rm -rf 
+rm -rf
+rmdir
 ```
 
 ### delete all files and directories
@@ -289,6 +295,7 @@ ctrl + d to send
 ```
 useradd [username]
 useradd tom
+adduser  # to create a user with password, full name and other credentials at the same time.
 ```
 
 ### Delete a user
@@ -504,6 +511,7 @@ lshw
 ### check if the system in 64 or 32 bit system 
 ```
 getconf LONG_BIT
+arch 
 ```
 
 ### To kill a proccess
