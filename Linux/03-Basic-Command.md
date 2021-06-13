@@ -124,8 +124,10 @@ touch ~/Download/output.txt
 ls ~
 ```
 ### Copy files
+```
 cp [path][file name] [destination path][file name]
 cp /home/tia/Download/output.txt /home/tia/Desktop/output.tx
+```
 
 ### Copy Directories
 ```
@@ -149,15 +151,6 @@ mv [file name] [new file name]
 
 mv devops devops-course
 mv output.txt test.tx
-```
-
-### Sync command
-**-a** : Preserve the specified attributes such as directory and file mode, ownership, timestamps, if possible additional attributes: context, links, xattr, all.
-**-v**: Verbose output.
-**-r**: Copy directories recursively.
-
-```
-rsync -av /var/lib/jenkins /jenkinshome/
 ```
 
 ### basic vim command

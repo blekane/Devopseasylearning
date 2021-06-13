@@ -178,9 +178,7 @@ Quit the prompt by quit command
 ```
 
 ## Add user to the git-crypt repo
-Now that you have added the collaborator’s public key to your keyring, all that’s left to do is add that key to the git-crypt credentials in your repo. You can do that with the command add-gpg-user . This will not only add the collaborator’s key as a verified decrypter but also serves as a git commit. At this point, you can git push the repo and the new encryption will be pushed out.
+Now that you have added the collaborator’s public key to your keyring, all that’s left to do is add that key to the git-crypt credentials in your repo. You can do that with the command add-gpg-user.
 ```
 git-crypt add-gpg-user --trusted D1F0A6846ED79975B9BDDAC29D0C9F2B2C08DA87
 ```
-
-
