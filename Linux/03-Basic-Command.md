@@ -112,8 +112,9 @@ p = name pipe file
 ```
 mkdir [path][directory name]
 mkdir [directory name]
-mkdir /home/tia/Download/devops
-mkdir ~/Download/devops
+mkdir /home/tia/Downloads/devops
+mkdir ~/Downloads/devops
+mkdir -p /home/tia/Downloads/devops/test/   #create directory test with parent directory devops at the same time 
 ```
 ### Create a file 
 ```
@@ -123,17 +124,21 @@ vim [file name]
 touch [path][file name]
 vim [path][file name]
 
-touch /home/tia/Download/output.txt
-touch ~/Download/output.txt
+touch /home/tia/Downloadsoutput.txt
+touch ~/Downloadsoutput.txt
 ls ~
 ```
 ### Copy files
 ```
 cp [path][file name] [destination path][file name]
+<<<<<<< HEAD
 cp /home/tia/Download/output.txt /home/tia/Desktop/output.tx
 ```
+=======
+cp /home/tia/Downloadsoutput.txt /home/tia/Desktop/output.tx
+>>>>>>> 09d27b3d4cee5fa728274d3158f4a22742027b6b
 
-### Copy Directories
+### Copy Directories recursively (R) ing copy the directory and all associated files.
 ```
 cp -R [path][directory name] [destination path][directory name]
 cp -R /home/tia/Download/devops /home/tia/Desktop/devops
@@ -145,10 +150,10 @@ mv [path][directory name] [destination path][directory name]
 mv [path][file name] [destination path][file name]
 
 mv /home/tia/Download/output.txt /home/tia/Desktop/test.tx
-cp -R /home/tia/Download/devops /home/tia/Desktop/devops-course
+cp -R /home/tia/Downloads/devops /home/tia/Desktop/devops
 ```
 
-### Rename files and directories
+### Rename files and directories can aslo be used to move files or directory from one destination to another 
 ```
 mv [directory name] [new directory name]
 mv [file name] [new file name]
@@ -289,6 +294,9 @@ ctrl + d to send
 useradd [username]
 useradd tom
 adduser  # to create a user with password, full name and other credentials at the same time.
+useradd [username] -s /bin/bash      # create a user with bash environment 
+useradd [username] -m -d /home/[username]    # create user with home directory
+useradd [username] -m -d /home/[username]  -s /bin/bash   #create user with home directory and bash environment 
 ```
 
 ### Delete a user
@@ -307,11 +315,16 @@ passwd tom
 ### Check all users on a server
 ```
 cat /etc/passwd
+ls /home     # check all user having a home directory 
 ```
 ### Password file
 ```
 /etc/shadow
 ```
+### environment variable
+env    # to check all environment variables 
+export USER=devops      # this will add an environment varialble called USER with value devops in he virtual machine 
+unset USER       # remove environment variable USER in the virtual machine 
 
 ### Find files and directory path in root file system
 ```
@@ -516,6 +529,16 @@ kill + PID number
 killall + name
 ```
 
-
+### Linux symbol 
+~   is equal to the current user's home directlry. E.g: /home/someone/
+*	 A symbol which stands for "everything"
+&	     Run a command in the background
+&&	These symbols written together stand for "and"
+\    Allows you to continue writing commands/Bash syntax in new line.
+..	help to take one step back 
+.	  In navigation or referring to files/folders, the dot stands for the current folder.
+#	  Everything after this symbol in the same line is considered to be a comment, so it won't be processed by the shell.
+>	  Take the output of a command and redirect it into a file (will overwrite the whole file).
+;   help move to the new line 
 
 
