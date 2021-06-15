@@ -290,10 +290,281 @@ The SED command in UNIX stands for stream editor and it can perform a lot of fun
 ```
 cat > geekfile.txt
 ```
+```
 unix is a great OS. Unix is open source. Unix is free os.
 Learning unix operating systems is a good skill. 
 Which one can you choose between unix and Windows?. I love unix
 unix is easy to learn, unix is a multiuser os,please learn unix.
 unix is a powerful OS and this is why companies use Unix
+```
+```
+ctrl + d: to save
+```
+**The below simple sed command replaces the first occurrence of each line of the word “unix” with “linux” in the file.**
+```
+sed 's/unix/linux/' geekfile.txt
+```
+**OUTPUT:**
+```
+linux is a great OS. Unix is open source. Unix is free os.
+Learning linux operating systems is a good skill.
+Which one can you choose between unix and Windows?. I love unix
+linux is easy to learn, unix is a multiuser os,please learn unix.
+linux is a powerful OS and this is why companies use Unix.
+```
 
+**Set command options**
+**- s** = substitute
+**- g** = global search
+**- i** = ignore case sensitive
+
+**The below simple sed command replaces the word “unix” with “linux” in the whole file.**
+```
+sed 's/unix/linux/g' geekfile.txt
+```
+**OUTPUT:**
+```
+linux is a great OS. Unix is open source. Unix is free os.
+Learning linux operating systems is a good skill.
+Which one can you choose between linux and Windows?. I love linux
+linux is easy to learn, linux is a multiuser os,please learn linux.
+linux is a powerful OS and this is why companies use Unix.
+```
+
+**The below simple sed command replaces the word “Unix” with “linux” in the whole file.**
+```
+sed -i 's/Unix/linux/g' geekfile.txt
+```
+**OUTPUT:**
+```
+linux is a great OS. linux is open source. linux is free os.
+Learning linux operating systems is a good skill.
+Which one can you choose between linux and Windows?. I love linux
+linux is easy to learn, linux is a multiuser os,please learn linux.
+linux is a powerful OS and this is why companies use linux.
+```
+
+**Add the text at the end of the fil**
+```
+sed -i '$i This is end of the file' geekfile.txt
+```
+**OUTPUT:**
+```
+linux is a great OS. linux is open source. linux is free os.
+Learning linux operating systems is a good skill.
+Which one can you choose between linux and Windows?. I love linux
+linux is easy to learn, linux is a multiuser os,please learn linux.
+linux is a powerful OS and this is why companies use linux.
+This is end of the file
+```
+
+**Add the text at the beginning of the file**
+```
+sed -i '1i This is beginning of the file' geekfile.txt
+```
+**OUTPUT:**
+```
+This is beginning of the file
+linux is a great OS. linux is open source. linux is free os.
+Learning linux operating systems is a good skill.
+Which one can you choose between linux and Windows?. I love linux
+linux is easy to learn, linux is a multiuser os,please learn linux.
+linux is a powerful OS and this is why companies use linux.
+This is end of the file
+```
+
+**Insert a line after a particular line in the file**
+```
+sed -i '/Learning linux operating systems is a good skill./a Line to be deleted' geekfile.txt
+```
+**OUTPUT:**
+```
+This is beginning of the file
+linux is a great OS. linux is open source. linux is free os.
+Learning linux operating systems is a good skill.
+Line to be deleted
+Which one can you choose between linux and Windows?. I love linux
+linux is easy to learn, linux is a multiuser os,please learn linux.
+linux is a powerful OS and this is why companies use linux.
+This is end of the file
+```
+
+**Delete a line from a file**
+```
+sed -i '/Line to be deleted/d' geekfile.txt
+```
+**OUTPUT:**
+```
+This is beginning of the file
+linux is a great OS. linux is open source. linux is free os.
+Learning linux operating systems is a good skill.
+Which one can you choose between linux and Windows?. I love linux
+linux is easy to learn, linux is a multiuser os,please learn linux.
+linux is a powerful OS and this is why companies use linux.
+This is end of the file
+```
+
+**Insert multiple lines after a specific line or insert lines after a match**
+
+**a** = appends lines underneath the specify line
+**\n** = new line
+```
+sed -i $'/linux is a multiuser/a\Line1\\nLine2\\nLine3' geekfile.txt
+```
+**OUTPUT:**
+```
+This is beginning of the file
+linux is a great OS. linux is open source. linux is free os.
+Learning linux operating systems is a good skill.
+Which one can you choose between linux and Windows?. I love linux
+linux is easy to learn, linux is a multiuser os,please learn linux.
+Line1
+Line2
+Line3
+linux is a powerful OS and this is why companies use linux.
+This is end of the file
+```
+
+**Replace a string at a specific line (this will replace the first occurrence)**
+
+Go on line 2, search for "linux" and replace it with "UNIX"
+```
+sed -i '2s/linux/UNIX/' geekfile.txt
+```
+**OUTPUT:**
+```
+This is beginning of the file
+UNIX is a great OS. linux is open source. linux is free os.
+Learning linux operating systems is a good skill.
+Which one can you choose between linux and Windows?. I love linux
+linux is easy to learn, linux is a multiuser os,please learn linux.
+Line1
+Line2
+Line3
+linux is a powerful OS and this is why companies use linux.
+This is end of the file
+```
+
+**Replace a string at a specific line (this will replace in the whole line)**
+
+Go on line 2, search for "linux" and replace it with "UNIX"
+```
+sed -i '2s/linux/UNIX/g' geekfile.txt
+```
+**OUTPUT:**
+```
+This is beginning of the file
+UNIX is a great OS. UNIX is open source. UNIX is free os.
+Learning linux operating systems is a good skill.
+Which one can you choose between linux and Windows?. I love linux
+linux is easy to learn, linux is a multiuser os,please learn linux.
+Line1
+Line2
+Line3
+linux is a powerful OS and this is why companies use linux.
+This is end of the file
+```
+
+**To delete multiple lines at once**
+```
+sed '6,8d' geekfile.txt
+```
+**OUTPUT:**
+```
+This is beginning of the file
+UNIX is a great OS. UNIX is open source. UNIX is free os.
+Learning linux operating systems is a good skill.
+Which one can you choose between linux and Windows?. I love linux
+linux is easy to learn, linux is a multiuser os,please learn linux.
+linux is a powerful OS and this is why companies use linux.
+This is end of the file
+```
+
+**To add double space or to put 1 space between each line or to read a file while adding space**
+```
+sed 'a\ \' geekfile.txt |less
+Or
+sed G geekfile.txt
+```
+**OUTPUT:**
+```
+This is beginning of the file
+ 
+UNIX is a great OS. UNIX is open source. UNIX is free os.
+ 
+Learning linux operating systems is a good skill.
+ 
+Which one can you choose between linux and Windows?. I love linux
+ 
+linux is easy to learn, linux is a multiuser os,please learn linux.
+ 
+Line1
+ 
+Line2
+ 
+Line3
+ 
+linux is a powerful OS and this is why companies use linux.
+ 
+This is end of the file
+```
+
+## HAND ON
+```
+vim us_presidents.csv 
+cat us_presidents.csv 
+cat tia.csv | cut -f2 
+cat tia.csv | cut -f2 |cut -d" " -f1 
+cat tia.csv | cut -f2 |cut -d" " -f1 |tr 'A-Z' 'a-z' 
+cat tia.csv | cut -f2 |cut -d" " -f1 |tr 'A-Z' 'a-z' |sort 
+cat tia.csv | cut -f2 |cut -d" " -f1 |tr 'A-Z' 'a-z' |sort |sort -u 
+cat tia.csv | cut -f2 |cut -d" " -f1 |tr 'A-Z' 'a-z' |sort |sort -u |wc -l 
+cat tia.csv | cut -f2 |cut -d" " -f1 |tr 'A-Z' 'a-z' |sort |sort -u |wc -l > users.txt
+```
+```
+vim useradd.sh 
+```
+```sh
+#!/bin/bash
+userlist=/tmp/users.txt
+username=$(cat /tmp/users.txt | tr 'A-Z' 'a-z')
+password=$username@redhat
+ 
+for user in $username
+do
+useradd $user
+echo $password | passwd --stdin $user
+done
+```
+
+```
+vim userdel.sh
+```
+```sh
+#!/bin/bash
+userlist=/tmp/users.txt
+username=$(cat /tmp/users.txt)
+ 
+for user in $username
+do
+userdel -r $user
+done
+```
+
+```
+vim u.sh
+```
+```sh
+#!/bin/bash
+userlist=/tmp/users.txt
+username=$(cat /tmp/users.txt | tr 'A-Z' 'a-z')
+password=$username@redhat
+ 
+for user in $username
+do
+useradd $user
+echo $password | passwd --stdin $user
+passwd --expire $user
+done
+```
 
