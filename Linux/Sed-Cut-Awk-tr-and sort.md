@@ -290,11 +290,10 @@ The SED command in UNIX stands for stream editor and it can perform a lot of fun
 ```
 cat > geekfile.txt
 ```
-```
 unix is a great OS. Unix is open source. Unix is free os.
 Learning unix operating systems is a good skill. 
 Which one can you choose between unix and Windows?. I love unix
 unix is easy to learn, unix is a multiuser os,please learn unix.
 unix is a powerful OS and this is why companies use Unix
-```
+
 
