@@ -1,7 +1,7 @@
 ## Linux Filesystem
 
 Let's take a quick look at the standard for the filesystem to better understand how things are organized.
-The filesystem starts with a **roo**t represented by a **slash**. The root is the highest level of the organizational hierarchy of the filesystem. Each system only has **one filesystem**, and everything else, folders, external hard drives, network shares, is represented within it. 
+The filesystem starts with a **root** represented by a **slash**. The root is the highest level of the organizational hierarchy of the filesystem. Each system only has **one filesystem**, and everything else, folders, external hard drives, network shares, is represented within it. 
 
 ![](/images/filesystem.JPG)
 

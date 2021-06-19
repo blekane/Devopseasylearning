@@ -513,13 +513,13 @@ This is end of the file
 ```
 vim us_presidents.csv 
 cat us_presidents.csv 
-cat tia.csv | cut -f2 
-cat tia.csv | cut -f2 |cut -d" " -f1 
-cat tia.csv | cut -f2 |cut -d" " -f1 |tr 'A-Z' 'a-z' 
-cat tia.csv | cut -f2 |cut -d" " -f1 |tr 'A-Z' 'a-z' |sort 
-cat tia.csv | cut -f2 |cut -d" " -f1 |tr 'A-Z' 'a-z' |sort |sort -u 
-cat tia.csv | cut -f2 |cut -d" " -f1 |tr 'A-Z' 'a-z' |sort |sort -u |wc -l 
-cat tia.csv | cut -f2 |cut -d" " -f1 |tr 'A-Z' 'a-z' |sort |sort -u |wc -l > users.txt
+cat us_presidents.csv | cut -f2 
+cat us_presidents.csv | cut -f2 |cut -d" " -f1 
+cat us_presidents.csv | cut -f2 |cut -d" " -f1 |tr 'A-Z' 'a-z' 
+cat us_presidents.csv | cut -f2 |cut -d" " -f1 |tr 'A-Z' 'a-z' |sort 
+cat us_presidents.csv | cut -f2 |cut -d" " -f1 |tr 'A-Z' 'a-z' |sort |sort -u 
+cat us_presidents.csv | cut -f2 |cut -d" " -f1 |tr 'A-Z' 'a-z' |sort |sort -u |wc -l 
+cat us_presidents.csv | cut -f2 |cut -d" " -f1 |tr 'A-Z' 'a-z' |sort |sort -u > users.txt
 ```
 ```
 vim useradd.sh 

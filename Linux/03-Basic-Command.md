@@ -131,17 +131,13 @@ ls ~
 ### Copy files
 ```
 cp [path][file name] [destination path][file name]
-<<<<<<< HEAD
-cp /home/tia/Download/output.txt /home/tia/Desktop/output.tx
+cp /home/tia/Downloads/output.txt /home/tia/Desktop/output.tx
 ```
-=======
-cp /home/tia/Downloadsoutput.txt /home/tia/Desktop/output.tx
->>>>>>> 09d27b3d4cee5fa728274d3158f4a22742027b6b
 
 ### Copy Directories recursively (R) ing copy the directory and all associated files.
 ```
 cp -R [path][directory name] [destination path][directory name]
-cp -R /home/tia/Download/devops /home/tia/Desktop/devops
+cp -R /home/tia/Downloads/devops /home/tia/Desktop/devops
 ``` 
 
 ### Move Directories and files
@@ -293,8 +289,8 @@ ctrl + d to send
 ```
 useradd [username]
 useradd tom
-adduser  # to create a user with password, full name and other credentials at the same time.
-useradd [username] -s /bin/bash      # create a user with bash environment 
+adduser    # to create a user with password, full name and other credentials at the same time.
+useradd [username] -s /bin/bash   # create a user with bash environment 
 useradd [username] -m -d /home/[username]    # create user with home directory
 useradd [username] -m -d /home/[username]  -s /bin/bash   #create user with home directory and bash environment 
 ```
@@ -322,9 +318,11 @@ ls /home     # check all user having a home directory
 /etc/shadow
 ```
 ### environment variable
-env    # to check all environment variables 
+```
+env                     # to check all environment variables 
 export USER=devops      # this will add an environment varialble called USER with value devops in he virtual machine 
-unset USER       # remove environment variable USER in the virtual machine 
+unset USER              # remove environment variable USER in the virtual machine 
+```
 
 ### Find files and directory path in root file system
 ```
@@ -458,6 +456,43 @@ vim /var/www/html/index.html
 </html>
 ```
 
+### Unzip and zip
+```
+wget https://linux-devops-course.s3.amazonaws.com/WEB+SIDE+HTML/static-website-example.zip
+unzip static-website-example.zip
+ls -ltrh
+```
+```
+zip -r static-website-example.zip static-website-example
+```
+```
+unzip static-website-example.zip
+```
+ 
+### Host a new webside
+```
+wget https://linux-devops-course.s3.amazonaws.com/WEB+SIDE+HTML/static-website-example.zip 
+unzip static-website-example.zip 
+cp -R static-website-example/* . 
+rm -rf static-website-example.zip 
+rm -rf static-website-example
+```
+
+### Download and upload from remote server
+```
+scp -r tia@10.0.0.34:/home/tia/website/static-website-example.zip . 
+scp -r static-website-example.zip tia@10.0.0.34:/home/tia/Downloads
+```
+
+### Download and upload from remote ec2
+```
+scp -i [myssh.pem] [local_file] [username]@[IP]:/home/ec2-user
+
+scp -i Devops-easy-learning-Centos-key.pem static-website-example.zip ec2-user@ec2-3-132-195-227.us-east-2.compute.amazonaws.com:/home/ec2-user
+
+scp -i Devops-easy-learning-Centos-key.pem ec2-user@ec2-3-132-195-227.us-east-2.compute.amazonaws.com:/home/ec2-user/static-website-example.zip .
+```
+
 ### Download from the internet using wget
 * [Installing or updating Zoom on Linux](https://support.zoom.us/hc/en-us/articles/204206269-Installing-or-updating-Zoom-on-Linux#h_825b50ac-ad15-44a8-9959-28c97e4803ef)
 ```
@@ -531,7 +566,7 @@ killall + name
 
 ### Linux symbol 
 ~   is equal to the current user's home directlry. E.g: /home/someone/
-*	 A symbol which stands for "everything"
+*	 A symbol which stands for "everything" `rm -rf *`
 &	     Run a command in the background
 &&	These symbols written together stand for "and"
 \    Allows you to continue writing commands/Bash syntax in new line.
@@ -541,4 +576,16 @@ killall + name
 >	  Take the output of a command and redirect it into a file (will overwrite the whole file).
 ;   help move to the new line 
 
-
+### Example with \
+Let create 5 directories
+```
+mkdir hr finance manager supervisor employee student
+```
+```
+mkdir hr \
+  finance \
+  manager \
+  supervisor \
+  employee \
+  student
+```
