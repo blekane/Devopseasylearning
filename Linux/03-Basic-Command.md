@@ -565,16 +565,16 @@ killall + name
 ```
 
 ### Linux symbol 
-~   is equal to the current user's home directlry. E.g: /home/someone/
-*	 A symbol which stands for "everything" `rm -rf *`
-&	     Run a command in the background
-&&	These symbols written together stand for "and"
-\    Allows you to continue writing commands/Bash syntax in new line.
-..	help to take one step back 
-.	  In navigation or referring to files/folders, the dot stands for the current folder.
-#	  Everything after this symbol in the same line is considered to be a comment, so it won't be processed by the shell.
->	  Take the output of a command and redirect it into a file (will overwrite the whole file).
-;   help move to the new line 
+- ~   is equal to the current user's home directlry. E.g: /home/someone/
+- *	 A symbol which stands for "everything" `rm -rf *`
+- &	     Run a command in the background
+- &&	These symbols written together stand for "and"
+- \    Allows you to continue writing commands/Bash syntax in new line.
+- ..	help to take one step back 
+- .	  In navigation or referring to files/folders, the dot stands for the current folder.
+- #	Everything after this symbol in the same line is considered to be a comment, so it won't be processed by the shell.
+- >	  Take the output of a command and redirect it into a file (will overwrite the whole file).
+- ;   help move to the new line 
 
 ### Example with \
 Let create 5 directories
