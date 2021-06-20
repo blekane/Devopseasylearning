@@ -334,8 +334,9 @@ find / -type d -name [directory name]
 ```
 
 ### Find Files Using Name in Current Directory
+```
 find . -name tecmint.txt
-
+```
 
 ### Find Files Under Home Directory
 ```
@@ -530,11 +531,13 @@ free -h
 ### Disk usage
 ```
 du -h
+df -h
 ```
 
 ### List all running process
 ```
 top
+ps aux
 ```
 
 ### CPU informaton
@@ -568,7 +571,7 @@ killall + name
 - `~`  is equal to the current user's home directlry. E.g: /home/someone/
 - `*`	 A symbol which stands for "everything" `rm -rf *`
 - `&`	 Run a command in the background
-- `&&` These symbols written together stand for "and"
+- `&&` These symbols written together stand for `and`
 - `\`  Allows you to continue writing commands/Bash syntax in new line.
 - `..` help to take one step back 
 - `.`	 In navigation or referring to files/folders, the dot stands for the current folder.
