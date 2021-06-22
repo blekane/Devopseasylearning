@@ -5,7 +5,7 @@
 
 IP address classes
 ```
-10.0.0.1/24  Class A
+10.0.0.1/8  Class A
 10.0.0.1/16  Class B
 10.0.0.1/24  Class C
 ```
