@@ -10,16 +10,40 @@ chkconfig sshd on
 ```
 ifconfig
 ip a
+hostname -i 
+hostname -I
+ip addr show
+```
 
+### See system hostname 
+```
+hostname 
+```
+
+### List system reboot history
+```
+last reboot  
+```
+
+### Show information about a particular user
+```
+yum install finger
+finger [username] 
 ```
 
 ### Connect into a server using ssh
 ```
 ssh [username]@[server IP]
-ssh -p 22 [username]@[server IP]
+ssh -p [port] [username]@[server IP]
 ssh tia@10.0.0.8
-ssh root@192.168.1.98
+ssh -p 22 root@192.168.1.98
 ssh [username]@[ser IP] -i [key path]  # if connecting using and existing ssh key 
+```
+
+### See active (listening) ports 
+```
+netstat -pnltu 
+netstat -pnltu |grep 22
 ```
 
 ### Get help
@@ -180,6 +204,11 @@ grep [string] [file name]
 grep error error.txt
 ```
 
+### Recursively search for a pattern in a directory
+```
+grep -r [pattern] [directory_name] 
+```
+
 ### Check who is login on a server
 ```
 who
@@ -338,19 +367,6 @@ find / -type d -name [directory name]
 find . -name tecmint.txt
 ```
 
-### Find Files Under Home Directory
-```
-find /home -name tecmint.txt
-```
-
-### Find Files Using Name and Ignoring Case
-* Find all the files whose name is tecmint.txt and contains both capital and small letters in /home directory.
-```
-find /home -iname tecmint.txt
-
-./tecmint.txt
-./Tecmint.txt
-```
 
 ### Find all PHP Files in a Directory
 ```
@@ -410,6 +426,7 @@ scp -r devops-course tia@52.91.239.56:/tmp/devops
 
 ![](/images/package.JPG)
 
+
 ### Update linux system
 ```
 yum update -y
@@ -424,11 +441,54 @@ yum -y install curl
 yum -y install wget
 ```
 
+### List all installed packages with yum
+```
+yum list installed 
+```
+
+### Remove a package
+```
+yum remove [package_name] -y
+
+yum list installed
+yum list installed |grep tree
+yum remove tree.x86_64 -y
+
+yum list installed |grep httpd
+yum remove httpd.x86_64 -y
+yum remove httpd-tools.x86_64 -y
+```
+
+### Install an .rpm package from a local file
+```
+rpm -i [package_name.rpm] 
+```
+
+### Remove an .rpm package
+``` 
+rpm -e [package_name.rpm] 
+```
+
+### Upgrade .rpm package from a local file
+```
+rpm -U [package_name.rpm] 
+```
+
 ### Google Installation
 ```
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+
 yum install ./google-chrome-stable_current_*.rpm
+OR
+rpm -i google-chrome-stable_current_x86_64.rpm
 ```
+```
+rpm -U google-chrome-stable_current_x86_64.rpm
+yum list installed |grep google
+rpm -e google-chrome-stable.x86_64
+yum remove google-chrome-stable.x86_64 -y
+```
+
 ### check if a package is install
 ```
 which [package name]
@@ -455,6 +515,20 @@ vim /var/www/html/index.html
     <h1>Success! The devopseasylearning.com virtual host is working!</h1>
   </body>
 </html>
+```
+
+### Archive an existing file 
+```
+tar cf [compressed_file.tar] [file_name]
+```
+
+### Extract an archived file
+```
+tar xf [compressed_file.tar] 
+```
+### Create a gzip compressed tar file by running 
+```
+tar czf [compressed_file.tar.gz] [file_name]
 ```
 
 ### Unzip and zip
@@ -501,17 +575,6 @@ wget [url]
 wget https://zoom.us/download?os=linux
 ```
 
-### Use RPM in Linux to install software
-```
-wget https://zoom.us/download?os=linux
-rpm -i zoom_x86_64.rpm
-```
-
-### If you are upgrading from an earlier version of the software package, run RPM in upgrade mode, as in the following example:
-```
-rpm -U zoom_x86_64.rpm
-```
-
 ### kernel version
 ```
 uname -r
@@ -528,10 +591,19 @@ history -c
 free -h
 ```
 
-### Disk usage
+### Show disk usage of the directory you are currently
 ```
 du -h
+```
+
+### Show root file system disk usage 
+```
 df -h
+```
+
+### Display disk partitions, sizes, and types with the command
+```
+fdisk -l
 ```
 
 ### List all running process
@@ -552,6 +624,11 @@ lscpu
 lshw
 ```
 
+### See information about block devices
+```
+lsblk 
+```
+
 ### check if the system in 64 or 32 bit system 
 ```
 getconf LONG_BIT
@@ -562,9 +639,38 @@ arch
 ```
 kill -9 [PID number]
 kill -15 [PID number]
+```
 
-kill + PID number
-killall + name
+### Terminate a Linux process under a given ID
+``` 
+kill [process_id]
+```
+
+### Terminate a process under a specific name
+``` 
+killall  [process_name]
+```
+
+### Run a Linux Command or job in the Background
+```
+command &
+sleep 5000
+```
+
+### List all running jobs
+```
+jobs -l
+```
+
+### Bring a particular job to the foreground
+```
+fg [job_number] 
+```
+
+### Terminate the background process
+```
+kill -9 [job_ID] 
+kill -9 25177
 ```
 
 ### Linux symbol 
@@ -592,3 +698,5 @@ mkdir hr \
   employee \
   student
 ```
+
+
