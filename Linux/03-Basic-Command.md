@@ -1,11 +1,5 @@
 # Linux Basic Commands
 
-### Enable ssh on Centos 6
-```
-service sshd status
-service sshd start
-chkconfig sshd on
-```
 ### Check the server IP address
 ```
 ifconfig
@@ -23,12 +17,6 @@ hostname
 ### List system reboot history
 ```
 last reboot  
-```
-
-### Show information about a particular user
-```
-yum install finger
-finger [username] 
 ```
 
 ### Connect into a server using ssh
@@ -300,15 +288,19 @@ shutdown -r +5 "Server will restart in 5 minutes. Please save your work."
 shutdown -c
 ```
 
-# wall command
+### wall command
+wall -- send a message to everybody's terminal.
 ``` 
 wall <<<"Hello everyone"
+OR
+wall "The system will be restarted in 10 minutes."
 ```
 ```
+wall
+
 Hello everyone.
 I hope everything is okay.
 See you all tomorrow.
-
 good night!
 
 ctrl + d to send
@@ -322,6 +314,12 @@ adduser    # to create a user with password, full name and other credentials at 
 useradd [username] -s /bin/bash   # create a user with bash environment 
 useradd [username] -m -d /home/[username]    # create user with home directory
 useradd [username] -m -d /home/[username]  -s /bin/bash   #create user with home directory and bash environment 
+```
+
+### Show information about a particular user
+```
+yum install finger
+finger [username] 
 ```
 
 ### Delete a user
@@ -366,7 +364,6 @@ find / -type d -name [directory name]
 ```
 find . -name tecmint.txt
 ```
-
 
 ### Find all PHP Files in a Directory
 ```
@@ -425,7 +422,6 @@ scp -r devops-course tia@52.91.239.56:/tmp/devops
 **Fedora** uses **DNF**. **SUSE** uses **YaST**, and Arch uses **Pacman**. Generally speaking the tools all work in a similar way. 
 
 ![](/images/package.JPG)
-
 
 ### Update linux system
 ```
