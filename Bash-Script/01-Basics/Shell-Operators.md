@@ -17,7 +17,7 @@ man test
 The following arithmetic operators are supported by Bourne Shell.
 Assume variable a holds 10 and variable b holds 20 
 
-| Operator | Description | Description | Example |
+| Operator | Description | Description |
 | :--- | :--- | :--- |
 | + (Addition) | Adds values on either side of the operator | `expr $a + $b` will give 30 |
 | - (Subtraction) | Subtracts right hand operand from left hand operand | `expr $a - $b` will give -10 |
