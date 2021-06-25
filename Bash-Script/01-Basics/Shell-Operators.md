@@ -17,7 +17,7 @@ man test
 The following arithmetic operators are supported by Bourne Shell.
 Assume variable a holds 10 and variable b holds 20 
 
-| Operator | Description | Description |
+| Operator | Description | Example |
 | :--- | :--- | :--- |
 | + (Addition) | Adds values on either side of the operator | `expr $a + $b` will give 30 |
 | - (Subtraction) | Subtracts right hand operand from left hand operand | `expr $a - $b` will give -10 |
@@ -79,7 +79,7 @@ Bourne Shell supports the following relational operators that are specific to nu
 
 For example, following operators will work to check a relation between `10` and `20` as well as in between `10` and `20` but not in between "ten" and "twenty". Assume variable a holds `10` and variable b holds `20`
 
-| Operator | Description | Description |
+| Operator | Description | Example |
 | :--- | :--- | :--- |
 | -eq | Checks if the value of two operands are equal; if yes, then the condition becomes true | [ $a -eq $b ] is not true |
 | -ne | Checks if the value of two operands are equal or not; if values are not equal, then the condition becomes true | [ $a -eq $b ] is not true |
@@ -149,3 +149,113 @@ fi
 **NB:** It is very important to understand that all the conditional expressions should be inside square braces with spaces around them, for example `[ $a == $b ]` is correct whereas, `[$a==$b]` is incorrect.
 
 ## 3- Boolean Operators
+Logical `OR` & `AND` operations are very useful where multiple conditions are used in our programs (scripts). OR is used between two or multiple conditions. It returns true if any one of the conditions returns as true. AND is used between two or multiple conditions. **It returns true only if all the conditions return as true.**
+- Logical OR in bash script is used with operator `-o` or `| |`
+- Logical AND in bash script is used with operator `-a` or `&&`
+
+The following Boolean operators are supported by the Bourne Shell.
+
+Assume variable a holds 10 and variable b holds 20 
+| Operator | Description | Example |
+| :--- | :--- | :--- |
+| ! | This is logical negation. This inverts a true condition into false and vice versa | [ ! false ] is true |
+| -o | This is logical OR. If one of the operands is true, then the condition becomes true | [ $a -lt 20 -o $b -gt 100 ] is true |
+| -a | This is logical AND. If both the operands are true, then the condition becomes true otherwise false | [ [ $a -lt 20 -a $b -gt 100 ] is false |
+
+**Example 1:**
+```sh 
+#!/bin/sh
+ 
+a=10
+b=20
+ 
+if [ $a != $b ]
+then
+   echo "$a != $b : a is not equal to b"
+else
+   echo "$a != $b: a is equal to b"
+fi
+ 
+if [ $a -lt 100 -a $b -gt 15 ] [ $a -lt 100 ] && [ $b -gt 15 ]
+then
+   echo "$a -lt 100 -a $b -gt 15 : returns true"
+else
+   echo "$a -lt 100 -a $b -gt 15 : returns false"
+fi
+ 
+if [ $a -lt 100 -o $b -gt 100 ]
+then
+   echo "$a -lt 100 -o $b -gt 100 : returns true"
+else
+   echo "$a -lt 100 -o $b -gt 100 : returns false"
+fi
+ 
+if [ $a -lt 5 -o $b -gt 100 ]
+then
+   echo "$a -lt 100 -o $b -gt 100 : returns true"
+else
+   echo "$a -lt 100 -o $b -gt 100 : returns false"
+fi
+```
+
+**RESULT:**
+```
+10 != 20 : a is not equal to b
+10 -lt 100 -a 20 -gt 15 : returns true
+10 -lt 100 -o 20 -gt 100 : returns true
+10 -lt 5 -o 20 -gt 100 : returns false
+```
+
+**Example 2:**
+```sh
+#!/bin/bash
+read -p "Enter Your Number:"  i
+ 
+if [ ( $i -ge 10  -a  $i -le 20 ) -o ( $i -ge 100  -a  $i -le 200 ) ]
+then
+        echo "OK"
+else
+    echo "Not OK"
+fi
+```
+
+**Example 3:** with `||`
+```sh
+#!/bin/bash
+read -p "Enter Your Number:"  i
+ 
+if [ $i -ge 10  -o  $i -le 20 ] || [ $i -ge 100  -o  $i -le 200  ]
+then
+        echo "OK"
+else
+    echo "Not OK"
+fi
+```
+
+**Example 4:** with `-a`
+```sh
+#!/bin/bash
+read -p "Enter First Numeric Value: "   first
+read -p "Enter Second Numeric Value: "  second
+ 
+if [ $first -le 10  -a  $second -gt 20 ]
+then
+        echo "OK"
+else
+    echo "Not OK"
+fi
+```
+
+**Example 4:** with `&&`
+```sh
+#!/bin/bash
+read -p "Enter First Numeric Value: "   first
+read -p "Enter Second Numeric Value: "  second
+ 
+if [ $first -le 10 ] && [ $second -gt 20 ]
+then
+        echo "OK"
+else
+    echo "Not OK"
+fi
+```
