@@ -15,8 +15,8 @@ The filesystem starts with a **root** represented by a **slash**. The root is th
 - **TMP:** it is a temporary directory. Its contains temporary data that will be erased when you reboot your computer
 - **USR:** user directory. It contains user data and programs
 - **VAR:** variable data directory. It is where the system must be able to write files and folders during operation. It's the system LOG
-- **lIB:** it is where 32 bit programs are installed
-- **lIB64:** it is where 64 bit programs are installed
+- **lib:** it is where 32 bit programs are installed
+- **lib64:** it is where 64 bit programs are installed
 
 ![](/images/filesystem-2.JPG)
 
