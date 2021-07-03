@@ -1,4 +1,4 @@
-# AWK, SED, CUT, TR, GREP, EGREP, SORT, AND PIPE COMMAND
+# AWK, SED, CUT, TR, GREP, SORT, AND PIPE COMMAND
 
 ## TR COMMAND
 This command can be used to convert strings from uppercase to lowercase or from uppercase to lowercase.
