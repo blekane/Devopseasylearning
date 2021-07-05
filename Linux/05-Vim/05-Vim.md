@@ -22,9 +22,9 @@ yum install vim -y
 
 **:set nonu:** disable line number
 
-**:se ai:** to enable auto-indent
+**:set ai:** to enable auto-indent
 
-**:se noai:** to disable auto-indent
+**:set noai:** to disable auto-indent
 
 **:set background:** dark to  set a dark background
 

@@ -179,7 +179,7 @@ head -n10 /var/log/messages | cut -d" " -f2,3
 
 **To print column 1 still 3**
 ```	
-head -n10 /var/log/messages | awk '{ print $2,$2,$3}'
+head -n10 /var/log/messages | awk '{ print $1,$2,$3}'
 head -n10 /var/log/messages | cut -d" " -f1-3
 ```
 
