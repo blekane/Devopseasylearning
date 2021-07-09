@@ -75,7 +75,7 @@ There is 4 types of special permission in linux:
 
 **Command to check special permission:**
 ```
-getfalcl  [file or directory name]
+getfacl  [file or directory name]
 ls -l  [file or directory name]
 ```
 
@@ -90,7 +90,7 @@ ls -l  [file or directory name]
 # SUID
 **SUID:** it's a special permission assigned to a file. These permissions allow the file being executed with the **privileges** (permissions) of the owner of the file. For example, if a file was owned by the root user and has the SUID being set, no matter who executed the file it would always run with root user privileges.
 
-### Octal (numbers) representation
+### 1- Octal (numbers) representation
 
 **4 set the SUID**
 ```
@@ -101,7 +101,7 @@ chmod 4[permission] [file or directory name]
 chmod 4766 hr 
 ```
 
-### Symbolic representation
+### 2- Symbolic representation
 ```
 chmod u+s [file or directory name] 
 ```
@@ -122,7 +122,7 @@ chmod u=rwS,g=rw,o=r hr
 # SGID
 **SGID:** it's defined as giving temporary permissions to a user to run a program/file with the permissions of the file group permissions to become a member of that group to execute the file. In simple words, users will get file Group's permissions when executing a Folder/file/program/command.
 
-### Octal (numbers) representation
+### 1- Octal (numbers) representation
 **2 set the SGID**
 ```
 chmod 2[permission] [file or directory name]
@@ -131,12 +131,7 @@ chmod 2[permission] [file or directory name]
 ```
 chmod 2766 hr 
 ```
-
-### Symbolic representation
-```
-chmod g+s [file or directory name] 
-```
-**Example:**
+### 2- Symbolic representation
 ```
 chmod g+s hr
 Or
@@ -146,18 +141,115 @@ chmod u=rwx,g=rws,o=rw hr
 Or
 chmod u=rwx,g=rwS,o=r hr
 ```
+
 **Example:**
+
+**Create a collaborative directory /shared/sysadm with the following characteristics:**
+
+- Group ownership of /shared/sysadm is sysadm.
+- The directory should be readable, writable, and accessible to members of sysadm, but not to any other user. (It is understood that root has access to all files and directories on the system.)
+- Files created in /shared/sysadm automatically have group ownership set to the sysadm group.
+
+**Answer**
 ```
-cd /home
-sudo mkdir accounting
-sudo groupadd accounting_employees
-sudo chgrp accounting_employes accounting
-sudo chmod 2770 accounting
-sudo useradd -G accounting lucas
+mkdir -p /shared/sysadm
+ls -ld /shared/sysadm
+chgrp group filename
+chgrp sysadm /shared/sysadm
+chmod 770 /shared/sysadm
+ls -ld /shared/sysadm
+chmod 2770 /shared/sysadm
+ls -ld /shared/sysadm
+
+useradd peter
+useradd -G sysadm peter
 ```
+
 # STICKY BIT
 **STICKY BIT:** it's a special permission assigned to a file
 
 It is a permission bit that is set on a file or a directory that lets only the owner of the file/directory or the root user to delete or rename the file. No other user is given privileges to delete the file created by some other user.
 
+### 1- Octal (numbers) representation
+1 set the sticky bit
+```
+chmod 1<permission> <file or directory name>
+```
+**Example:** 
+```
+chmod 1770 /shared/sysadm
+```
 
+### 2- Symbolic representation
+```
+chmod o+t <file or directory name>
+Or
+chmod o+t <permission> <file or directory name>
+```
+**Example:**
+```
+chmod o+t /shared/sysadm
+Or
+chmod o+t,a+rwx hr
+
+chmod u=wrx,g=rw,o=rwt hr
+Or
+chmod u=wrx,g=rw,o=rwT hr
+```
+
+### MIX
+7 set the SUID, SGID, and the sticky bit using octal representation
+```
+chmod 7777 <file or directory name>     
+7 = 1+2+4
+
+chmod 7770 /shared/sysadm
+getfacl /shared/sysadm
+ls -l /shared/sysadm
+```
+
+## To find all the files in the system that have a SUID set
+```
+find / -perm -4000
+```
+
+## To find all the files in the system that have a SGID set
+```
+find / -perm -2000
+```
+
+## To find all the files in the system that have a SGID and SGID set
+```
+find / -perm -6000
+```
+
+### To find all the files in the system that have a SGID, SGID the sticky set
+```
+find / -perm -7000
+```
+
+# ACL (ACCESS CONTROL LIST) PERMISSION
+Access control list (ACL) provides an additional, more flexible permission mechanism for file systems. It is designed to assist with UNIX file permissions. ACL allows you to give permissions for any user or group to any disc resource.
+
+### ACL command syntax:
+```
+setfacl -m user:<username>:<permissions> <file>
+-m=modify
+```
+
+### To check ACL permissions
+```
+getfacl <file name or directory name>
+```
+
+**Example:**
+```
+touch aclfile.txt
+setfacl -m user:tia:rwx aclfile.txt
+setfacl -m user:john:r-- aclfile.txt
+setfacl -m user:tom:--- aclfile.txt
+getfacl aclfile.txt
+```
+
+**NB:** + symbol means ACL is being set to a file or directory
+![](/images/acl1.JPG)
