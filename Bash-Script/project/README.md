@@ -1,4 +1,5 @@
 ### Questions
+```
 1- Check if the CPU is at least 4000                                     
 2- check if the user admin exists on the server, if not create a user admin with the password=redhat and give him root privilege            
 3- Check if a group helpdesk exists on the server. If not,create a group helpdesk, add paul, John, tom (password = "redhat") and give them root privilege to reset other users' passwords only. NB: make sure that you expire users account
@@ -17,12 +18,12 @@
 16- Check if password authentication is set to yes in ssh_config file. If no, set it to yes                                                 
 17-  Check if the server will require a root for maintenance mode. If not, set it to require root password for maintenance mode        
 18- Check if the password aging is enforced. If not, enforced            
-- SET PASS_MAX_DAYS TO 90 DAYS                                         
-- SET PASS_MIN_LEN TO 8                                                
-- SET PASS_MIN_LEN TO 0                                                
-- SET PASS_WARN_AGE TO 14 DAYS                                         
-19- Check if the grub password is set. If not, set the grub password.The passowrd shoold be `redhat`  
-
+    - SET PASS_MAX_DAYS TO 90 DAYS                                         
+    - SET PASS_MIN_LEN TO 8                                                
+    - SET PASS_MIN_LEN TO 0                                                
+    - SET PASS_WARN_AGE TO 14 DAYS                                         
+19- Check if the grub password is set. If not, set the grub password.The passowrd shoold be redhat  
+```
 
 ### 1- Check if the CPU is at least 4000
 ```sh
