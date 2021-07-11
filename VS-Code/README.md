@@ -22,4 +22,5 @@ yum install code -y
 Now that VS Code is installed on your CentOS system you can launch it either from the command line by typing `code` or by clicking on the VS Code icon (Applications -> Programming -> Visual Studio Code).
 
 ### How to Install Visual Studio Code on Ubuntu 20.04
+apt update -y
 snap install --classic code

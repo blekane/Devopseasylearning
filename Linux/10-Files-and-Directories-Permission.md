@@ -1,6 +1,4 @@
 ## File and Directories Permissions in Linux/Unix
-
-**In this Linux file commands tutorial, you will learn**
 - Ownership of Linux files
 - Permissions
 - Changing file/directory permissions with 'chmod' command

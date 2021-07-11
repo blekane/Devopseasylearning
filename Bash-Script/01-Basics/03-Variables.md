@@ -189,3 +189,196 @@ the value of the variable E here is :PAUL
 In this second function I can still call the variable x :JOHN
 In this second function I cannot call the variable E :
 ```
+
+**Example 3:** 
+```sh
+read -p "1- Enter the first name: " FIRST_NAME 
+read -p "2- Enter the last name: " LAST_NAME
+read -p "3- Enter age: " AGE
+read -p "4- Do you have fever (y or n)?: " FEVER
+read -p "5- Do you have a cough? (y or n): " COUGH
+read -p "6- Do you have any difficulty breathing? (y or n): " BREATHING
+read -p "7- Have you been in contact with someone who has been tested positive with the Coronavirus? (y or n): " CONTACT
+read -p "8- Did you travel outside the United States for the past 2 weeks? (y or n): " TRAVEL
+read -p "9- Is anyone in your house cough, fever, difficulty breathing or have been in contact with someone who has been tested positive for Coronavirus? (y or n): "  HOUSE
+
+echo "Below are your answers:"
+#echo -e "1- $FIRST_NAME\n2- $LAST_NAME\n3- $AGE\n4- $FEVER\n5- $COUGH\n6- $BREATHING\n7- $CONTACT\n8- $TRAVEL\n9- $HOUSE"
+
+echo "1- $FIRST_NAME"
+echo "2- $LAST_NAME"
+echo "3- $AGE"
+echo "4- $FEVER"
+echo "5- $COUGH"
+echo "6- $BREATHING"
+echo "7- $CONTACT"
+echo "8- $TRAVEL"
+echo "9- $HOUSE"
+```
+
+**Example 0:** 
+```sh
+#!/bin/bash
+
+#Description: This script will create a user, group, shell and add the user to a group as primary and secondary group
+
+# Author: Tia M
+# Date: July 11, 2021
+
+read -p "Enter the first name: " FIRST_NAME
+read -p "Enter the last name: " LAST_NAME
+read -p "Enter the group that you will like to create: " GROUP
+read -p "Enter the user shell: " SHELL
+
+groupadd $GROUP
+useradd -c "$FIRST_NAME $LAST_NAME" -G $GROUP -s $SHELL $FIRST_NAME  
+
+echo 
+cat /etc/passwd |grep $FIRST_NAME
+
+echo
+cat /etc/group |grep $GROUP
+```
+
+**Example 4:** 
+```sh
+#! /bin/bash
+
+# This script will create a user account
+read -p "Enter the first name: " FIRST_NAME 
+read -p "Enter the last name: " LAST_NAME
+
+FIRST_NAME2=`echo "$FIRST_NAME" | tr '[:upper:]' '[:lower:]'`
+LAST_NAME2=`echo "$LAST_NAME" | tr tr '[:upper:]' '[:lower:]'`
+
+useradd $FIRST_NAME2
+echo "Enter you password and confirm"
+passwd $FIRST_NAME2
+```
+
+**Example 5:** 
+```sh
+#! /bin/bash
+
+# This script will create a user account
+read -p "Enter the first name: " FIRST_NAME 
+read -p "Enter the last name: " LAST_NAME
+
+FIRST_NAME2=`echo "$FIRST_NAME" | tr '[:upper:]' '[:lower:]'`
+LAST_NAME2=`echo "$LAST_NAME" | tr '[:upper:]' '[:lower:]'`
+
+useradd $FIRST_NAME2
+usermod -c "$FIRST_NAME $LAST_NAME" $FIRST_NAME2
+echo "Enter you password and confirm"
+passwd $FIRST_NAME2
+
+cat /etc/passwd |grep $FIRST_NAME2
+cat /etc/shadow |grep $FIRST_NAME2
+```
+
+**Example 6:** 
+```sh
+#!/bin/bash
+echo -n "Enter username: "
+read username
+echo -n "Enter password: "
+read -s passwd
+echo
+echo "$username, the password entered is $passwd"
+```
+
+**Example 7:** 
+```sh
+#! /bin/bash
+
+# This script will create a user account
+echo -n "Enter the first name: " 
+read FIRST_NAME 
+echo -n "Enter the last name: " 
+read LAST_NAME
+echo -n "Enter the password: " 
+read -s PASSWORD
+
+echo -e "\nYou first name is: $FIRST_NAME, you last name is: $LAST_NAME and the password entered is $PASSWORD"
+```
+
+**Example 8:** 
+```sh
+#! /bin/bash
+
+# This script will create a user account
+echo -n "Enter the first name: " 
+read FIRST_NAME 
+echo -n "Enter the last name: " 
+read LAST_NAME
+echo -n "Enter the password: " 
+read -s PASSWORD
+
+#echo -e "\nYou first name is: $FIRST_NAME, you last name is: $LAST_NAME and the password entered is $PASSWORD"
+
+FIRST_NAME2=`echo "$FIRST_NAME" | tr '[:upper:]' '[:lower:]'`
+PASSWORD2=$FIRST_NAME2@$PASSWORD
+
+useradd $FIRST_NAME2
+usermod -c "$FIRST_NAME $LAST_NAME" $FIRST_NAME2
+echo $PASSWORD2 | passwd --stdin $FIRST_NAME2
+
+cat /etc/passwd |grep $FIRST_NAME2
+cat /etc/shadow |grep $FIRST_NAME2
+```
+
+**NB:** This script will work well only in **CentOs** because there is no option call `--stdin` in **Ubuntu**
+
+- [passwd: unrecognized option '--stdin' error on Debian when I run my created Bash Script](https://stackoverflow.com/questions/54382242/passwd-unrecognized-option-stdin-error-on-debian-when-i-run-my-created-bash)
+
+I am using Debian. I am learning Bash scripting. I am creating a script that creates new user and sets password the problem is I get passwd: unrecognized option '--stdin' error
+
+That is my script:
+```sh
+#!/bin/bash
+read -p "Please Enter Your Real Name: " REAL_NAME 
+read -p "Please Enter Your User Name: " USER_NAME 
+useradd -c "${COMMENT}" -m ${USER_NAME} 
+read -p "Please Enter Your Password: " PASSWORD
+echo ${PASSWORD} | passwd --stdin ${USER_NAME}
+passwd -e ${USER_NAME}
+```
+
+There is no `--stdin` option, and you need to protect your variable with quotes.
+This is a working version:
+```sh
+#!/bin/bash
+read -p "Please Enter Your Real Name: " REAL_NAME 
+read -p "Please Enter Your User Name: " USER_NAME 
+useradd -c "${COMMENT}" -m ${USER_NAME} 
+read -p "Please Enter Your Password: " PASSWORD
+echo -e "$PASSWORD\n$PASSWORD" |passwd "$USER_NAME"
+passwd -e ${USER_NAME}
+```
+
+**Example 9: RESOLUTION** 
+```sh
+#! /bin/bash
+
+# This script will create a user account
+echo -n "Enter the first name: " 
+read FIRST_NAME 
+echo -n "Enter the last name: " 
+read LAST_NAME
+echo -n "Enter the password: " 
+read -s PASSWORD
+
+#echo -e "\nYou first name is: $FIRST_NAME, you last name is: $LAST_NAME and the password entered is $PASSWORD"
+
+FIRST_NAME2=`echo "$FIRST_NAME" | tr '[:upper:]' '[:lower:]'`
+PASSWORD2=$FIRST_NAME2@$PASSWORD
+
+useradd $FIRST_NAME2
+usermod -c "$FIRST_NAME $LAST_NAME" $FIRST_NAME2
+
+echo -e "$PASSWORD2\n$PASSWORD2" |passwd "$FIRST_NAME2"
+passwd -e ${FIRST_NAME2}
+
+cat /etc/passwd |grep $FIRST_NAME2
+cat /etc/shadow |grep $FIRST_NAME2
+```

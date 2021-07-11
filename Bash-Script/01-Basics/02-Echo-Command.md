@@ -205,7 +205,7 @@ EOF
 echo ""
 echo  '/------------------------------------------------------------------------\'
 echo "|                    **** Warning ***                                    |"
-echo "| This computer system is the private property of Data Service Group INC |"
+echo "| This computer system is the private property of  DevOps Easy Learning  |"
 echo "| It is for authorized use only.                                         |"
 echo "|                                                                        |"
 echo "| Unauthorized or improper use of this system may result in civil and    |"

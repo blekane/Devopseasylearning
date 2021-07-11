@@ -79,3 +79,25 @@ It is the first line in the script which indicates the environment the script ne
 - Save the script file as `filename.sh` for instance
 - Give execute permission `chmod +x filename.sh`
 For executing the script type bash filename.sh or `./filename.sh` or `sh filename.sh` or `bash filename.sh`
+
+
+## Commentts in shell script
+You can put your comments in your script as follows
+```sh
+#!/bin/bash
+# Author :Ali
+# Date:
+# Script follows here:
+pwd
+ls
+```
+
+Save the above content and make the script executable 
+```
+chmod +x test.sh
+```
+
+The shell script is now ready to be executed
+```
+./test.sh
+```
