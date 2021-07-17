@@ -9,6 +9,7 @@
 
 ## Types of Shell
 There are two main shells in Linux:
+
 **1. The Bourne Shell:** The prompt for this shell is $ and its derivatives are listed below:
 - Bourne shell (sh)
 - Korn shell (ksh)

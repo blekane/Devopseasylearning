@@ -160,7 +160,7 @@ Assume variable a holds 10 and variable b holds 20
 | :--- | :--- | :--- |
 | ! | This is logical negation. This inverts a true condition into false and vice versa | [ ! false ] is true |
 | -o | This is logical OR. If one of the operands is true, then the condition becomes true | [ $a -lt 20 -o $b -gt 100 ] is true |
-| -a | This is logical AND. If both the operands are true, then the condition becomes true otherwise false | [ [ $a -lt 20 -a $b -gt 100 ] is false |
+| -a | This is logical AND. If both the operands are true, then the condition becomes true otherwise false | [  $a -lt 20 -a $b -gt 100 ] is false |
 
 **Example 1:**
 ```sh 
@@ -259,3 +259,152 @@ else
     echo "Not OK"
 fi
 ```
+
+## 4- String Operators
+The following string operators are supported by Bourne Shell.
+Assume variable a holds "abc" and variable b holds "efg" 
+
+| Operator | Description | Example |
+| :--- | :--- | :--- |
+| != | Checks if the value of two operands are equal or not; if yes, then the condition becomes true | [ $a = $b ] is not true |
+| -o | Checks if the value of two operands are equal or not; if values are not equal then the condition becomes true | [ $a != $b ] is true |
+| -z | Checks if the given string operand size is zero; if it is zero length, then it returns true | [ -z $a ] is not true |
+| -n | Checks if the given string operand size is non-zero; if it is nonzero length, then it returns true | [ -n $a ] is not false |
+| str | Checks if str is not the empty string; if it is empty, then it returns false | [ $a ] is not false |
+
+**Example:**
+```sh
+#!/bin/sh
+ 
+a="abc"
+b="efg"
+ 
+if [ $a = $b ]
+then
+   echo "$a = $b : a is equal to b"
+else
+   echo "$a = $b: a is not equal to b"
+fi
+ 
+if [ $a != $b ]
+then
+   echo "$a != $b : a is not equal to b"
+else
+   echo "$a != $b: a is equal to b"
+fi
+ 
+if [ -z $a ]
+then
+   echo "-z $a : string length is zero"
+else
+   echo "-z $a : string length is not zero"
+fi
+ 
+if [ -n $a ]
+then
+   echo "-n $a : string length is not zero"
+else
+   echo "-n $a : string length is zero"
+fi
+ 
+if [ $a ]
+then
+   echo "$a : string is not empty"
+else
+   echo "$a : string is empty"
+fi
+```
+
+**RESULT:**
+```
+abc = efg: a is not equal to b
+abc != efg : a is not equal to b
+-z abc : string length is not zero
+-n abc : string length is not zero
+abc : string is not empty
+```
+
+## 5- File Test Operators
+We have a few operators that can be used to test various properties associated with a Unix file.
+
+| Operator | Description | Example |
+| :--- | :--- | :--- |
+| -d file | Checks if the file is a directory; if yes, then the condition becomes true | [ -d $file ] is not true |
+| -f file | Checks if file is an ordinary file as opposed to a directory or special file; if yes, then the condition becomes true | [ -f $file ] is true |
+| -g file | Checks if the file has its set group ID (SGID) bit set; if yes, then the condition becomes true | [ -g $file ] is false |
+| -k file | Checks if the file has its sticky bit set; if yes, then the condition becomes true | [ -k $file ] is false |
+| -u file | Checks if the file has its Set User ID (SUID) bit set; if yes, then the condition becomes true | [ -u $file ] is false |
+| -r file | Checks if the file is readable; if yes, then the condition becomes true | [ -r $file ] is true |
+| -w file | Checks if the file is writable; if yes, then the condition becomes true | [ -w $file ] is true |
+| -x file | Checks if the file is executable; if yes, then the condition becomes true | [ -r $file ] is true |
+| -s file | Checks if the file has size greater than 0; if yes, then the condition becomes true | [ -s $file ] is true |
+| -r file | Checks if the file is readable; if yes, then the condition becomes true | [ -r $file ] is true |
+| -e file | Checks if file exists; is true even if file is a directory but exists | [ -e $file ] is true |
+
+**Example:**
+```sh
+#!/bin/sh
+cd /tmp/ && touch test.sh
+file="/tmp/test.sh"
+ 
+if [ -r $file ]
+then
+   echo "File has read access"
+else
+   echo "File does not have read access"
+fi
+ 
+if [ -w $file ]
+then
+   echo "File has write permission"
+else
+   echo "File does not have write permission"
+fi
+ 
+if [ -x $file ]
+then
+   echo "File has execute permission"
+else
+   echo "File does not have execute permission"
+fi
+ 
+if [ -f $file ]
+then
+   echo "File is an ordinary file"
+else
+   echo "This is special file"
+fi
+ 
+if [ -d $file ]
+then
+   echo "File is a directory"
+else
+   echo "This is not a directory"
+fi
+ 
+if [ -s $file ]
+then
+   echo "File size is not zero"
+else
+   echo "File size is zero"
+fi
+ 
+if [ -e $file ]
+then
+   echo "File exists"
+else
+   echo "File does not exist"
+fi
+```
+
+**RESULT:**
+```
+File has read access
+File has write permission
+File does not have execute permission
+File is an ordinary file
+This is not a directory
+File size is zero
+File exists
+```
+

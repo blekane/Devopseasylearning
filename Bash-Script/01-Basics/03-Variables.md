@@ -53,8 +53,8 @@ env | less
 
 ```sh
 echo "The name of the your computer is: $HOSTNAME"
-echo "Your home directory is: $PWD"
-echo "Your present working directory is: $HOME"
+echo "Your home directory is: $HOME"
+echo "Your present working directory is: $PWD"
 echo "The Shell being used by the user: $SHELL"
 echo "The user who is currently login is: $USER"
 echo "The user ID is: $ID"
@@ -72,13 +72,21 @@ The user ID is: 1000
 
 ## Working with Special Variables
 **- $0:** This will return the script name 
+
 **- $#:** How many command line parameters were passed to the script.
+
 **- $@:** All the command line parameters passed to the script.
+
 **- $?:** The exit status of the last process to run.
+
 **- $$:** The Process ID (PID) of the current script.
+
 **- $USER:** The username of the user executing the script.
+
 **- $HOSTNAME:** The hostname of the computer running the script.
+
 **- $SECONDS:** The number of seconds the script has been running for.
+
 **- $LINENO:** Returns the current line number of the script.
 
 ## Example 1:

@@ -23,7 +23,7 @@ Hello Tia
 I hope you are doing well
 ```
 
-**\v = vertical tab**
+**\t = horizontal tab**
 ```sh
 echo -e "List of fruits:\nOrange \t\t\tBanana \t\t\tApple \t\t\tAvocado"
 ```
