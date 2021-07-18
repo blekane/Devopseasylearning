@@ -13,7 +13,7 @@ sh -x script_name
 
 Run several portions of a script in debug mode by placing the `set -x` option at the point where debugging is to begin and the `set +x` option where you want it to stop. Do this as many times in the script as you want. The debug options are shown in Table below:
 
-| Option | DMeaning | 
+| Option | Meaning | 
 | :--- | :--- | 
 | set -x | Prints the statements after interpreting metacharacters and variables |
 | set +x | Stops the printing of statements |
