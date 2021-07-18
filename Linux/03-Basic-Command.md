@@ -513,6 +513,32 @@ vim /var/www/html/index.html
 </html>
 ```
 
+### How To Open A Port In CentOS / RHEL 7 through CLI?
+```
+sudo firewall-cmd --zone=public --add-port=80/tcp --permanent
+sudo firewall-cmd --reload
+```
+
+### How to stop, enable and restart the firewalld in CentOS / RHEL 7?
+```
+systemctl stop firewalld.service
+systemctl status firewalld.service
+systemctl enable firewalld.service
+systemctl restart firewalld.service
+```
+
+### How To Open A Port In Ubuntu?
+```
+syntax:
+ufw allow port-number/protocol
+example:
+$ sudo ufw allow 8080/tcp
+$ sudo ufw allow 80/tcp
+Ubuntu reload / restart iptables service command
+$ sudo ufw reload
+```
+
+
 ### Archive an existing file 
 ```
 tar cf [compressed_file.tar] [file_name]

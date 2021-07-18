@@ -133,3 +133,47 @@ fi
 ./build.sh --env qa --tag covid19-qa
 ./build.sh --env prod --tag covid19-prod
 ```
+
+## Build and push into 2 environments such as NONPROD, PROD (Senior guy)
+```sh
+ENVIRONMENT_PROD=prod
+ENVIRONMENT_NONPROD=nonprod
+
+DOCKER_REGISTRY_PROD=288210522308.dkr.ecr.us-east-1.amazonaws.com
+DOCKER_REGISTRY_NONPROD=288210522308.dkr.ecr.us-east-1.amazonaws.com
+DOCKER_REPO=jenkins
+
+PARAM_ENV=`echo $1 | awk -F= '{print $1}'`
+PARAM_TAG=`echo $3 | awk -F= '{print $1}'`
+VALUE=`echo $2 | awk -F= '{print $1}'`
+TAG=`echo $4 | awk -F= '{print $1}'`
+
+
+if [ $VALUE == $ENVIRONMENT_NONPROD ] && [ $PARAM_ENV == "--env" ] && [ $PARAM_TAG == "--tag" ]
+then
+    echo "Building Jenkins $VALUE image and pushing it into AWS ECR"
+    DOCKER_FULL="$DOCKER_REGISTRY_NONPROD/$DOCKER_REPO:$TAG"
+    aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $DOCKER_REGISTRY_NONPROD
+    docker build -t $DOCKER_FULL .
+    docker push $DOCKER_FULL
+    exit 1
+
+elif [ $VALUE == $ENVIRONMENT_PROD ] && [ $PARAM_ENV == "--env" ] && [ $PARAM_TAG == "--tag" ]
+then
+    echo "Building Jenkins $VALUE image and pushing it into AWS ECR"
+    DOCKER_FULL="$DOCKER_REGISTRY_PROD/$DOCKER_REPO:$TAG"
+    aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $DOCKER_REGISTRY_PROD
+    docker build -t $DOCKER_FULL .
+    docker push $DOCKER_FULL
+    exit 1
+
+else 
+    echo ""
+    echo "ERROR: Check the below usage to build the image according to your environement: "
+    echo "Usage for Jenkins nonprod image: $0 --env $ENVIRONMENT_NONPROD --tag <image tag name>"
+    echo "Usage for Jenkins prod image: $0 --env $ENVIRONMENT_PROD --tag <image tag name>"
+    echo "Example: $0 --env $ENVIRONMENT_NONPROD --tag jenkins-nonprod"
+    echo ""
+    exit 1
+fi
+```
