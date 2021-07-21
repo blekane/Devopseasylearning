@@ -13,7 +13,14 @@ chmod +x ./kubectl
 mv kubectl /usr/local/bin/
 kubectl
 ```
-
+**Ubuntu**
+```sh
+apt  install curl -y
+curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.9/2020-08-04/bin/linux/amd64/kubectl
+chmod +x ./kubectl
+mv kubectl /usr/local/bin/
+kubectl
+```
 ### Docker installation
 ```sh
 #! /bin/bash
@@ -38,6 +45,12 @@ sudo systemctl enable docker
 sudo systemctl start docker
 sudo docker run hello-world
 sudo docker run docker/whalesay cowsay hello-world!
+```
+
+**Ubuntu**
+```sh
+sudo apt-get update && \
+    sudo apt-get install docker.io -y
 ```
 
 ### Golang tool installation
@@ -153,6 +166,16 @@ rpm -Uvh harbottle-main-release.rpm
 yum install kubectx -y
 kubectx
 ```
+
+**kubectx and kubens on Ubuntu**
+```sh
+wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx
+wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens
+chmod +x kubectx kubens
+sudo mv kubens kubectx /usr/local/bin
+
+kubectx --help
+kubens --help
 
 ### Switch between clunster
 kind get clusters or kubectx

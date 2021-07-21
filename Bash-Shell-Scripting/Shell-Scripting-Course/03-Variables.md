@@ -257,7 +257,7 @@ read -p "Enter the first name: " FIRST_NAME
 read -p "Enter the last name: " LAST_NAME
 
 FIRST_NAME2=`echo "$FIRST_NAME" | tr '[:upper:]' '[:lower:]'`
-LAST_NAME2=`echo "$LAST_NAME" | tr tr '[:upper:]' '[:lower:]'`
+LAST_NAME2=`echo "$LAST_NAME" | tr '[:upper:]' '[:lower:]'`
 
 useradd $FIRST_NAME2
 echo "Enter you password and confirm"
