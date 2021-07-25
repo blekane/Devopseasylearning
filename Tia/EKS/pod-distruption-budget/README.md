@@ -1,4 +1,4 @@
-## PodDisruptionBudget
+## Pod Disruption Budget
 [Pod Disruption Budget in kubernetes](https://www.youtube.com/watch?v=vqDDwPpe2Po)
 
 **Pod Disruption Budget**

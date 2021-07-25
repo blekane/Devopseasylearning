@@ -29,7 +29,7 @@
 ## 3. Using a DaemonSet to run a pod on every node
 A DaemonSet deploys pods to all nodes in the cluster, unless you specify that the pods should only run on a subset of all the nodes. This is done by specifying the **node-Selector** property in the pod template, which is part of the DaemonSet definition (similar to the pod template in a ReplicaSet or ReplicationController).
 
-## 3.1 Create DaemonSet
+## 3.1. Create DaemonSet
 In this section we will setup a **logging agent using fluentd**. This agent is supposed to run on all the worker nodes part of Kubernetes cluster. Before we start we would need the KIND and apiVersion value for DaemonSet. This will be used in the manifest file.
 ```sh
 root@ubuntu:~# kubectl explain DaemonSet | head -n 2
@@ -87,7 +87,7 @@ Once you have a valid DaemonSet configuration in place, you can use the `kubectl
 kubectl create -f fluentd-daemonset.yml -n test
 ```
 
-## 3.2 Inspect DaemonSets
+## 3.2. Inspect DaemonSets
 To list the available daemonsets we will use `kubectl get` command. Here ds is short abbreviation of DaemonSets. Since I have a two node cluster, 2 daemonsets were created.
 ```sh
 root@ubuntu:~# kgn
@@ -112,7 +112,7 @@ fluentd-wlmkx   1/1     Running   0          10m   10.244.2.4   my-cluster-worke
 ## 4. Limiting DaemonSets to Specific Nodes
 The most common use case for DaemonSets is to run a **Pod across every node in a Kubernetes cluster**. However, there are some cases where you want to deploy a Pod to only a subset of nodes. For example, maybe you have a workload that requires a GPU or access to fast storage only available on a subset of nodes in your cluster. In cases like these, **node labels** can be used to tag specific nodes that meet workload requirements.
 
-## 4.1 Create DaemonSet using Node Selectors
+## 4.1. Create DaemonSet using Node Selectors
 **Node selectors** can be used to limit what nodes a Pod can run on in a given Kubernetes cluster. Node selectors are defined as part of the Pod spec when creating a **DaemonSet**. The DaemonSet configuration in following YAMl file limits NGINX to running only on nodes with the `ssd=true` label set.
 ```
 vim nginx-daemonset.yml
@@ -149,7 +149,7 @@ Let’s create our nginx daemon set:
 kubectl create -f nginx-daemonset.yml
 ```
 
-## 4.2 Inspect DaemonSet
+## 4.2. Inspect DaemonSet
 List the available daemon sets:
 ```sh
 root@ubuntu:~# kubectl create -f nginx-daemonset.yml
@@ -168,7 +168,7 @@ my-cluster-worker          Ready    <none>   109m   v1.19.1   beta.kubernetes.io
 my-cluster-worker2         Ready    <none>   109m   v1.19.1   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=my-cluster-worker2,kubernetes.io/os=linux
 ```
 
-## 4.3 Adding required labels to the node
+## 4.3. Adding required labels to the node
 Let us go ahead and add this label to one of our worker nodes:
 ```sh
 root@ubuntu:~# kgn
@@ -197,7 +197,7 @@ fluentd-wlmkx              1/1     Running   0          58m   10.244.2.4   my-cl
 nginx-fast-storage-fz867   1/1     Running   0          86s   10.244.2.5   my-cluster-worker    
 ```
 
-## 4.5 Removing the required label from the node
+## 4.5. Removing the required label from the node
 Now, imagine you’ve made a mistake and have mislabeled one of the nodes. It has a spinning disk drive, not an SSD. What happens if you change the node’s label?
 
 **To remove a label from the node we use following syntax:**
