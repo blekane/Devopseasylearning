@@ -350,3 +350,13 @@ This is the K8 command line interface that we use to communicate with the API se
 - When you install the kubernetes controller manager, other controllers get installed as well.
 
 ![](/images/k18.JPG)
+
+# 8. Conclusion
+
+In this Kubernetes session, we learned how applications have changed in recent years and how they can now be harder to deploy and manage. You’ve learned that:
+
+- Linux containers provide much the same benefits as virtual machines, but are far more lightweight and allow for much better hardware utilization.
+- Docker improved on existing Linux container technologies by allowing easier and faster provisioning of containerized apps together with their OS environments.
+- Kubernetes exposes the whole datacenter as a single computational resource for running applications.
+- Developers can deploy apps through Kubernetes without assistance from sysadmins.
+- Sysadmins can sleep better by **having Kubernetes deal with failed nodes automatically**.

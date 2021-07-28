@@ -101,6 +101,7 @@ useradd $user
 echo $password | passwd --stdin $user
 done
 
+groupadd sysmgrs
 usermod -aG sysmgrs natasha
 usermod -aG sysmgrs harry
 usermod -s /sbin/nologin sarah
