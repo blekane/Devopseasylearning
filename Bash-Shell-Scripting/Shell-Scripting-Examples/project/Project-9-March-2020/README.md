@@ -25,35 +25,7 @@
 19. Check if the grub password is set. If not, set the grub password. The password should be "redhat" 
 
 
-
-### Questions
-```
-1- Check if the CPU is at least 4000                                     
-2- check if the user admin exists on the server, if not create a user admin with the password=redhat and give him root privilege            
-3- Check if a group helpdesk exists on the server. If not,create a group helpdesk, add paul, John, tom (password = "redhat") and give them root privilege to reset other users' passwords only. NB: make sure that you expire users account
-4- Check if the memory is at least 8G                                    
-5- Check the first digit of the  Kernel version is at least 3 and above  
-6- check if the root file system is not more than 10%                    
-7- Check if selinux is set to enforcing, if not enforced it              
-8- Check if the OS version is CentOs 6 or 7                              
-9- Check if the default runlevel is 3. If not, set it to 3.              
-10- Check if cron.allow is present on the server. If not, create it.       
-11- Check if sshd port 22 is open. if yes close                          
-12- Change the default ssh port to 29                                    
-13- Check if port 8080 is open. If not open port 8080                    
-14- check if port 80 is open on the server. If not, open port 80         
-15- Check if the password hash is SHA512. If not, change to SHA512       
-16- Check if password authentication is set to yes in ssh_config file. If no, set it to yes                                                 
-17-  Check if the server will require a root for maintenance mode. If not, set it to require root password for maintenance mode        
-18- Check if the password aging is enforced. If not, enforced            
-    - SET PASS_MAX_DAYS TO 90 DAYS                                         
-    - SET PASS_MIN_LEN TO 8                                                
-    - SET PASS_MIN_LEN TO 0                                                
-    - SET PASS_WARN_AGE TO 14 DAYS                                         
-19- Check if the grub password is set. If not, set the grub password.The passowrd shoold be redhat  
-```
-
-### 1- Check if the CPU is at least 4000
+## 1- Check if the CPU is at least 4000
 ```sh
 function CPU() {
 CPU=`lscpu |grep "CPU MHz:" |awk '{print$3}' |awk -F. '{print$1}'`
@@ -67,7 +39,7 @@ fi
 CPU
 ```
 
-### 2- check if the user admin exists on the server, if not create a user
+## 2- check if the user admin exists on the server, if not create a user
 ```sh
 function ADMIN() {
 id admin > /dev/null 2>&1 
@@ -139,7 +111,7 @@ fi
 HELPDESK
 ```
 
-### 4- Check if the memory is at least 8G
+## 4- Check if the memory is at least 8G
 ```sh
 function MEMORY_CHECK() {
 
@@ -154,7 +126,7 @@ fi
 MEMORY_CHECK
 ```
 
-### 4- Check if the memory is at least 8G
+## 4- Check if the memory is at least 8G
 ```sh
 function MEMORY_CHECK() {
 
@@ -169,7 +141,7 @@ fi
 MEMORY_CHECK
 ```
 
-### 5- Check the first digit of the  Kernel version is at least 3 and above
+## 5- Check the first digit of the  Kernel version is at least 3 and above
 ```sh
 function KERNEL() {
 
@@ -184,7 +156,7 @@ fi
 KERNEL
 ```
 
-### 6- check if the root file system is not more than 10%
+## 6- check if the root file system is not more than 10%
 ```sh
 function FILE_SYSTEM() {
 
@@ -199,7 +171,7 @@ fi
 FILE_SYSTEM
 ```
 
-### 7- Check if selinux is set to enforcing, if not enforced it
+## 7- Check if selinux is set to enforcing, if not enforced it
 ```sh
 function SELINUX() {
 
@@ -217,7 +189,7 @@ SELINUX
 ```
 
 
-### 8- Check if the OS version is CentOs 6 or 7
+## 8- Check if the OS version is CentOs 6 or 7
 * NB: This function will not works
 ```sh
 function OS_VERSION() {
@@ -236,7 +208,7 @@ fi
 OS_VERSION
 ```
 
-### 9- Check if the default runlevel is 3. If not, set it to 3.
+## 9- Check if the default runlevel is 3. If not, set it to 3.
 ```sh
 function RUNLEVEL() {
 
@@ -263,7 +235,7 @@ fi
 RUNLEVEL
 ```
 
-### 10- Check if cron.allow is present on the server. If not, create it.
+## 10- Check if cron.allow is present on the server. If not, create it.
 ```sh
 function CRON.ALLOW() {
 
@@ -284,7 +256,7 @@ fi
 CRON.ALLOW
 ```
 
-### 11-  Check if sshd port 22 is open. If yes, close port 22
+## 11-  Check if sshd port 22 is open. If yes, close port 22
 ```sh
 function CHECK_PORT22() {
 
@@ -329,7 +301,7 @@ fi
 CHECK_PORT22
 ```
 
-### 12- Change the default ssh port to 29
+## 12- Change the default ssh port to 29
 * ssh -p 29 root@10.0.0.36
 * && = AND
 * || = OR
@@ -383,8 +355,8 @@ fi
 ```
 
 
-### 13- Check if port 8080 is open. If not open port 8080 
-### 14- check if port 80 is open on the server. If not, open port 80
+## 13- Check if port 8080 is open. If not open port 8080 
+## 14- check if port 80 is open on the server. If not, open port 80
 ```sh
 function IPTABLES_PORT_6() {
 
@@ -431,7 +403,7 @@ else
 fi
 ```
 
-### 15- Check if the password hash is SHA512. If not, change to SHA512
+## 15- Check if the password hash is SHA512. If not, change to SHA512
 * authconfig --passalgo=md5 --update
 * authconfig --passalgo=sha256 --update
 * authconfig --passalgo=sha512 --update
@@ -467,7 +439,7 @@ PASSWORD_HASH
 ```
 
 
-### 16- Check if password authentication is set to yes in ssh_config file. If no, set it to yes   
+## 16- Check if password authentication is set to yes in ssh_config file. If no, set it to yes   
 ```sh
 function PASSWORD_7() {
 
@@ -516,7 +488,7 @@ fi
 ```
 
 
-### 17- Check if the server will require a root for maintenance mode.If not, set it to require root password for maintenance mode.
+## 17- Check if the server will require a root for maintenance mode.If not, set it to require root password for maintenance mode.
 ```sh
 function password_maintenance(){
 echo 
@@ -562,7 +534,7 @@ fi
 password_maintenance
 ```
 
-### 18- Check if the password aging is enforced. If not, enforced
+## 18- Check if the password aging is enforced. If not, enforced
 * SET PASS_MAX_DAYS TO 90 DAYS
 * SET PASS_MIN_LEN TO 8
 * SET PASS_MIN_LEN TO 0
@@ -593,7 +565,7 @@ fi
 PASSWORD_AGING
 ```
 
-### 19- Check if the grub password is set. If not, set the grub password. The passowrd shoold be "redhat"     
+## 19- Check if the grub password is set. If not, set the grub password. The passowrd shoold be "redhat"     
 * grub-crypt: to encrypt the grub password. make encrypt with SHA512
 * vim /etc/grub.conf 
 * password --encrypted end put the encrypted password below hiddenmenu in this file
