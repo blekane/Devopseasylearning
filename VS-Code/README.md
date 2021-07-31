@@ -48,4 +48,13 @@ kubectl describe po  pod-name -namespce dev1 |grep -i image
 kubectl describe po  pod-name -namespce dev1 |grep -i image
 ```
 
+### Change all occurences
+```
+ctrl + f2
+```
+You can also select the word the you want to change all occurence in the file, right click on ckoose `Change all occurences` and change everything as once.
+
+### Search recursive in folder and replace
+![](/images/vs-search.JPG)
+
 
