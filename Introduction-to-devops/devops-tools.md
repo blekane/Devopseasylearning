@@ -68,7 +68,7 @@ AWS ECR is a fully-managed Docker container registry that makes it easy for deve
 ### Docker Hub: 
 Docker Hub is a service provided by Docker for storing, finding and sharing container images with your team. It is the world’s largest repository of container images.
 
-### Ansible:*
+### Ansible:
 Ansible is an open-source software provisioning, configuration management, and application-deployment tool.
 
 ### Docker Swarm:
