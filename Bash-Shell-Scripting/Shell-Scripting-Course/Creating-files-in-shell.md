@@ -37,3 +37,18 @@ docker build -t https:2.0 .
 docker run --name https-web -p 8030:80 -d https:2.0
 ```
 
+```sh
+rm -rf docker-jenkins
+mkdir docker-jenkins
+cd docker-jenkins
+cp /var/lib/jenkins/workspace/Package/target/addressbook.war .
+touch dockerfile
+cat <<EOT>> dockerfile
+From tomcat
+ADD addressbook.war /usr/local/tomcat/webapps
+CMD "catalina.sh" "run"
+EXPOSE 8080
+EOT
+sudo docker build -t myimage:$BUILD_NUMBER .
+sudo docker run -itd -P myimage:$BUILD_NUMBER
+```
