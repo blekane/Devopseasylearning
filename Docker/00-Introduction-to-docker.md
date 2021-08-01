@@ -7,6 +7,7 @@
     - Why should we use containers or what was the problem without containers?
         - Solution 1 with Virtual Machine
         - Solution 2 Docker containers
+    - What is a containerization?
     - Benefit of Containers
 
 2. Virtual Machine vs Docker Containers
@@ -63,6 +64,9 @@ The ultimate solution to this problem was to provide something that is much more
 - With docker, developers would now package their application, dependent libraries, framework in a container and it can run everywhere that docker is installed.
 - Operation teams can easily deploy the container without having to worry about configuring the application as these containers already contain an up and running application.
 
+### What is a containerization?
+Let me explain this with an example. Usually, in the software development process, code developed on one machine might not work perfectly fine on any other machine because of the dependencies. This problem was solved by the containerization concept. So basically, an application that is being developed and deployed is bundled and wrapped together with all its configuration files and dependencies. This bundle is called a container. Now when you wish to run the application on another system, the container is deployed which will give a bug-free environment as all the dependencies and libraries are wrapped together. Most famous containerization environments are Docker and Kubernetes.
+
 ## Benefit of Containers
 **Consistent Environment**
 Containers give developers the ability to create predictable environments that are isolated from other applications. Containers can also include **software dependencies** needed by the application, such as specific versions of programming language runtimes and other software **libraries**. From the developer’s perspective, all this is guaranteed to be ***consistent*** no matter where the application is ultimately deployed. All this translates to productivity. Developers and IT Ops teams spend less time debugging and diagnosing differences in environments. Therefore, they more time available to develop and shipp new functionality for users. And it means fewer bugs since developers can now make assumptions everything will work well in **dev, test and production environments**.
@@ -85,6 +89,8 @@ The image should be self explanatory to understand the difference between **Dock
 - The docker containers share **Linux kernel** so it would be a good fit if you are planning to run multiple applications on the same Linux kernel but if you have applications that require different operating system then you will have to go for VM
 - Since VM does not share the host OS it is comparatively more ***secure than Docker*** containers. An attacker may exploit all the containers if it gets access to the host or any single container.
 - Since containers don’t have OS they use comparatively very **less resources** to execute the application and you can utilize the underlying resources more effectively
+
+![](/images/vm.JPG)
 
 # 3. Container Orchestration
 ## What is Container Orchestration?
