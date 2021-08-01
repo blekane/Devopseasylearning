@@ -21,7 +21,7 @@
         - Benefits of Elastic Container Registry (ECR)
     - Docker Hub
         - What is a Docker Registry?
-        - Why should you Docker Hub?
+        - Why should you use Docker Hub?
 
 
 # 1. Docker containers
@@ -156,7 +156,7 @@ In many cases, a registry will consist of **multiple repositories** which contai
 
 Docker Hub is Docker’s official cloud-based registry for Docker images.
 
-**Why should you Docker Hub?**
+**Why should you use Docker Hub?**
 
 So, with all the different Docker registry options, why should you use Docker Hub? Here are a few of the key upsides of Docker Hub:
 
