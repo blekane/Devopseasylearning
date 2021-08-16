@@ -264,6 +264,17 @@ else
     exit 1
 fi
 ```
+```sh
+else 
+    echo ""
+    echo  $'\e[1;33m'ERROR: Check the below usage to build the image according to your environement$'\e[0m'
+    echo  $'\e[1;33m'Usage for Jenkins nonprod image: $0 --env $ENVIRONMENT_NONPROD --tag [image tag name]$'\e[0m'
+    echo  $'\e[1;33m'Usage for Jenkins prod image: $0 --env $ENVIRONMENT_PROD --tag [image tag name]$'\e[0m'
+    echo  $'\e[1;33m'Example: $0 --env $ENVIRONMENT_NONPROD --tag jenkins-nonprod$'\e[0m'
+    echo ""
+    exit 1
+fi
+```
 
 ## 2- Case statement
 Syntax of bash case statement.
