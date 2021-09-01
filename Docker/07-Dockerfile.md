@@ -292,14 +292,16 @@ vim Dockerfile
 ```
 ```Dockerfile
 FROM centos:latest
+ARG port=80
+ARG user=root
 LABEL maintainer="Tia M"
 RUN yum -y update && \
     yum -y install httpd
 
 COPY index.html /var/www/html/
-USER root
+USER ${user}
 ENTRYPOINT ["/usr/sbin/httpd", "-D", "FOREGROUND"]
-EXPOSE 80
+EXPOSE ${port}
 ```
 
 **Biuld and test**
@@ -324,6 +326,8 @@ vim Dockerfile
 ```
 ```Dockerfile
 FROM httpd
+ARG port=80
+ARG user=root
 LABEL maintainer="Tia M"
 RUN apt -y update && \
     apt -y install wget && \
@@ -338,9 +342,9 @@ RUN rm -rf * && \
     rm -rf covid19.zip && \
     rm -rf covid19
 
-USER root
+USER ${user}
 CMD ["httpd-foreground"]
-EXPOSE 80
+EXPOSE ${port}
 ```
 
 **Biuld and test**
@@ -380,7 +384,7 @@ RUN rm -rf * && \
 
 USER root
 ENTRYPOINT ["httpd-foreground"]
-EXPOSE 80
+EXPOSE 80-10000
 ```
 
 **Biuld and test**
@@ -452,7 +456,8 @@ vim Dockerfile
 FROM httpd
 
 ARG WEB_DIRECTORY=covid19 
-
+ARG port=80
+ARG user=root
 LABEL maintainer="Tia M"
 RUN apt -y update && \
     apt -y install wget && \
@@ -467,9 +472,9 @@ RUN rm -rf * && \
     rm -rf $WEB_DIRECTORY.zip && \
     rm -rf $WEB_DIRECTORY
 
-USER root
+USER ${user}
 ENTRYPOINT ["httpd-foreground"]
-EXPOSE 80
+EXPOSE ${port}
 ```
 **Biuld and test**
 ```

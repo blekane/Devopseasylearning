@@ -42,6 +42,21 @@ docker push 788210522308.dkr.ecr.us-east-1.amazonaws.com/aws-ecr-docker:covid19-
 ```
 
 ## Build and push into one env (Senior guy)
+
+```sh
+#!/bin/bash
+PARAM_ENV=`echo $1 | awk -F= '{print $1}'`
+PARAM_TAG=`echo $3 | awk -F= '{print $1}'`
+VALUE=`echo $2 | awk -F= '{print $1}'`
+TAG=`echo $4 | awk -F= '{print $1}'`
+
+echo $PARAM_ENV
+echo $PARAM_TAG
+echo $VALUE
+echo $TAG
+```
+
+
 ```sh
 #!/bin/bash
 
