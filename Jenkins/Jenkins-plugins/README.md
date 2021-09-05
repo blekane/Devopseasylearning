@@ -1,7 +1,9 @@
 ### How to get all the plugins install in jenkins
 * add script at the end of jenkins url, hit enter and paste the code below
 
-https://jenkins2.nonprod.nafta.dcp.aws.mbusa.com/script
+https://[Jenkins url]/script
+
+http://10.0.0.36:8080/script
 
 ```sh
 def pluginList = new ArrayList(Jenkins.instance.pluginManager.plugins)
@@ -11,7 +13,14 @@ pluginList.sort { it.getShortName() }.each{
 }
 ```
 
+**Role-based Authorization Strategy:** Enables user authorization using a Role-Based strategy. Roles can be defined globally or for 
 
-Role-based Authorization Strategy: role-strategy
-Matrix Authorization Strategy Plugin: matrix-auth
+**configuration-as-code:** This plugin allows configuration of Jenkins based on human-readable declarative configuration files.
 
+**Slack Notification:** Integrates Jenkins with Slack, allows publishing build statuses, messages and files to Slack channels.
+
+**Build Pipeline:** This plugin renders upstream and downstream connected jobs that typically form a build pipeline. In addition, it offers the ability to define manual triggers for jobs that require intervention prior to execution, e.g. an approval process outside of Jenkins.
+
+**Config AutoRefresh:** The Config AutoRefresh Plugin provides a way to configure the auto-refresh rate from the Jenkins UI.
+
+**Email Extension Plugin** – This plugin lets you configure every aspect of email notifications. You can customize things such as when to send the email, who receives it, and what the email says.

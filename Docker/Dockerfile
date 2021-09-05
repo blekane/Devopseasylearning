@@ -83,6 +83,8 @@ EXPOSE 80
 # OR 
 
 FROM httpd
+ARG port=80
+ARG user=root
 LABEL maintainer="Tia M"
 RUN apt -y update 
 RUN apt -y install wget 
@@ -105,6 +107,8 @@ EXPOSE 80
 
 # -------------------------------------------------------------------------
 FROM httpd
+ARG port=80
+ARG user=root
 LABEL maintainer="Tia M"
 RUN apt -y update && \
     apt -y install wget && \
@@ -119,13 +123,15 @@ RUN rm -rf * && \
     rm -rf static-website-example.zip && \
     rm -rf static-website-example
 
-USER root
+USER ${user}
 ENTRYPOINT ["httpd-foreground"]
-EXPOSE 80
+EXPOSE ${port}
 
 # OR 
 
 FROM httpd
+ARG port=80
+ARG user=root
 LABEL maintainer="Tia M"
 RUN apt -y update && \
     apt -y install wget && \
@@ -138,13 +144,15 @@ RUN apt -y update && \
     rm -rf static-website-example.zip && \
     rm -rf static-website-example
 
-USER root
+USER ${user}
 ENTRYPOINT ["httpd-foreground"]
-EXPOSE 80
+EXPOSE ${port}
 
 # OR 
 
 FROM httpd
+ARG port=80
+ARG user=root
 LABEL maintainer="Tia M"
 RUN apt -y update 
 RUN apt -y install wget 
@@ -157,9 +165,9 @@ RUN cp -R static-website-example/* .
 RUN rm -rf static-website-example.zip 
 RUN rm -rf static-website-example
 
-USER root
+USER ${user}
 CMD ["httpd-foreground"]
-EXPOSE 80
+EXPOSE ${port}
 
 # -------------------------------------------------------------------------
 
@@ -168,7 +176,8 @@ EXPOSE 80
 # -------------------------------------------------------------------------
 
 FROM httpd
-
+ARG port=80
+ARG user=root
 ARG WEB_DIRECTORY=static-website-example
 
 LABEL maintainer="Tia M"
@@ -185,9 +194,9 @@ RUN rm -rf * && \
     rm -rf $WEB_DIRECTORY.zip && \
     rm -rf $WEB_DIRECTORY
 
-USER root
+USER ${user}
 ENTRYPOINT ["httpd-foreground"]
-EXPOSE 80
+EXPOSE ${port}
 
 # OR
 
@@ -195,7 +204,8 @@ EXPOSE 80
 FROM httpd
 
 ARG WEB_DIRECTORY=covid19 
-
+ARG port=80
+ARG user=root
 LABEL maintainer="Tia M"
 RUN apt -y update && \
     apt -y install wget && \
@@ -210,19 +220,22 @@ RUN rm -rf * && \
     rm -rf $WEB_DIRECTORY.zip && \
     rm -rf $WEB_DIRECTORY
 
-USER root
+USER ${user}
 ENTRYPOINT ["httpd-foreground"]
-EXPOSE 80
+EXPOSE ${port}
 # -------------------------------------------------------------------------
 
 
 
 # -------------------------------------------------------------------------
 FROM tomcat
+ARG port=8080
+ARG user=root
 LABEL maintainer="Tia M"
 ADD https://warfiles-for-docker.s3.amazonaws.com/addressbook.war /usr/local/tomcat/webapps/
+USER ${user}
 ENTRYPOINT ["catalina.sh", "run"]
-EXPOSE 8080
+EXPOSE ${port}
 
 
 FROM tomcat

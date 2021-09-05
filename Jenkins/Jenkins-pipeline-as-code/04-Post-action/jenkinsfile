@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+              echo "Cloning the source code........" 
+            }
+        }
+        stage('compile') {
+            steps {
+               echo "Compiling the application........" 
+            }
+        }
+        stage('build') {
+            steps {
+               echo "Building the application........"
+            }
+        }
+        stage('test') {
+            steps {
+              echo "Testing the application........" 
+            }
+        }
+        stage('package') {
+            steps {
+               echo "Packaging the application........"
+            }
+        }
+        stage('deploy') {
+            steps {
+               echo "Deploying the application........"
+            }
+        }
+    }
+    post {
+        always {
+            echo "This will always execute no matter if the build failed or succeed"
+        }
+        success {
+            echo "This will execute only if the build succeeded"
+        }
+        failure {
+            echo "This will execute only if the build failed"
+        }
+        unstable {
+            echo "This will execute only if the build is unstable"
+        }
+    }
+}

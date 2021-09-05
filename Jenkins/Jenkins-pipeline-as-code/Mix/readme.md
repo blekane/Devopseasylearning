@@ -15,43 +15,6 @@ https://github.com/devbyaccident/azure-voting-app-redis/blob/master/Jenkinsfile
 Jenkins and Docker Build a Docker image using an jenkins pipeline and push it into docker registry
 https://www.edureka.co/community/55640/jenkins-docker-docker-image-jenkins-pipeline-docker-registry
 
-
-
-## General Terms
-**- Agent:** An agent is typically a machine, or container, which connects to a Jenkins master and executes tasks when directed by the master.
-
-**Artifact:** An immutable file generated during a Build or Pipeline run which is archived onto the Jenkins Master for later retrieval by users.
-
-**Build:** Result of a single execution of a Project
-
-**Folder** An organizational container for Pipelines and/or Projects, similar to folders on a file system.
-
-**Job:** A deprecated term, synonymous with Project.
-
-**Master:** The central, coordinating process which stores configuration, loads plugins, and renders the various user interfaces for Jenkins.
-
-**Node:** A machine which is part of the Jenkins environment and capable of executing Pipelines or Projects. Both the Master and Agents are considered to be Nodes.
-
-**Project:** A user-configured description of work which Jenkins should perform, such as building a piece of software, etc.
-
-**Pipeline:** A user-defined model of a continuous delivery pipeline
-
-**Plugin:** An extension to Jenkins functionality provided separately from Jenkins
-
-**Trigger:** A criteria for triggering a new Pipeline run or Build.
-
-**Step:** A single task; fundamentally steps tell Jenkins what to do inside of a Pipeline or Project
-
-**Workspace:** A disposable directory on the file system of a Node where work can be done by a Pipeline or Project. Workspaces are typically left in place after a Build or Pipeline run completes unless specific Workspace cleanup policies have been put in place on the Jenkins Master.
-
-**Upstream:** A configured Pipeline or Project which triggers a separate Pipeline or Project as part of its
-execution.
-
-**Downstream:** A configured Pipeline or Project which is triggered as part of the execution of a separate Pipeline
-or Project.
-
-
-
 ## Some plugins in Jenkins
 - **Config AutoRefresh:** the Config AutoRefresh Plugin provides a way to configure the auto-refresh rate from the Jenkins UI.
 - configuration-as-code
@@ -78,10 +41,232 @@ pluginList.sort { it.getShortName() }.each{
   plugin -> 
     println ("${plugin.getShortName()}: ${plugin.getVersion()}")
 }
+```
 
 
+## Declarative pipeline Vs Scripted Pipeline
+- A declarative pipeline has a structure defined already that needs to be followed while scripting pipeline is a groovy script that does not have a structure. 
+
+- Declarative pipeline start with the **pipeline definition** while scripted pipeline start with **node definition**
+
+```groovy
+
+node {
+	// Scripted Pipeline Here
+}
+```
+
+```groovy
+pipeline {
+	// Declarative Pipeline Here
+}
+```
 
 
+## Running hello world
+- **Agent** indicates that Jenkins should allocate an executor or slave to run the pipeline.
+- **Stage:** it is a section of the pipeline such as build, test and so on
+- **Steps:** it is the specific instruction to execute the stage.
+- **Pipeline:** it is a series of tasks required to build, test and deploy an application from source control into dev, qa and prod.
+
+```groovy
+pipeline {
+    agent any
+    stages {
+        stage('Hello World') {
+            steps {
+                echo "Hello World"
+            }
+        }
+    }
+}
+```
+
+
+## Pipeline structure
+```groovy
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+              echo "Cloning the source code........" 
+            }
+        }
+        stage('compile') {
+            steps {
+               echo "Compiling the application........" 
+            }
+        }
+        stage('build') {
+            steps {
+               echo "Building the application........"
+            }
+        }
+        stage('test') {
+            steps {
+              echo "Testing the application........" 
+            }
+        }
+        stage('package') {
+            steps {
+               echo "Packaging the application........"
+            }
+        }
+        stage('deploy') {
+            steps {
+               echo "Deploying the application........"
+            }
+        }
+    }
+}
+```
+
+
+## Running a shell script in the pipeline
+```groovy
+pipeline {
+    agent any
+    stages {
+        stage('Hello World') {
+            steps {
+                echo "Hello World"
+            }
+        }
+        stage('Run shell commands') {
+            steps {
+               sh '''
+                 #!/bin/bash
+                 echo "hello world" 
+                 ls -la
+                 cat /etc/*release
+                ''' 
+            }
+        }
+    }
+}
+```
+
+```groovy
+pipeline {
+    agent any
+    stages {
+        stage('Hello World') {
+            steps {
+                echo "Hello World"
+            }
+        }
+        stage('Run shell commands') {
+            steps {
+               sh '''
+                #! /bin/bash
+
+                # Uninstall old versions
+                sudo yum remove docker \\
+                                docker-client \\
+                                docker-client-latest \\
+                                docker-common \\
+                                docker-latest \\
+                                docker-latest-logrotate \\
+                                docker-logrotate \\
+                                docker-engine
+
+                # this will download the script package to install docker
+                curl -fsSL https://get.docker.com -o get-docker.sh
+                # this will install the package
+                sudo sh get-docker.sh
+
+                sudo systemctl enable docker
+                sudo systemctl start docker
+                sudo docker run hello-world
+                sudo docker run docker/whalesay cowsay hello-world!
+                ''' 
+            }
+        }
+    }
+}
+```
+
+
+## post action
+**Post:**
+- This helps execute some logic after all stages are executed.
+- It can be very helpful to notify the team about the status of the build such as sending **out notification**.
+
+**We have 5 post build condition:**
+- **Always:** this will always execute no matter if the build failed or succeed.
+- **Success:** this will execute only if the build succeeded.
+- **Failure:** this will execute only if the build failed.
+- **Changed:** only run if the current Pipeline run has a different status from the previously completed
+- **Unstable:** this will execute only if the build is unstable. An example is to fialed the copy an artifact to a remote server.
+- 
+
+```groovy
+pipeline {
+    agent any
+    stages {
+        stages('Example') {
+            steps {
+               echo 'Hello World' 
+            }
+        }
+    }
+    post {
+        always {
+            echo 'I will always say Hello again!'
+        }
+    }
+}
+```
+
+```groovy
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+              echo "Cloning the source code........" 
+            }
+        }
+        stage('compile') {
+            steps {
+               echo "Compiling the application........" 
+            }
+        }
+        stage('build') {
+            steps {
+               echo "Building the application........"
+            }
+        }
+        stage('test') {
+            steps {
+              echo "Testing the application........" 
+            }
+        }
+        stage('package') {
+            steps {
+               echo "Packaging the application........"
+            }
+        }
+        stage('deploy') {
+            steps {
+               echo "Deploying the application........"
+            }
+        }
+    }
+    post {
+        always {
+            echo "This will always execute no matter if the build failed or succeed"
+        }
+        success {
+            echo "This will execute only if the build succeeded"
+        }
+        failure {
+            echo "This will execute only if the build failed"
+        }
+    }
+}
+```
 
 
 ## When condition
@@ -243,6 +428,114 @@ pipeline {
 				echo "Deploying the application"
 				sh 'cat /etc/*release'
 			}
+		}
+	}
+}
+```
+
+
+## Email Notification or Handling Failures
+* This will not send out notification because the build will not failed
+
+```groovy
+pipeline {
+	agent any
+	stages {
+		stage('Test') {
+			steps {
+				sh 'cat /etc/*release'
+			}
+		}
+	}
+	post {
+		failure {
+			mail bcc: '', body: '''Hi 
+			Please Check Jenkins the job failed.''', cc: '', from: '', replyTo: '', subject: 'Jenkins Job Notification', to: 'tiajearad44@gmail.com'
+		}
+	}
+}
+```
+
+* This will send out notification because the build will failed
+```groovy
+// Declarative //
+pipeline {
+	agent any
+	stages {
+		stage('Test') {
+			steps {
+				sh 'cat /etc/*release....'
+			}
+		}
+	}
+	post {
+		failure {
+			mail bcc: '', body: '''Hi 
+			Please Check Jenkins the job failed.''', cc: '', from: '', replyTo: '', subject: 'Jenkins Job Notification', to: 'tiajearad44@gmail.com'
+		}
+	}
+}
+```
+
+* This will send an email notification out if the build failed
+```groovy
+pipeline {
+	agent any
+	stages {
+		stage('Checkout') {
+			steps {
+				echo "Cloning the code from VCS"
+			}
+		}
+		stage('Compile') {
+			when {
+				expression {
+					currentBuild.result == null || currentBuild.result == 'SUCCESS'
+				}
+			}
+			steps {
+				echo "Compiling the application"
+				sh 'cat /etc/*release'
+			}
+		}
+		stage('Buiid') {
+			when {
+				expression {
+					currentBuild.result == null || currentBuild.result == 'SUCCESS'
+				}
+			}
+			steps {
+				echo "Building the application"
+				sh 'cat /etc/*release'
+			}
+		}
+		stage('Test') {
+			when {
+				expression {
+					currentBuild.result == null || currentBuild.result == 'SUCCESS'
+				}
+			}
+			steps {
+				echo "Testing the application"
+				sh 'cat /etc/*release'
+			}
+		}
+		stage('deploy') {
+			when {
+				expression {
+					currentBuild.result == null || currentBuild.result == 'SUCCESS'
+				}
+			}
+			steps {
+				echo "Deploying the application"
+				sh 'cat /etc/*release'
+			}
+		}
+	}
+	post {
+		failure {
+			mail bcc: '', body: '''Hi 
+			Please Check Jenkins the job failed.''', cc: '', from: '', replyTo: '', subject: 'Jenkins Job Notification', to: 'tiajearad44@gmail.com'
 		}
 	}
 }
@@ -1042,4 +1335,51 @@ pipeline {
 }
 ```
 
+## Blue Ocean
+- Blue Ocean can be installed in an existing Jenkins environment or be run with Docker.
+- To start using the plugin:blue-ocean[Blue Ocean plugin] in an existing Jenkins environment, it must be running Jenkins `2.7.x or later.`:
+    1. Login to your Jenkins server
+    2. Click Manage Jenkins in the sidebar then Manage Plugins
+    3. Choose the Available tab and use the search bar to find Blue Ocean
+    4. Click the checkbox in the Install column
+    5. Click either Install without restart or Download now and install after restart
 
+**With Docker:**
+- To start a new Jenkins with Blue Ocean pre-installed:
+    1. Ensure Docker is installed.
+    2. Run docker run -p 8888:8080 jenkinsci/blueocean:latest
+    3. Browse to localhost:8888/blue
+
+
+## General Terms
+**- Agent:** An agent is typically a machine, or container, which connects to a Jenkins master and executes tasks when directed by the master.
+
+**Artifact:** An immutable file generated during a Build or Pipeline run which is archived onto the Jenkins Master for later retrieval by users.
+
+**Build:** Result of a single execution of a Project
+
+**Folder** An organizational container for Pipelines and/or Projects, similar to folders on a file system.
+
+**Job:** A deprecated term, synonymous with Project.
+
+**Master:** The central, coordinating process which stores configuration, loads plugins, and renders the various user interfaces for Jenkins.
+
+**Node:** A machine which is part of the Jenkins environment and capable of executing Pipelines or Projects. Both the Master and Agents are considered to be Nodes.
+
+**Project:** A user-configured description of work which Jenkins should perform, such as building a piece of software, etc.
+
+**Pipeline:** A user-defined model of a continuous delivery pipeline
+
+**Plugin:** An extension to Jenkins functionality provided separately from Jenkins
+
+**Trigger:** A criteria for triggering a new Pipeline run or Build.
+
+**Step:** A single task; fundamentally steps tell Jenkins what to do inside of a Pipeline or Project
+
+**Workspace:** A disposable directory on the file system of a Node where work can be done by a Pipeline or Project. Workspaces are typically left in place after a Build or Pipeline run completes unless specific Workspace cleanup policies have been put in place on the Jenkins Master.
+
+**Upstream:** A configured Pipeline or Project which triggers a separate Pipeline or Project as part of its
+execution.
+
+**Downstream:** A configured Pipeline or Project which is triggered as part of the execution of a separate Pipeline
+or Project.

@@ -1,0 +1,63 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+              echo "Cloning the source code........" 
+            }
+        }
+        stage('Compile') {
+            steps {
+               echo "Compiling the application........" 
+            }
+        }
+          stage('Test') {
+            steps {
+              echo "Testing the application........" 
+            }
+        }
+        stage('Build') {
+            steps {
+               echo "Building the application........"
+            }
+        }
+        stage('Package') {
+            steps {
+               echo "Packaging the application........"
+            }
+        }
+        stage('Docker-build') {
+            steps {
+               echo "Biulding docker image........"
+            }
+        }
+        stage('Docker-push') {
+            steps {
+               echo "Pushing docker image into AWS ECR or docker hub........"
+            }
+        }
+        stage('Deploy') {
+            steps {
+               echo "Deploying the application into Kubernetes........"
+            }
+        }
+        
+    }
+    post {
+        success {
+            echo 'Finished with status: SUCCESS ===> GOOD JOB GUYS!'
+        }
+
+        failure {
+            echo 'Finished with status: FAILED ===> Please check the console output to fix this job IMMEDIATELY ===> THANKS.'
+        }
+        unstable {
+            echo 'Finished with status: UNSTABLE ===> Please check the console output to fix this job IMMEDIATELY ===> THANKS.' 
+        }
+    }        
+}
+
+
+
+
+
