@@ -79,13 +79,18 @@ echo
 fi
 ```
 
-### Jenkins on AWS
+### Jenkins on AWS EC2
 [How to install jenkins in AWS EC2](https://www.jenkins.io/doc/tutorials/tutorial-for-installing-jenkins-on-AWS/)
 ```sh
-sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo yum update –y
+sudo yum install wget -y
+sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/redhat-stable/jenkins.repo
 sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
-sudo yum upgrade
-sudo yum install jenkins java-1.8.0-openjdk-devel -y
+sudo yum upgrade -y
+sudo amazon-linux-extras install epel -y
+sudo amazon-linux-extras install java-openjdk11 -y 
+sudo yum install jenkins -y
 sudo systemctl daemon-reload
 sudo systemctl start jenkins
 sudo systemctl status jenkins
@@ -98,7 +103,7 @@ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
 
 
-### Jenkins install in Ubuntu
+### Jenkins install in Ubuntu with Maven
 ```sh
 #!/bin/bash
 #Maintainer name 
@@ -133,7 +138,7 @@ echo
 sleep 2
 
 sudo add-apt-repository ppa:openjdk-r/ppa
-sudo apt-get update
+sudo apt-get update -y
 sudo apt install unzip -y
 sudo apt-get install -y openjdk-8-jdk
 
@@ -142,7 +147,7 @@ sudo apt-get install -y openjdk-8-jdk
 #wget -q -O - https://pkg.jenkins.io/debian/jenkins-ci.org.key | sudo apt-key add -
 wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
 echo deb https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list
-sudo apt-get update
+sudo apt-get update -y
 sudo apt-get install -y jenkins
 sudo systemctl start jenkins
 
@@ -201,7 +206,7 @@ echo Thank you for using this script email me for any question comment or concer
 exit
 ```
 
-### Install jenkins on AWS, CentOs and Ubuntu with the case statement
+### Install jenkins on AWS EC2, CentOs and Ubuntu with the case statement
 
 ```sh
 #!/bin/bash
@@ -265,7 +270,7 @@ sudo wget -O /etc/yum.repos.d/jenkins.repo \
     https://pkg.jenkins.io/redhat-stable/jenkins.repo
 sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
 #sudo yum upgrade -y
-sudo java-11-openjdk-devel -y
+sudo yum install java-11-openjdk-devel -y
 sudo yum install jenkins -y 
 sudo systemctl daemon-reload
 systemctl start jenkins 
@@ -283,17 +288,19 @@ exit 1
 Amazon)
 echo "This is Amazon server"
 sleep 5
+sudo yum update –y
 sudo yum install wget -y
 sudo wget -O /etc/yum.repos.d/jenkins.repo \
     https://pkg.jenkins.io/redhat-stable/jenkins.repo
 sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
 sudo yum upgrade -y
-sudo java-1.8.0 -y
-sudo yum install jenkins -y 
+sudo amazon-linux-extras install epel -y
+sudo amazon-linux-extras install java-openjdk11 -y 
 sudo yum install jenkins -y
 sudo systemctl daemon-reload
-systemctl start jenkins 
-systemctl enable jenkins
+sudo systemctl start jenkins
+sudo systemctl status jenkins
+sudo systemctl enable jenkins
 
 echo "Use the bellow URL to check your website on the browser:"
 sleep 2
@@ -310,75 +317,39 @@ esac
 fi
 ```
 
-```sh
-#! /bin/bash
 
-# This script will install java and jenkins
- echo "Checking the operating system"
- OS=$(cat /etc/os-release |grep PRETTY_NAME | awk -F= '{print$2}' | awk -F '"' '{print$2}' |awk '{print$1}')
+sudo add-apt-repository ppa:openjdk-r/ppa
+sudo apt-get update -y
+sudo apt install unzip -y
+sudo apt-get install -y openjdk-8-jdk
 
-echo 'checking if jenkins is installed'
-ls /var/lib |grep jenkins
-if 
-[[ ${?} -eq 0 ]]
-then 
-    echo "Jenkins is install"
-    exit 1
-    else
 
-case $OS in
-Ubuntu)
+
+sudo yum update –y
+sudo yum install wget -y
+sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+sudo yum upgrade -y
+sudo amazon-linux-extras install epel -y
+sudo amazon-linux-extras install java-openjdk11 -y 
+sudo yum install jenkins -y
+sudo systemctl daemon-reload
+sudo systemctl start jenkins
+sudo systemctl status jenkins
+sudo systemctl enable jenkins
+
+
+
 sudo apt install wget -y
-sudo apt update
-sudo apt search openjdk
-sudo apt install openjdk-11-jdk -y
-java -version
-ufw enable 2& > /dev/null
-ufw allow 8080/tcp   2& > /dev/null 
-ufw reload
 wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
 sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > \
     /etc/apt/sources.list.d/jenkins.list'
 sudo apt-get update -y
+sudo apt install openjdk-11-jdk -y
 sudo apt-get install jenkins -y
-systemctl start jenkins 
-systemctl enable jenkins
-
-;;
-
-CentOS) 
-sudo yum install wget -y 
-sudo wget -O /etc/yum.repos.d/jenkins.repo \
-    https://pkg.jenkins.io/redhat-stable/jenkins.repo
-sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
-sudo yum upgrade -y
-sudo java-11-openjdk-devel -y
-sudo yum install jenkins -y 
 sudo systemctl daemon-reload
-systemctl start jenkins 
-systemctl enable jenkins
-firewall-cmd --permanent --add-port=8080/tcp   2& > /dev/null 
-firewall-cmd --reload 2& > /dev/null
-;;
+sudo systemctl start jenkins
+sudo systemctl status jenkins
+sudo systemctl enable jenkins
 
-Amazon)
-sudo yum install wget -y  
-sudo wget -O /etc/yum.repos.d/jenkins.repo \
-    https://pkg.jenkins.io/redhat-stable/jenkins.repo
-sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
-sudo yum upgrade -y
-sudo java-1.8.0 -y
-sudo yum install jenkins -y 
-sudo systemctl daemon-reload
-systemctl start jenkins 
-systemctl enable jenkins
-;;
-
-*)
-   echo "your operating system is UNKNOWN"
-   exit 1
-   ;;
-esac 
-
-fi
-```

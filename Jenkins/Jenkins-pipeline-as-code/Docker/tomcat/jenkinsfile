@@ -1,0 +1,184 @@
+pipeline {
+    agent any
+    environment {
+        TAG='addressbook'
+        CONTAINER_PORT='8080'
+        HOST_NAME_OR_IP='http:10.0.0.10'
+        registry = 'leonardtia/devops-test-repo'
+        registryCredential = 'Docker-Hub-Credentials'
+        dockerImage = ''
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'GitHub-Credentials', url: 'https://github.com/leonardtia1/dockerfile.git']]]) 
+            }
+        }
+        stage('Building The Image') {
+            steps {
+                script {
+                    dockerImage = docker.build registry + ":${TAG}-${BUILD_NUMBER}"
+                }
+            }   
+        }
+        stage('Runing The Image') {
+            steps {
+                sh '''
+                 #!/bin/bash
+                 docker images
+                 docker run \
+                    -d \
+                    -p 80${BUILD_NUMBER}:${CONTAINER_PORT} \
+                    --name=${TAG}-${BUILD_NUMBER} \
+                    ${registry}:${TAG}-${BUILD_NUMBER}
+                docker ps
+                ''' 
+            }
+        }
+        stage('Pushing Image To Docker Hub') {
+            steps {
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                        dockerImage.push()
+                    }
+                }
+            }
+        }
+        stage('Remove Unused docker image') {
+            steps {
+                sh "docker rmi --force ${registry}:${TAG}-$BUILD_NUMBER"
+                sh "docker images"
+                sh "docker ps"
+            }
+        }
+        stage('App URL') {
+            steps {
+                sh '''
+                 #!/bin/bash
+                 echo "Use this URL to access you application: ${HOST_NAME_OR_IP}:80${BUILD_NUMBER}/${TAG}"
+                ''' 
+            }
+        }      
+    }
+    post {
+        success {
+            slackSend baseUrl: 'https://hooks.slack.com/services/',
+            channel: 'pipeline-test', 
+            color: '#BDFFC3', 
+            message: 'Project Name : ' + JOB_NAME + ' \n Build Status : Build number ' + currentBuild.displayName + ' finished with status: SUCCESS ===> GOOD JOB GUYS! \n Description : ' + currentBuild.description + '\n Build URL : ' + BUILD_URL, 
+            teamDomain: 'Devops easy learning', 
+            tokenCredentialId: 'Slack-Token-For-Incoming-Webhooks'
+        }
+        failure {
+            slackSend baseUrl: 'https://hooks.slack.com/services/',
+            channel: 'pipeline-test', 
+            color: '#FF9FA1', 
+            message: 'Project Name : ' + JOB_NAME + ' \n Build Status : Build number ' + currentBuild.displayName + ' finished with status: FAILED ===> Please check the console output to fix this job IMMEDIATELY ===> THANKS. \n Description : ' + currentBuild.description + '\n Build URL : ' + BUILD_URL, 
+            teamDomain: 'Devops easy learning', 
+            tokenCredentialId: 'Slack-Token-For-Incoming-Webhooks'
+        }
+        unstable {
+            slackSend baseUrl: 'https://hooks.slack.com/services/',
+            channel: 'pipeline-test', 
+            color: '#FFFE89', 
+            message: 'Project Name : ' + JOB_NAME + ' \n Build Status : Build number ' + currentBuild.displayName + ' finished with status: UNSTABLE ===> Please check the console output to fix this job IMMEDIATELY ===> THANKS. \n Description : ' + currentBuild.description + '\n Build URL : ' + BUILD_URL, 
+            teamDomain: 'Devops easy learning', 
+            tokenCredentialId: 'Slack-Token-For-Incoming-Webhooks'
+        }
+        
+    }
+}
+
+
+
+
+pipeline {
+    agent any
+    environment {
+        TAG='pebble'
+        CONTAINER_PORT='8080'
+        HOST_NAME_OR_IP='http:10.0.0.10'
+        registry = 'leonardtia/devops-test-repo'
+        registryCredential = 'Docker-Hub-Credentials'
+        dockerImage = ''
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'GitHub-Credentials', url: 'https://github.com/leonardtia1/dockerfile.git']]]) 
+            }
+        }
+        stage('Building The Image') {
+            steps {
+                script {
+                    dockerImage = docker.build registry + ":${TAG}-${BUILD_NUMBER}"
+                }
+            }   
+        }
+        stage('Runing The Image') {
+            steps {
+                sh '''
+                 #!/bin/bash
+                 docker images
+                 docker run \
+                    -d \
+                    -p 80${BUILD_NUMBER}:${CONTAINER_PORT} \
+                    --name=${TAG}-${BUILD_NUMBER} \
+                    ${registry}:${TAG}-${BUILD_NUMBER}
+                docker ps
+                ''' 
+            }
+        }
+        stage('Pushing Image To Docker Hub') {
+            steps {
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                        dockerImage.push()
+                    }
+                }
+            }
+        }
+        stage('Remove Unused docker image') {
+            steps {
+                sh "docker rmi --force ${registry}:${TAG}-$BUILD_NUMBER"
+                sh "docker images"
+                sh "docker ps"
+            }
+        }
+        stage('App URL') {
+            steps {
+                sh '''
+                 #!/bin/bash
+                 echo "Use this URL to access you application: ${HOST_NAME_OR_IP}:80${BUILD_NUMBER}/${TAG}"
+                ''' 
+            }
+        }      
+    }
+    post {
+        success {
+            slackSend baseUrl: 'https://hooks.slack.com/services/',
+            channel: 'pipeline-test', 
+            color: '#BDFFC3', 
+            message: 'Project Name : ' + JOB_NAME + ' \n Build Status : Build number ' + currentBuild.displayName + ' finished with status: SUCCESS ===> GOOD JOB GUYS! \n Description : ' + currentBuild.description + '\n Build URL : ' + BUILD_URL, 
+            teamDomain: 'Devops easy learning', 
+            tokenCredentialId: 'Slack-Token-For-Incoming-Webhooks'
+        }
+        failure {
+            slackSend baseUrl: 'https://hooks.slack.com/services/',
+            channel: 'pipeline-test', 
+            color: '#FF9FA1', 
+            message: 'Project Name : ' + JOB_NAME + ' \n Build Status : Build number ' + currentBuild.displayName + ' finished with status: FAILED ===> Please check the console output to fix this job IMMEDIATELY ===> THANKS. \n Description : ' + currentBuild.description + '\n Build URL : ' + BUILD_URL, 
+            teamDomain: 'Devops easy learning', 
+            tokenCredentialId: 'Slack-Token-For-Incoming-Webhooks'
+        }
+        unstable {
+            slackSend baseUrl: 'https://hooks.slack.com/services/',
+            channel: 'pipeline-test', 
+            color: '#FFFE89', 
+            message: 'Project Name : ' + JOB_NAME + ' \n Build Status : Build number ' + currentBuild.displayName + ' finished with status: UNSTABLE ===> Please check the console output to fix this job IMMEDIATELY ===> THANKS. \n Description : ' + currentBuild.description + '\n Build URL : ' + BUILD_URL, 
+            teamDomain: 'Devops easy learning', 
+            tokenCredentialId: 'Slack-Token-For-Incoming-Webhooks'
+        }
+        
+    }
+}

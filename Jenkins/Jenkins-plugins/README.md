@@ -23,4 +23,12 @@ pluginList.sort { it.getShortName() }.each{
 
 **Config AutoRefresh:** The Config AutoRefresh Plugin provides a way to configure the auto-refresh rate from the Jenkins UI.
 
-**Email Extension Plugin** – This plugin lets you configure every aspect of email notifications. You can customize things such as when to send the email, who receives it, and what the email says.
+**Email Extension Plugin:**  This plugin lets you configure every aspect of email notifications. You can customize things such as when to send the email, who receives it, and what the email says.
+
+**CloudBees Docker Build and Publish plugin:** This plugin enables building Dockerfile based projects, as well as publishing of the built images/repos to the docker registry.
+
+**Docker Pipeline:** Build and use Docker containers from pipelines.
+
+**GitHub Integration Plugin:** GitHub Integration Plugin for Jenkins
+
+**Multibranch Scan Webhook Trigger:** Trigger that can receive any HTTP request and trigger a multibranch job scan when token matched.
