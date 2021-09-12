@@ -83,9 +83,10 @@ CREATE DATABASE sales;
 ```
 
 ### PostgreSQL DROP DATABASE
+**NB:** only the supper user and the owner can drop the database
 ```sql
-DROP DATABASE  [database name];
-DROP DATABASE sales;
+DROP DATABASE IF EXISTS  [database name];
+DROP DATABASE IF EXISTS sales;
 ```
 
 ### How to delete users?
@@ -98,6 +99,15 @@ DROP USER  tia;
 ```sql
 DROP TABLE  [table name];
 DROP TABLE accounts;
+```
+
+### Drop a COLUMN (ALTER TABLE DROP COLUMN)
+```sql
+ALTER TABLE table_name
+DROP COLUMN column_name;
+
+ALTER TABLE accounts
+DROP COLUMN user_email;
 ```
 
 ### Create a database and connect
@@ -132,3 +142,19 @@ psql -h localhost -p 5432 -U tia learning
 SELECT * FROM [table name];
 SELECT * FROM locations;
 ```
+
+### Comment in SQL
+```
+--- Using pgAdmin - View table structure, and create column
+```
+
+OR 
+
+```
+/*
+Using pgAdmin - Rename, delete and change the data type of a column
+Using pgAdmin - View table structure, and create column
+*/
+```
+
+
