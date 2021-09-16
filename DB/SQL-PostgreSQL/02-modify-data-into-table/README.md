@@ -92,9 +92,49 @@ RETURNING *;
 UPDATE customers
 SET 
 email = 'jhon@.com',
-first_name = 'Tom',
+first_name = 'Hans',
 last_name = 'Paul',
 age = 10
 WHERE customer_id = 3
 RETURNING *;
 ```
+
+### Updating all records in a table
+1. Create a new column in customers tabe
+```sql
+ALTER TABLE public.customers
+    ADD COLUMN gender character varying(15);
+```
+
+2. Update just one record
+```sql
+select * from customers;
+
+UPDATE customers
+SET gender = 'Male'
+WHERE customer_id = 2
+```
+
+2. Update all the records
+```sql
+select * from customers;
+
+UPDATE customers
+SET gender = 'Male'
+```
+
+### Delete data from a table
+```sql
+select * from customers;
+
+DELETE FROM customers 
+WHERE customer_id = 1;
+```
+
+### Delete data from a table
+```sql
+select * from customers;
+
+DELETE FROM customers 
+```
+
