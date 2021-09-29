@@ -4,6 +4,8 @@
 * [Terraform Releases](https://releases.hashicorp.com/terraform/)
 
 ### Terraform installation on Windows:
+[terraform 13.5](https://releases.hashicorp.com/terraform/0.13.5/)
+
 * Unzip the folder
 * create a folder call terraform on the C drive and paste the terraform.exe
 * Type `env` on windows search bar and at it to path `C:\terraform`

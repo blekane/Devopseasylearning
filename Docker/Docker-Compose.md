@@ -15,6 +15,13 @@ chmod +x /usr/local/bin/docker-compose
 ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 docker-compose -version
 ```
+## Docker Compose Installation on Ubuntu?
+```
+apt update -y
+snap install docker         
+apt  install docker-compose  -y
+docker-compose --version
+```
 
 ## Example
 **1. Create a compose file**
