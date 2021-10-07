@@ -12,6 +12,17 @@ services:
     image: sonarqube
     ports:
     - "9000:9000"
+  grafana:
+    image: grafana/grafana
+    ports:
+    - "3000:3000"
+  splunk:
+    image: splunk/splunk:latest
+    ports:
+    - "8000:8000"
+    environment:
+    - SPLUNK_START_ARGS=--accept-license
+    - SPLUNK_PASSWORD=<password>
   mysql:
     image: mysql
     ports:
@@ -50,3 +61,45 @@ volumes:
 
 
 
+## Wordpress and mariadb
+```yaml
+version: '2'
+
+services:
+  wordpress:
+    image: wordpress:4.5
+    depends_on:
+      - db
+    links:
+      - db
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+    networks:
+      - frontend
+      - backend
+    restart: always
+
+  db:
+    image: mariadb:10.1
+    volumes:
+      - "./volumes/db:/var/lib/mysql"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    networks:
+      - frontend
+      - backend
+    
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge

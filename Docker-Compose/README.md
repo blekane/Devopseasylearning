@@ -462,7 +462,7 @@ services:
 docker-compose up -d
 docker-compose down
 
-# Sonarqube default password
+# Sonarqube default username and password
 username: admin
 password: admin
 ```
@@ -484,11 +484,45 @@ services:
 docker-compose up -d
 docker-compose down
 
-# Pgadmin default password
+# Pgadmin default username and password
 username: pgadmin4@pgadmin.org
 password: admin
 ```
 
+## Splunk
+```yml
+version: '3'
+services:
+  splunk:
+    image: splunk/splunk:latest
+    ports:
+    - "8000:8000"
+    environment:
+    - SPLUNK_START_ARGS=--accept-license
+    - SPLUNK_PASSWORD=<password>
+
+# Commands
+docker-compose up -d
+docker-compose down
+
+# splunk default username and password
+username: admin
+password: <password>
+```
+
+## Grafana
+```yaml
+version: '3'
+services:
+  grafana:
+    image: grafana/grafana
+    ports:
+    - "3000:3000"
+
+# Grafana default username and password
+username: admin
+password: admin
+```
 
 ## Example
 **1. Create a compose file**
@@ -512,6 +546,17 @@ services:
     image: sonarqube
     ports:
     - "9000:9000"
+  grafana:
+    image: grafana/grafana
+    ports:
+    - "3000:3000"
+  splunk:
+    image: splunk/splunk:latest
+    ports:
+    - "8000:8000"
+    environment:
+    - SPLUNK_START_ARGS=--accept-license
+    - SPLUNK_PASSWORD=<password>
   mysql:
     image: mysql
     ports:
@@ -569,7 +614,7 @@ docker exec -it [Running Container ID or name] cat /nexus-data/admin.password
 docker exec -it nexus cat /nexus-data/admin.password
 docker exec -it 96ca9c409aaa cat /nexus-data/admin.password
 
-# Sonarqube default password
+# Sonarqube default username and password
 username: admin
 password: admin
 
@@ -586,160 +631,127 @@ exit
 # Connection through CLI
 docker exec -it [Running Container ID or name] psql --host=postgres --username=postgres dbname=TEST_SM
 docker exec -it 45971b9c64f4 psql --host=postgres --username=postgres dbname=TEST_SM
-```
-https://github.com/leonardtia1/docker-compose-lamp
-https://github.com/marcel-dempers/docker-development-youtube-series/tree/master/storage/redis
 
+# splunk default username and password
+username: admin
+password: <password>
+http://192.168.2.33:8000/
+
+# Grafana default username and password
+username: admin
+password: admin
+http://192.168.2.33:3000/
+```
+
+## LAMP
+
+[docker-compose-lamp](https://github.com/leonardtia1/docker-compose-lamp)
+
+**Environment file call sample.env**
+```sh
+# Please Note:
+# In PHP Versions <= 7.4 MySQL8 is not supported due to lacking pdo support
+
+# To determine the name of your containers
+COMPOSE_PROJECT_NAME=lamp
+
+# Possible values: php54, php56, php71, php72, php73, php74
+PHPVERSION=php74
+DOCUMENT_ROOT=./www
+VHOSTS_DIR=./config/vhosts
+APACHE_LOG_DIR=./logs/apache2
+PHP_INI=./config/php/php.ini
+
+# Possible values: mariadb, mysql, mysql8
+DATABASE=mysql
+MYSQL_DATA_DIR=./data/mysql
+MYSQL_LOG_DIR=./logs/mysql
+
+# If you already have the port 80 in use, you can change it (for example if you have Apache)
+HOST_MACHINE_UNSECURE_HOST_PORT=80
+HOST_MACHINE_SECURE_HOST_PORT=443
+
+# If you already have the port 3306 in use, you can change it (for example if you have MySQL)
+HOST_MACHINE_MYSQL_PORT=3306
+
+# If you already have the port 8080 in use, you can change it
+HOST_MACHINE_PMA_PORT=8080
+
+# If you already has the port 6379 in use, you can change it (for example if you have Redis)
+HOST_MACHINE_REDIS_PORT=6379
+
+# MySQL root user password
+MYSQL_ROOT_PASSWORD=tiger
+
+# Database settings: Username, password and database name
+MYSQL_USER=docker
+MYSQL_PASSWORD=docker
+MYSQL_DATABASE=docker
+```
+
+*Docker compose file**
+```yaml
 version: "3"
 
 services:
-  redis:
-    image: redis
-    volumes:
-      - ./data:/data
+  webserver:
+    build: 
+      context: ./bin/${PHPVERSION}
+    container_name: '${COMPOSE_PROJECT_NAME}-${PHPVERSION}'
+    restart: 'always'
     ports:
-      - 6379:6379
-
-
-https://community.atlassian.com/t5/Jira-articles/How-to-run-Jira-in-a-docker-container/ba-p/752697
-
-
-
-
-
-
-
-**3. Test the web applications**
-```
-http://10.0.0.94:8050
-http://10.0.0.94:8060/happy_new_year
-http://10.0.0.94:8070
-```
-
-**4. Test MYSQL DB**
-
-**Login into MYSQL container**
-```
-docker exec -it <mysql container ID> bash
-docker exec -it ab3bc2b97c7e bash
-```
-**Login into MYSQL DB**
-```
-
-mysql -u root -p
-mysql -u tia -p
-```
-**Run some MYSQL commands**
-```
-CREATE DATABASE MYSQLTEST;
-SHOW DATABASES;
-exit
-```
-
-**5. Uninstall the application**
-```
-docker-compose down
-docker ps
-```
-
-## Example
-
-**LAMP server:**
-- Wordpress = front end or web server
-- Mariadb = database
-- Php = back end
-
-**- wordpress:** for front end programing
-**- phpadmin:** for back end programing
-**- mariadb:** for DB
-
-
-**1. Create a compose file**
-
-**NB:** `links` will make sure that the dependency container is ready first before the other container. All containers here depend on the database. It will start the database first, configure it and link it with others to establish communication. Compose will automatically open communication
-
-```
-mkdir compose
-cd compose/
-vim docker-compose.yml
-```
-```yaml
-version: '3'
-services:
-    wordpress:
-        image: wordpress
-        links:
-        - wordpress_db:mysql
-        ports:
-        - "7070:80"
-    
-    wordpress_db:
-        image: mariadb
-        ports:
-        - "3306:3306"
-        environment:
-        - MYSQL_ROOT_PASSWORD=password
-    
-    phpadmin:
-        image: corbinu/docker-phpmyadmin
-        links:
-        - wordpress_db:mysql
-        ports:
-        - "8181:80"
-        environment:
-        - MYSQL_ROOT_PASSWORD=password
-```
-
----yaml
-wordpress:
- image: wordpress
- links:
- - wordpress_db:mysql
- ports:
- - "7070:80"
- 
-wordpress_db:
- image: mariadb
- environment:
-    MYSQL_ROOT_PASSWORD: password
- 
-phpadmin:
- image: corbinu/docker-phpmyadmin
- links:
- - wordpress_db:mysql
- ports:
- - "8181:80"
- environment:
-    MYSQL_USERNAME: root
-    MYSQL_ROOT_PASSWORD: password
+      - "${HOST_MACHINE_UNSECURE_HOST_PORT}:80"
+      - "${HOST_MACHINE_SECURE_HOST_PORT}:443"
+    links: 
+      - database
+    volumes: 
+      - ${DOCUMENT_ROOT-./www}:/var/www/html
+      - ${PHP_INI-./config/php/php.ini}:/usr/local/etc/php/php.ini
+      - ${VHOSTS_DIR-./config/vhosts}:/etc/apache2/sites-enabled
+      - ${LOG_DIR-./logs/apache2}:/var/log/apache2
+    environment:
+      PMA_PORT: ${HOST_MACHINE_PMA_PORT}
+  database:
+    build:
+      context: "./bin/${DATABASE}"
+    container_name: '${COMPOSE_PROJECT_NAME}-database'
+    restart: 'always'
+    ports:
+      - "127.0.0.1:${HOST_MACHINE_MYSQL_PORT}:3306"
+    volumes: 
+      - ${MYSQL_DATA_DIR-./data/mysql}:/var/lib/mysql
+      - ${MYSQL_LOG_DIR-./logs/mysql}:/var/log/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: '${COMPOSE_PROJECT_NAME}-phpmyadmin'
+    links:
+      - database
+    environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
+      PMA_USER: ${MYSQL_USER}
+      PMA_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - '${HOST_MACHINE_PMA_PORT}:80'
+    volumes: 
+      - /sessions
+      - ${PHP_INI-./config/php/php.ini}:/usr/local/etc/php/conf.d/php-phpmyadmin.ini
+  redis:
+    container_name: '${COMPOSE_PROJECT_NAME}-redis'
+    image: redis:latest
+    ports:
+      - "127.0.0.1:${HOST_MACHINE_REDIS_PORT}:6379"
 ```
 
 
-**2. Run the docker compose file to install the applications**
-```
-docker-compose up -d
--d = start all the container in detached mode or keep all containers running at the background
-```
-
-```
-docker images
-docker ps
-```
-
-**3. Test the web applications**
-```
-http://10.0.0.94:8181
-```
-![](/images/php.JPG)
-
-
-```
-http://10.0.0.94:7070
-```
-![](/images/php.JPG)
 
 
 
-https://github.com/DanWahlin/NodeExpressMongoDBDockerApp
-
-https://github.com/DanWahlin/CodeWithDanDockerServices

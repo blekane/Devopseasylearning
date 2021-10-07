@@ -1,0 +1,185 @@
+pipeline {
+    agent any
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+        disableConcurrentBuilds()
+        timeout (time: 10, unit: 'MINUTES')
+        timestamps()
+    }
+    environment {
+
+        AWS_ACCOUNT_ID="YOUR_ACCOUNT_ID_HERE"
+        AWS_DEFAULT_REGION="CREATED_AWS_ECR_CONTAINER_REPO_REGION" 
+        IMAGE_REPO_NAME="ECR_REPO_NAME"
+        REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
+
+        registry = 'leonardtia/devops-test-repo'
+        registryCredential = 'Docker-Hub-Credentials'
+        dockerImage = ''
+    }
+    parameters {
+        choice(name: 'team', choices: ['devops', 'developer', 'tester'], description: 'Select your team')
+        string(defaultValue: "", description: 'Enter your last_name', name: 'name')
+        choice(name: 'app', choices: ['client', 'api', 'db'], description: 'Select an app')
+        choice(name: 'registry', choices: ['nexus', 'dockerhub', 'ecr', 'all'], description: 'Select a registry')
+        string(defaultValue: "", description: 'supply a github repository', name: 'github')
+        string(defaultValue: "", description: 'supply the branch for the docker image', name: 'branch')
+        choice(name: 'repository', choices: ['klm', 'jnlp'], description: 'Select a repository')
+        string(defaultValue: "", description: 'supply a tag ', name: 'tag')
+        choice(name: 'environment', choices: ['dev', 'qa', 'stg', 'prod'], description: 'Select the environment')
+    }
+    stages {
+        stage('Cloning the repository') {
+            steps {
+                sh '''
+                ls
+                '''
+            }
+        }
+        stage('Validate if the Dockerfile exist') {
+            steps {
+                sh '''
+                ls
+                '''
+            }
+        }
+        stage('Building the docker image') {
+            steps {
+                 sh '''
+                 ls
+                 '''
+            }   
+        }
+        stage('Pushing to Nexus') {
+            when {
+                expression { 
+                    params.registery == 'nexus' 
+                }
+            }
+            steps {
+                sh '''
+                ls
+                '''
+            }
+        }
+        stage('Pushing to Docker Hub') {
+            when {
+                expression { 
+                    params.registery == 'dockerhub' 
+                }
+            }
+            steps {
+                script {
+                    sh '''
+                    ls
+                    '''
+                }
+            }
+        }
+        stage('Pushing to ECR') {
+            when {
+                expression { 
+                    params.registery == 'dockerhub' 
+                }
+            }
+            steps {
+                script {
+                    sh '''
+                    ls
+                    '''
+                }  
+            }
+        }
+        stage('Pushing to Nexus, Docker Hub and ECR') {
+            when {
+                expression { 
+                    params.registery == 'all' 
+                }
+            }
+            steps {
+                script {
+                    sh '''
+                    ls
+                    '''
+                }
+                script {
+                    sh '''
+                    ls
+                    '''
+                }
+                script {
+                    sh '''
+                    ls
+                    '''
+                }  
+            }
+        }
+        stage('Deploying to DEV') {
+            when {
+                expression { 
+                    params.environment == 'dev' 
+                }
+            }
+            steps {
+                script {
+                    sh '''
+                    echo "Deploy to Developmnet environment"
+                    '''
+                }  
+            }
+        }
+        stage('Deploying to QA') {
+            when {
+                expression { 
+                    params.environment == 'qa' 
+                }
+            }
+            steps {
+                script {
+                    sh '''
+                    echo "Deploy to QA environment"
+                    '''
+                }  
+            }
+        }
+        stage('Deploying to STG') {
+            when {
+                expression { 
+                    params.environment == 'stg' 
+                }
+            }
+            steps {
+                script {
+                    sh '''
+                    echo "Deploy to STG environment"
+                    '''
+                }  
+            }
+        }
+        stage('Deploying to PROD') {
+            when {
+                expression { 
+                    params.environment == 'prod' 
+                }
+            }
+            steps {
+                script {
+                    sh '''
+                    echo "Deploy to STG environment"
+                    '''
+                }  
+            }
+         }
+    }
+    post {
+        always {
+            echo "This will always execute no matter if the build failed or succeed"
+        }
+        success {
+            echo "This will execute only if the build succeeded"
+        }
+        failure {
+            echo "This will execute only if the build failed"
+        }
+    } 
+}
