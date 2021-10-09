@@ -18,10 +18,13 @@ https://grafana.com/tutorials/grafana-fundamentals/?utm_source=grafana_gettingst
 ### Grafana Installation in Docker
 https://hub.docker.com/r/grafana/grafana
 
+```
 docker run -d --name=grafana -p 3000:3000 grafana/grafana
 docker run -d --name=grafana -p 3050:3000 grafana/grafana
 
-
+Username: admin
+Password: admin
+```
 ### Links to install promtheus Helm chart into Kubernetes Cluster
 * [DEPRECATED prometheus-operator link](https://github.com/helm/charts/tree/master/stable/prometheus-operator)
 

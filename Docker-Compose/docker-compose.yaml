@@ -61,45 +61,61 @@ volumes:
 
 
 
-## Wordpress and mariadb
-```yaml
-version: '2'
-
+version: '3'
 services:
-  wordpress:
-    image: wordpress:4.5
-    depends_on:
-      - db
-    links:
-      - db
+  app:
+    image: 'jc21/nginx-proxy-manager:latest'
     ports:
-      - "8080:80"
+      - '80:80'
+      - '81:81'
+      - '443:443'
     environment:
-      WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: wordpress
-    networks:
-      - frontend
-      - backend
-    restart: always
-
-  db:
-    image: mariadb:10.1
+      DB_MYSQL_HOST: "db"
+      DB_MYSQL_PORT: 3306
+      DB_MYSQL_USER: "npm"
+      DB_MYSQL_PASSWORD: "npm"
+      DB_MYSQL_NAME: "npm"
     volumes:
-      - "./volumes/db:/var/lib/mysql"
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
     networks:
       - frontend
-      - backend
-    
+  db:
+    image: 'jc21/mariadb-aria:latest'
+    environment:
+      MYSQL_ROOT_PASSWORD: 'npm'
+      MYSQL_DATABASE: 'npm'
+      MYSQL_USER: 'npm'
+      MYSQL_PASSWORD: 'npm'
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    networks:
+      - frontend
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - frontend
+  sonarqube:
+    image: sonarqube
+    ports:
+      - "9000:9000"
+    networks:
+      - frontend
+  nexus:
+    image: sonatype/nexus3
+    ports:
+      - "8081:8081"
+    networks:
+      - frontend
+  splunk:
+    image: splunk/splunk:latest
+    ports:
+      - "8000:8000"
+    networks:
+      - frontend
 
 networks:
   frontend:
-    driver: bridge
-  backend:
     driver: bridge

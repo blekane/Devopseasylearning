@@ -101,9 +101,11 @@ path "sys/mounts"
   capabilities = ["read"]
 }
 
+vault policy write [name of the policy] [path of the policy].hcl
 vault policy write secrets-mgmt ./secrets-mgmt.hcl
 vault policy list
 vault policy read secrets-mgmt
+vault policy delete secrets-mgmt
 
 # Next we'll create a policy for the accounting secrets engine
 # First we'll enable the secrets engine
@@ -121,30 +123,26 @@ vault kv put accounting/apitokens/privileged/p101 token=1234567890
 
 vim accounting.md.hcl
 
-### Allow access to all accounting data
 path "accounting/data/*" {
     capabilities = ["create", "read", "update", "delete", "list"]
 }
-
-### Allow access to metadata for kv2
 path "accounting/metadata/*" {
     capabilities = ["list"]
 }
-
-### Deny access to privileged accounting data
 path "accounting/data/apitokens/privleged*" {
     capabilities = ["deny"]
 }
-
 path "accounting/metadata/apitokens/privileged*" {
     capabilities = ["deny"]
 }
 
+vault policy write [name of the policy] [path of the policy].hcl
 vault policy write accounting ./accounting.hcl
 vault policy list
-vault policy read accounting.hcl
+vault policy read accounting
+vault policy delete accounting
 ```
-## Assigning a Policy
+## Assigning a Policy to a token
 
 ```sh
 # Associate directly with a token
@@ -157,7 +155,7 @@ vault write auth/userpass/users/ned token_policies="secrets-mgmt"
 vault write identity/entity/name/ned policies="secrets-mgmt"
 ```
 
-```s
+```sh
 # First let's try out our accounting policy be associating a policy
 # directly with a token
 vault token create -policy=accounting
@@ -185,4 +183,28 @@ vault kv get accounting/apitokens/privileged/p101
 
 # Excellent! Next we're going to test out out secrets-mgmt policy
 # We are going to assign it to Ned in the userpass auth method
+```
+
+
+## We are going to assign a policy to Ned in the userpass auth method
+```sh
+# Looks like token_policies should do it
+vault write auth/userpass/users/ned token_policies="secrets-mgmt"
+
+# Now we can log in as Ned and try to mount a new secrets engine
+vault login -method=userpass username=ned
+
+vault secrets enable -path=testing -version=1 kv
+
+vault secrets list
+
+vault secrets disable testing
+
+vault secrets disable accounting
+
+# Lastly, let's get rid of the accounting policy
+vault policy delete accounting
+
+# Wait, Ned can't do that! Let's log in as root again
+vault login
 ```
