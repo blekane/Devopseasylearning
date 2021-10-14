@@ -30,18 +30,21 @@ apt install git -y
 
 ![](/images/jenkins16.JPG)
 
+update the jenkins location in manage jenkins to manage sure that it is the same url in github
+![](/images/jenkins50.JPG)
+
 ### 4- Configuration in github
 We need to add github to notify jenkins after each commit. Got to github and follow the steps:
 - In the repos, click on settings
 - Webhoot
 - Add webhub
-- Copy you jenkins url:**http://10.0.0.10:8080**
-- Append github-webhook: **http://10.0.0.10:8080/github-webhook/**
+- Copy you jenkins url:**http://10.0.0.94:8080**
+- Append github-webhook: **http://10.0.0.94:8080/github-webhook/**
 - Paste it in payload url
 - In content type, choose application/json
 
 ![](/images/jenkins15.JPG)
 
-- In Which events would you like to trigger this webhook?, choose Just the push event.
+- In Which events would you like to trigger this webhook?, choose send me everything.
 - And check active
 - Click add webhook

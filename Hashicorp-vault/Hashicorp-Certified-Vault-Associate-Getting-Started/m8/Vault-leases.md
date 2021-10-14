@@ -1,6 +1,55 @@
+## Using Vault Leases
 
+### Lease Overview
+- Control dynamic secret lifecycle
+- Dynamic secrets and service tokens
+- Includes metadata about secret
+- Renew or revoke lease
+- No direct CLI command
+- Use `/sys/leases/lookup` path
 
-# Re-enable consul secrets engine
+### Lease Properties
+- lease_duration**
+    - Time to live
+    - Default TTL
+    - Max TTL
+    - TL Inheritance
+        - System
+        - Mount
+        - Object
+    - Renewal
+- lease_id
+- lease_renewable
+
+### Working with Leases
+```sh
+# Renew a lease
+vault lease renew [options] ID
+vault lease renew –increment=30m consul/creds/web/KWq5o8zRVc6LtAutsta6Uf8G
+
+# Revoke a lease
+vault lease revoke [options] ID
+vault lease revoke consul/creds/web/KWq5o8zRVc6LtAutsta6Uf8G
+
+# Every lease on consul/creds/web/
+vault lease revoke –prefix consul/creds/web/
+
+# Lookup active leases in /web/
+vault list [options] sys/leases/lookup/PATH 
+vault list sys/leases/lookup/consul/creds/web/
+
+# View leases properties
+vault write [options] sys/leases/lookup/ lease_id=ID
+vault write sys/leases/lookup/ lease_id=consul/creds/web/KWq5o8zRVc6LtAutsta6Uf8G
+```
+
+## Tasks:
+- Create Consul tokens
+- Renew a lease
+- Revoke a lease
+
+```s
+# Enable consul secrets engine
 vault secrets enable consul
 
 # Get consul up and running

@@ -1,0 +1,17 @@
+version: "3"
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/certs:/etc/nginx/ssl
+    depends_on:
+      - web
+  web:
+     image: httpd
+     volumes:
+       - web-data:/var/www/html
+volumes:
+  web-data:

@@ -34,7 +34,7 @@ vault server -dev
 DO NOT USE VAULT_TOKEN for the variable name
 ```
 ROOT_TOKEN=[ROOT_TOKEN_VALUE_HERE]
-ROOT_TOKEN=s.7fX9gEzMfwCMrO8hqtUa5AWF
+ROOT_TOKEN=s.pkWjl98aImxhANgYGmnbW9aG
 export ROOT_TOKEN
 ```
 Let's log into the Vault server using our root token and the Vault server address. The default launch of the development server is listening on the loopback address and port 8200

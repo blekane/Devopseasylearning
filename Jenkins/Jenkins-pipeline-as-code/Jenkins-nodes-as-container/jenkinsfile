@@ -1,0 +1,615 @@
+
+pipeline {
+    agent any
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+        disableConcurrentBuilds()
+        timeout (time: 10, unit: 'MINUTES')
+        timestamps()
+    }
+    environment {
+        registry = 'leonardtia/devops-test-repo'
+        registryCredential = 'Docker-Hub-Credentials'
+        dockerImage = ''
+    }
+    parameters {
+        choice(name: 'registry', choices: ['nexus', 'dockerhub', 'ecr', 'all'], description: 'Select a registry')
+        string(defaultValue: "https://github.com/leonardtia1/maven-project.git", description: 'supply a github repository', name: 'github')
+        string(defaultValue: "maven-project", description: 'supply a github name', name: 'repo_name')
+        string(defaultValue: "master", description: 'supply the branch for the docker image', name: 'branch')
+        string(defaultValue: "", description: 'supply a tag ', name: 'tag')
+        choice(name: 'environment', choices: ['dev', 'qa', 'stg', 'prod'], description: 'Select the environment')
+    }
+    stages {
+        stage('Cloning the repository') {
+            agent {
+                docker { image 'bitnami/git' }
+            }
+            steps {
+                 dir("${env.WORKSPACE}/src") {
+                    sh '''
+                    rm -rf *
+                    ls 
+                    pwd
+                    git clone -b ${branch} ${github}
+                '''
+                 }
+            }
+        }
+        stage('Building the code') {
+            agent {
+                docker { image 'maven:3.8.1-adoptopenjdk-11' }
+            }
+            steps {
+                dir("${env.WORKSPACE}/src") {
+                    sh '''
+                    ls 
+                    pwd
+                    cd ${repo_name}
+                    mvn --version
+                    mvn clean install package
+                    '''
+                }
+            }
+        }
+    } 
+}
+
+
+pipeline {
+    agent any
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+        disableConcurrentBuilds()
+        timeout (time: 10, unit: 'MINUTES')
+        timestamps()
+    }
+    environment {
+        registry = 'leonardtia/devops-test-repo'
+        registryCredential = 'Docker-Hub-Credentials'
+        dockerImage = ''
+    }
+    parameters {
+        choice(name: 'registry', choices: ['nexus', 'dockerhub', 'ecr', 'all'], description: 'Select a registry')
+        string(defaultValue: "https://github.com/leonardtia1/maven-project.git", description: 'supply a github repository', name: 'github')
+        string(defaultValue: "maven-project", description: 'supply a github name', name: 'repo_name')
+        string(defaultValue: "master", description: 'supply the branch for the docker image', name: 'branch')
+        string(defaultValue: "develop", description: 'supply a tag ', name: 'tag')
+        choice(name: 'environment', choices: ['dev', 'qa', 'stg', 'prod'], description: 'Select the environment')
+        string(defaultValue: "src/maven-project/webapp/target/", description: 'supply the the path of the warfile', name: 'war')
+    }
+    stages {
+        stage('Cloning the repository') {
+            agent {
+                docker { image 'bitnami/git' }
+            }
+            steps {
+                 dir("${env.WORKSPACE}/src") {
+                    sh '''
+                    rm -rf *
+                    ls 
+                    pwd
+                    git clone -b ${branch} ${github}
+                '''
+                 }
+            }
+        }
+        stage('Building the code') {
+            agent {
+                docker { image 'maven:3.8.1-adoptopenjdk-11' }
+            }
+            steps {
+                dir("${env.WORKSPACE}/src") {
+                    sh '''
+                    ls 
+                    pwd
+                    cd ${repo_name}
+                    mvn --version
+                    mvn clean install package
+                    '''
+                }
+            }
+        }
+        stage('Creating a dockerfile') {
+             agent {
+                label 'master'
+            }
+            steps {
+                dir("${env.WORKSPACE}/src") {
+                    sh '''
+                    ls 
+                    pwd
+                    cd ${repo_name}
+                    rm -rf Dockerfile || true
+                    '''
+                    sh '''
+                    sudo cat << EOF > ${repo_name}/Dockerfile
+                    FROM tomcat
+                    ADD ${war}.*war /usr/local/tomcat/webapps
+                    CMD "catalina.sh" "run"
+                    EXPOSE 8080
+                    EOF
+                    '''
+                    sh '''
+                    cd ${repo_name}
+                    cat Dockerfile 
+                    '''
+                }
+            }
+        }   
+    } 
+}
+
+
+pipeline {
+    agent any
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+        disableConcurrentBuilds()
+        timeout (time: 10, unit: 'MINUTES')
+        timestamps()
+    }
+    environment {
+        registry = 'leonardtia/devops-test-repo'
+        registryCredential = 'Docker-Hub-Credentials'
+        dockerImage = ''
+    }
+    parameters {
+        choice(name: 'registry', choices: ['nexus', 'dockerhub', 'ecr', 'all'], description: 'Select a registry')
+        string(defaultValue: "https://github.com/leonardtia1/maven-project.git", description: 'supply a github repository', name: 'github')
+        string(defaultValue: "maven-project", description: 'supply a github name', name: 'repo_name')
+        string(defaultValue: "master", description: 'supply the branch for the docker image', name: 'branch')
+        string(defaultValue: "develop", description: 'supply a tag ', name: 'tag')
+        choice(name: 'environment', choices: ['dev', 'qa', 'stg', 'prod'], description: 'Select the environment')
+        string(defaultValue: "/var/lib/jenkins/workspace/pipeline@2/src/maven-project/webapp/webapp.war", description: 'supply the the path of the warfile', name: 'war')
+    }
+    stages {
+        stage('Cloning the repository') {
+            agent {
+                docker { image 'bitnami/git' }
+            }
+            steps {
+                 dir("${env.WORKSPACE}/src") {
+                    sh '''
+                    rm -rf *
+                    ls ls
+                    pwd
+                    git clone -b ${branch} ${github}
+                '''
+                 }
+            }
+        }
+        stage('Building the code') {
+            agent {
+                docker { image 'maven:3.8.1-adoptopenjdk-11' }
+            }
+            steps {
+                dir("${env.WORKSPACE}/src") {
+                    sh '''
+                    ls 
+                    pwd
+                    cd ${repo_name}
+                    mvn --version
+                    mvn clean install package
+                    '''
+                }
+            }
+        }
+        stage('Creating a dockerfile') {
+             agent {
+                label 'master'
+            }
+            steps {
+                dir("${env.WORKSPACE}/src") {
+                    sh '''
+                    ls 
+                    pwd
+                    cd ${repo_name}
+                    #rm -rf Dockerfile || true
+                    rm -rf Dockerfile* || true
+                    '''
+                    sh '''
+                    sudo cat << EOF > ${repo_name}/Dockerfile
+                    FROM tomcat
+                    COPY ${war} /usr/local/tomcat/webapps
+                    CMD "catalina.sh" "run"
+                    EXPOSE 8080
+                    '''
+                    sh '''
+                    cd ${repo_name}
+                    cat Dockerfile 
+                    '''
+                }
+            }
+        }
+        stage('Building the image') {
+            agent {
+                label 'master'
+            }
+            steps {
+                dir("${env.WORKSPACE}/src") {
+                    sh '''
+                    cd ${repo_name}
+                    ls
+                    sudo docker build -t ${registry}:${tag} .
+                    '''
+                }
+            }
+        }
+    } 
+}
+
+
+
+
+
+pipeline {
+    agent any
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+        disableConcurrentBuilds()
+        timeout (time: 10, unit: 'MINUTES')
+        timestamps()
+    }
+    environment {
+        registry = 'leonardtia/devops-test-repo'
+        registryCredential = 'Docker-Hub-Credentials'
+        dockerImage = ''
+    }
+    parameters {
+        choice(name: 'registry', choices: ['nexus', 'dockerhub', 'ecr', 'all'], description: 'Select a registry')
+        string(defaultValue: "https://github.com/leonardtia1/maven-project.git", description: 'supply a github repository', name: 'github')
+        string(defaultValue: "maven-project", description: 'supply a github name', name: 'repo_name')
+        string(defaultValue: "master", description: 'supply the branch for the docker image', name: 'branch')
+        string(defaultValue: "develop", description: 'supply a tag ', name: 'tag')
+        choice(name: 'environment', choices: ['dev', 'qa', 'stg', 'prod'], description: 'Select the environment')
+        string(defaultValue: "/var/lib/jenkins/workspace/pipeline@2/src/maven-project/webapp/webapp.war", description: 'supply the the path of the warfile', name: 'war')
+    }
+    stages {
+        stage('Cloning the repository') {
+            agent {
+                docker { image 'bitnami/git' }
+            }
+            steps {
+                 dir("${env.WORKSPACE}/src") {
+                    sh '''
+                    rm -rf *
+                    ls ls
+                    pwd
+                    git clone -b ${branch} ${github}
+                '''
+                 }
+            }
+        }
+        stage('Building the code') {
+            agent {
+                docker { image 'maven:3.8.1-adoptopenjdk-11' }
+            }
+            steps {
+                dir("${env.WORKSPACE}/src") {
+                    sh '''
+                    ls 
+                    pwd
+                    cd ${repo_name}
+                    mvn --version
+                    mvn clean install package
+                    '''
+                }
+            }
+        }
+        stage('Creating a dockerfile') {
+             agent {
+                label 'master'
+            }
+            steps {
+                dir("${env.WORKSPACE}/src") {
+                    sh '''
+                    ls 
+                    pwd
+                    cd ${repo_name}
+                    #rm -rf Dockerfile || true
+                    rm -rf Dockerfile* || true
+                    '''
+                    sh '''
+                    sudo cat << EOF > ${repo_name}/Dockerfile
+                    FROM tomcat
+                    COPY ${war} /usr/local/tomcat/webapps
+                    CMD "catalina.sh" "run"
+                    EXPOSE 8080
+                    '''
+                    sh '''
+                    cd ${repo_name}
+                    cat Dockerfile 
+                    '''
+                }
+            }
+        }
+        stage('Building the image') {
+            agent {
+                label 'master'
+            }
+            steps {
+                dir("${env.WORKSPACE}/src") {
+                    sh '''
+                    cd ${repo_name}
+                    ls
+                    sudo docker build -t ${registry}:${tag} .
+                    '''
+                }
+            }
+        }
+    } 
+}
+
+
+
+
+pipeline {
+    agent any
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+        disableConcurrentBuilds()
+        timeout (time: 10, unit: 'MINUTES')
+        timestamps()
+    }
+    parameters {
+        choice(name: 'registry', choices: ['nexus', 'dockerhub', 'ecr', 'all'], description: 'Select a registry')
+        string(defaultValue: "https://github.com/leonardtia1/maven-project.git", description: 'supply a github repository', name: 'github')
+        string(defaultValue: "maven-project", description: 'supply a github name', name: 'repo_name')
+        string(defaultValue: "master", description: 'supply the branch for the docker image', name: 'branch')
+        string(defaultValue: "develop", description: 'supply a tag ', name: 'tag')
+        choice(name: 'environment', choices: ['dev', 'qa', 'stg', 'prod'], description: 'Select the environment')
+        string(defaultValue: "/var/lib/jenkins/workspace/pipeline@2/src/maven-project/webapp/webapp.war", description: 'supply the the path of the warfile', name: 'war')
+    }
+    environment {
+        registry = 'leonardtia/devops-test-repo'
+        registryCredential = 'Docker-Hub-Credentials'
+        dockerImage = ''
+    }
+    stages {
+        stage ('checkout') {
+            agent {
+                docker { image 'bitnami/git' }
+            }
+            steps {
+                dir("${WORKSPACE}/build") {
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: "*/master"]],
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions: [[$class: 'LocalBranch']],
+                        submoduleCfg: [],
+                        userRemoteConfigs: [[
+                        url: 'https://github.com/leonardtia1/maven-project.git',
+                        credentialsId: 'GitHub-Credentials'
+                        ]]
+                    ])
+                }
+            }
+        }
+        stage('Building the code') {
+            agent {
+                docker { image 'maven:3.8.1-adoptopenjdk-11' }
+            }
+            steps {
+                dir("${env.WORKSPACE}/build") {
+                    sh '''
+                    ls 
+                    pwd
+                    mvn --version
+                    mvn clean install package
+                    '''
+                }
+            }
+        }
+        stage ('Building the image') {
+            agent {
+                label 'master'
+            }
+            steps {
+                script {
+                    dir("${env.WORKSPACE}/build") {
+                        docker.withRegistry('','Docker-Hub-Credentials' ) {
+                            docker.build('leonardtia/devops-test-repo'+":${tag}")
+                        }
+                    }
+
+                } 
+            }
+
+        }
+    }
+}
+
+
+
+pipeline {
+    agent any
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+        disableConcurrentBuilds()
+        timeout (time: 10, unit: 'MINUTES')
+        timestamps()
+    }
+    parameters {
+        string(defaultValue: "https://github.com/leonardtia1/maven-project.git", description: 'supply a github repository', name: 'github')
+        string(defaultValue: "master", description: 'supply the branch for the docker image', name: 'branch')
+        string(defaultValue: "develop", description: 'supply a tag ', name: 'tag')
+    }
+    environment {
+        registry = 'leonardtia/devops-test-repo'
+        registryCredential = 'Docker-Hub-Credentials'
+        dockerImage = ''
+    }
+    stages {
+        stage ('checkout') {
+            agent {
+                docker { image 'bitnami/git' }
+            }
+            steps {
+                dir("${WORKSPACE}/build") {
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: "*/master"]],
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions: [[$class: 'LocalBranch']],
+                        submoduleCfg: [],
+                        userRemoteConfigs: [[
+                        url: 'https://github.com/leonardtia1/maven-project.git',
+                        credentialsId: 'GitHub-Credentials'
+                        ]]
+                    ])
+                }
+            }
+        }
+        stage('Building the code') {
+            agent {
+                docker { image 'maven:3.8.1-adoptopenjdk-11' }
+            }
+            steps {
+                dir("${env.WORKSPACE}/build") {
+                    sh '''
+                    ls 
+                    pwd
+                    mvn --version
+                    mvn clean install package
+                    '''
+                }
+            }
+        }
+        stage ('Building the image') {
+            agent {
+                label 'master'
+            }
+            steps {
+                script {
+                    dir("${env.WORKSPACE}/build") {
+                        docker.withRegistry('','Docker-Hub-Credentials' ) {
+                            dockerImage = docker.build('leonardtia/devops-test-repo'+":${tag}")
+                        }
+                    }
+
+                } 
+            }
+        }
+        stage ('Pushing the image') {
+            agent {
+                label 'master'
+            }
+            steps {
+                script {
+                    dir("${env.WORKSPACE}/build") {
+                        docker.withRegistry('','Docker-Hub-Credentials' ) {
+                            dockerImage.push()
+                        }
+                    }
+                } 
+            }
+        }
+        stage ('Deployment') {
+           agent {
+                label 'master'
+            }
+            steps {
+                sh '''
+                sudo docker run -d -P ${registry}:${tag} 
+                sudo docker ps   
+                '''
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+### docker file for git
+```
+FROM ubuntu
+RUN apt update -y
+RUN apt install git -y
+CMD ["bash"]
+
+From tomcat
+Maintainer Tia
+ADD addressbook.war /usr/local/tomcat/webapps
+CMD "catalina.sh" "run"
+EXPOSE 8080
+
+dovker build -t git_container
+```
+```groovy
+pipeline {
+    agent none
+    stages {
+        stage('Cleaning the wokspace') {
+             agent {
+                label 'master'
+            }
+            steps {
+                sh '''
+                 rm -rf *
+                '''
+            }
+        }
+        stage('Cloning the repository') {
+            agent {
+                docker { image 'git_container' }
+            }
+            steps {
+                sh '''
+                 git clone https://github.com/leonardtia1/devops_addressbook.git
+                 sh sleep 10
+                '''
+            }
+        }
+         stage('Building the code') {
+            agent {
+                docker { image 'maven:3.8.1-adoptopenjdk-11' }
+            }
+            steps {
+                sh '''
+                ls 
+                cd devops_addressbook
+                mvn --version
+                mvn clean install package
+                sleep 10
+                '''
+            }
+        }
+        stage('Testing the code') {
+            agent {
+                docker { image 'sonarqube' }
+            }
+            steps {
+                sh '''
+                ls 
+                cd devops_addressbook
+                mvn --version
+                mvn clean install package
+                sleep 10
+                '''
+            }
+        }
+        stage('Deploying the application') {
+             agent {
+                label 'master'
+            }
+            steps {
+                sh '''
+                ls
+                '''
+            }
+        }
+    }
+}
+```
+

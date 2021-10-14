@@ -737,8 +737,6 @@ pipeline {
 
 
 
-
-
 pipeline {
     agent {
         label 'master'
@@ -791,32 +789,6 @@ pipeline {
     }
   }
 } 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1388,4 +1360,87 @@ unstable{
 slackSend (channel: '#general', color: 'warning', message: "UNSTABLE : Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
 }
  }
+}
+
+
+
+pipeline {
+    agent none
+    stages {
+
+
+
+         stage('cleaning') {
+
+              agent {
+        label "master"
+          }
+          
+            steps {
+                sh '''
+                rm -rf ./*
+                '''
+            }
+        }
+
+        stage('cloning the repo') {
+            agent {
+        docker { image 'git_container' }
+          }
+            steps {
+                sh '''
+                git clone https://github.com/kemvoueric/devops_addressbook.git
+                
+                '''
+            }
+        }
+
+        
+
+        stage('build artifact') {
+            agent {
+        docker { image 'maven:3.8.1-adoptopenjdk-11' }
+          }
+            steps {
+                sh '''
+                ls
+               cd  devops_addressbook
+                mvn clean install package
+                 sleep 5
+            '''
+            }
+        }
+
+         stage('building  images') {
+               agent {
+        label "master"
+          }
+            steps {
+                sh '''
+              
+                cd devops_addressbook
+               sudo docker build -t tomcat-image:${BUILD_NUMBER} .
+                 
+            '''
+            }
+        }
+
+          stage('deploy') {
+               agent {
+        label "master"
+          }
+            steps {
+                sh '''
+              
+               sudo docker  rm -f $(sudo docker ps -aq)
+           
+               sudo docker run -itd --name tomcat-${BUILD_NUMBER} -p 85:8080  tomcat-image:${BUILD_NUMBER} 
+                sudo docker ps   
+            '''
+            }
+        }
+
+
+    }
+
 }

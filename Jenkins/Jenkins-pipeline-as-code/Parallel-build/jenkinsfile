@@ -1,0 +1,684 @@
+// Clone
+pipeline {
+    agent {
+        label 'master'
+    }
+    options {
+    buildDiscarder(logRotator(numToKeepStr: '20'))
+    disableConcurrentBuilds()
+    timeout (time: 10, unit: 'MINUTES')
+    timestamps()
+    }
+    environment {
+
+            AWS_ACCOUNT_ID="YOUR_ACCOUNT_ID_HERE"
+            AWS_DEFAULT_REGION="CREATED_AWS_ECR_CONTAINER_REPO_REGION" 
+            IMAGE_REPO_NAME="ECR_REPO_NAME"
+            REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
+
+            registry = 'leonardtia/devops-test-repo'
+            registryCredential = 'Docker-Hub-Credentials'
+            dockerImage = ''
+        }
+        parameters {
+            choice(name: 'team', choices: ['devops', 'developer', 'tester'], description: 'Select your team')
+            string(defaultValue: "", description: 'Enter your last_name', name: 'name')
+            choice(name: 'app', choices: ['client', 'api', 'db'], description: 'Select an app')
+            choice(name: 'registry', choices: ['nexus', 'dockerhub', 'ecr', 'all'], description: 'Select a registry')
+            string(defaultValue: "https://github.com/leonardtia1/dockerfile.git", description: 'supply a github repository', name: 'repository')
+            string(defaultValue: "main", description: 'supply the branch for the docker image', name: 'branch')
+            choice(name: 'project', choices: ['klm', 'jnlp'], description: 'Select the project name')
+            string(defaultValue: "", description: 'supply a tag ', name: 'tag')
+            choice(name: 'environment', choices: ['dev', 'qa', 'stg', 'prod', 'all_env'], description: 'Select the environment')
+        }
+        stages {
+            stage ('checkout') {
+            steps {
+                dir("${WORKSPACE}/build") {
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: "*/${branch}"]],
+                    doGenerateSubmoduleConfigurations: false,
+                    extensions: [[$class: 'LocalBranch']],
+                    submoduleCfg: [],
+                    userRemoteConfigs: [[
+                    url: "${repository}",
+                    credentialsId: 'GitHub-Credentials'
+                    ]]
+                ])
+                }
+            }
+        }
+    }
+} 
+
+
+
+// Build
+pipeline {
+    agent {
+        label 'master'
+    }
+    options {
+    buildDiscarder(logRotator(numToKeepStr: '20'))
+    disableConcurrentBuilds()
+    timeout (time: 10, unit: 'MINUTES')
+    timestamps()
+    }
+    environment {
+
+            AWS_ACCOUNT_ID="YOUR_ACCOUNT_ID_HERE"
+            AWS_DEFAULT_REGION="CREATED_AWS_ECR_CONTAINER_REPO_REGION" 
+            IMAGE_REPO_NAME="ECR_REPO_NAME"
+            REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
+
+            DOCKER_REGISTRY = "leonardtia/devops-test-repo:${team}_${name}_${app}_${tag}"
+            // DOCKER_REGISTRY = "leonardtia/devops-test-repo:${tag}"
+            dockerImage = ''
+        }
+        parameters {
+            choice(name: 'team', choices: ['devops', 'developer', 'tester'], description: 'Select your team')
+            string(defaultValue: "", description: 'Enter your last_name', name: 'name')
+            choice(name: 'app', choices: ['client', 'api', 'db'], description: 'Select an app')
+            choice(name: 'registry', choices: ['nexus', 'dockerhub', 'ecr', 'all'], description: 'Select a registry')
+            string(defaultValue: "https://github.com/leonardtia1/dockerfile.git", description: 'supply a github repository', name: 'repository')
+            string(defaultValue: "main", description: 'supply the branch for the docker image', name: 'branch')
+            choice(name: 'project', choices: ['klm', 'jnlp'], description: 'Select the project name')
+            string(defaultValue: "develop", description: 'supply a tag ', name: 'tag')
+            choice(name: 'environment', choices: ['dev', 'qa', 'stg', 'prod'], description: 'Select the environment')
+        }
+        stages {
+            stage ('checkout') {
+            steps {
+                dir("${WORKSPACE}/build") {
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: "*/${branch}"]],
+                    doGenerateSubmoduleConfigurations: false,
+                    extensions: [[$class: 'LocalBranch']],
+                    submoduleCfg: [],
+                    userRemoteConfigs: [[
+                    url: "${repository}",
+                    credentialsId: 'GitHub-Credentials'
+                    ]]
+                ])
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                script {
+                    dir("${WORKSPACE}/build") {
+                       docker.withRegistry('','Docker-Hub-Credentials' ) {
+                           sh '''
+                            #!/usr/bin/env bash
+                            docker build -t  "${DOCKER_REGISTRY}" .
+                            '''
+                       } 
+                    }
+                }
+            }
+        }
+        stage('Push') {
+            steps {
+                script {
+                    dir("${WORKSPACE}/build") {
+                       docker.withRegistry('','Docker-Hub-Credentials' ) {
+                           sh '''
+                            #!/usr/bin/env bash
+                            docker push "${DOCKER_REGISTRY}" 
+                            '''
+                       } 
+                    }
+                }
+            }
+        }
+    }
+} 
+
+
+pipeline {
+    agent {
+        label 'master'
+    }
+    options {
+    buildDiscarder(logRotator(numToKeepStr: '20'))
+    disableConcurrentBuilds()
+    timeout (time: 10, unit: 'MINUTES')
+    timestamps()
+    }
+    environment {
+
+            AWS_ACCOUNT_ID="YOUR_ACCOUNT_ID_HERE"
+            AWS_DEFAULT_REGION="CREATED_AWS_ECR_CONTAINER_REPO_REGION" 
+            IMAGE_REPO_NAME="ECR_REPO_NAME"
+
+            ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
+            DOCKER_REGISTRY = "leonardtia/devops-test-repo:${team}_${name}_${app}_${tag}"
+            NEXUS_REGISTRY = "leonardtia/devops-test-repo:${team}_${name}_${app}_${tag}"
+            // DOCKER_REGISTRY = "leonardtia/devops-test-repo:${tag}"
+            dockerImage = ''
+        }
+        parameters {
+            choice(name: 'team', choices: ['devops', 'developer', 'tester'], description: 'Select your team')
+            string(defaultValue: "", description: 'Enter your last_name', name: 'name')
+            choice(name: 'app', choices: ['client', 'api', 'db'], description: 'Select an app')
+            choice(name: 'registry', choices: ['nexus', 'dockerhub', 'ecr', 'all'], description: 'Select a registry')
+            string(defaultValue: "https://github.com/leonardtia1/dockerfile.git", description: 'supply a github repository', name: 'repository')
+            string(defaultValue: "main", description: 'supply the branch for the docker image', name: 'branch')
+            choice(name: 'project', choices: ['klm', 'jnlp'], description: 'Select the project name')
+            string(defaultValue: "develop", description: 'supply a tag ', name: 'tag')
+            choice(name: 'environment', choices: ['dev', 'qa', 'stg', 'prod'], description: 'Select the environment')
+        }
+        stages {
+            stage ('checkout') {
+            steps {
+                dir("${WORKSPACE}/build") {
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: "*/${branch}"]],
+                    doGenerateSubmoduleConfigurations: false,
+                    extensions: [[$class: 'LocalBranch']],
+                    submoduleCfg: [],
+                    userRemoteConfigs: [[
+                    url: "${repository}",
+                    credentialsId: 'GitHub-Credentials'
+                    ]]
+                ])
+                }
+            }
+        }
+        stage('Builds') {
+            parallel {
+                stage('Building dockerhub image') {
+                    when {
+                        expression {
+                            params.registry == 'ecr'
+                        }
+                    }
+                    steps {
+                        script {
+                             dir("${WORKSPACE}/build") {
+                                 docker.withRegistry('','Docker-Hub-Credentials' ) {
+                                     sh '''
+                                        #!/usr/bin/env bash
+                                        docker build -t  "${DOCKER_REGISTRY}" .
+                                        '''
+                                 }
+                             }
+                        }
+                    }
+                }
+                stage('Building Nexus image') {
+                    when {
+                        expression {
+                            params.registry == 'ecr'
+                        }
+                    }
+                    steps {
+                        script {
+                             dir("${WORKSPACE}/build") {
+                                 docker.withRegistry('','Docker-Hub-Credentials' ) {
+                                     sh '''
+                                        sleep 10
+                                        '''
+                                 }
+                             }
+                        }
+                    }
+                }
+                stage('Building ECR image') {
+                    when {
+                        expression {
+                            params.registry == 'ecr'
+                        }
+                    }
+                    steps {
+                        script {
+                             dir("${WORKSPACE}/build") {
+                                 docker.withRegistry('','Docker-Hub-Credentials' ) {
+                                     sh '''
+                                        sleep 15
+                                        '''
+                                 }
+                             }
+                        }
+                    }
+                }
+            }
+        }
+        stage('Push') {
+            when {
+                expression { 
+                    params.registry == 'dockerhub' 
+                }
+            }
+            steps {
+                script {
+                    dir("${WORKSPACE}/build") {
+                       docker.withRegistry('','Docker-Hub-Credentials' ) {
+                           sh '''
+                            #!/usr/bin/env bash
+                            docker push "${DOCKER_REGISTRY}" 
+                            '''
+                       } 
+                    }
+                }
+            }
+        }
+    }
+} 
+
+
+//https://stackoverflow.com/questions/37690920/conditional-step-stage-in-jenkins-pipeline
+
+pipeline {
+    agent any
+    stages {
+        stage('some parallel stage') {
+            parallel {
+                stage('parallel stage 1') {
+                    when {
+                      expression { ENV == "something" }
+                    }
+                    steps {
+                        echo 'something'
+                    }
+                }
+                stage('parallel stage 2') {
+                    steps {
+                        echo 'something'
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+pipeline {
+    agent {
+        label 'master'
+    }
+    options {
+    buildDiscarder(logRotator(numToKeepStr: '20'))
+    disableConcurrentBuilds()
+    timeout (time: 10, unit: 'MINUTES')
+    timestamps()
+    }
+    environment {
+
+            AWS_ACCOUNT_ID="YOUR_ACCOUNT_ID_HERE"
+            AWS_DEFAULT_REGION="CREATED_AWS_ECR_CONTAINER_REPO_REGION" 
+            IMAGE_REPO_NAME="ECR_REPO_NAME"
+
+            ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
+            DOCKER_REGISTRY = "leonardtia/devops-test-repo:${team}_${name}_${app}_${tag}"
+            NEXUS_REGISTRY = "leonardtia/devops-test-repo:${team}_${name}_${app}_${tag}"
+            // DOCKER_REGISTRY = "leonardtia/devops-test-repo:${tag}"
+            dockerImage = ''
+        }
+        parameters {
+            choice(name: 'team', choices: ['devops', 'developer', 'tester'], description: 'Select your team')
+            string(defaultValue: "", description: 'Enter your last_name', name: 'name')
+            choice(name: 'app', choices: ['client', 'api', 'db'], description: 'Select an app')
+            choice(name: 'registry', choices: ['nexus', 'dockerhub', 'ecr', 'all'], description: 'Select a registry')
+            string(defaultValue: "https://github.com/leonardtia1/dockerfile.git", description: 'supply a github repository', name: 'repository')
+            string(defaultValue: "main", description: 'supply the branch for the docker image', name: 'branch')
+            choice(name: 'project', choices: ['klm', 'jnlp'], description: 'Select the project name')
+            string(defaultValue: "develop", description: 'supply a tag ', name: 'tag')
+            choice(name: 'environment', choices: ['dev', 'qa', 'stg', 'prod'], description: 'Select the environment')
+        }
+        stages {
+            stage ('checkout') {
+            steps {
+                dir("${WORKSPACE}/build") {
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: "*/${branch}"]],
+                    doGenerateSubmoduleConfigurations: false,
+                    extensions: [[$class: 'LocalBranch']],
+                    submoduleCfg: [],
+                    userRemoteConfigs: [[
+                    url: "${repository}",
+                    credentialsId: 'GitHub-Credentials'
+                    ]]
+                ])
+                }
+            }
+        }
+        stage('Builds') {
+            parallel {
+                stage('Building dockerhub image') {
+                    when {
+                        expression {
+                            params.registry == 'ecr'
+                        }
+                    }
+                    steps {
+                        script {
+                             dir("${WORKSPACE}/build") {
+                                 docker.withRegistry('','Docker-Hub-Credentials' ) {
+                                     sh '''
+                                        #!/usr/bin/env bash
+                                        docker build -t  "${DOCKER_REGISTRY}" .
+                                        '''
+                                 }
+                             }
+                        }
+                    }
+                }
+                stage('Building Nexus image') {
+                    when {
+                        expression {
+                            params.registry == 'ecr'
+                        }
+                    }
+                    steps {
+                        script {
+                             dir("${WORKSPACE}/build") {
+                                 docker.withRegistry('','Docker-Hub-Credentials' ) {
+                                     sh '''
+                                        sleep 10
+                                        '''
+                                 }
+                             }
+                        }
+                    }
+                }
+                stage('Building ECR image') {
+                    when {
+                        expression {
+                            params.registry == 'ecr'
+                        }
+                    }
+                    steps {
+                        script {
+                             dir("${WORKSPACE}/build") {
+                                 docker.withRegistry('','Docker-Hub-Credentials' ) {
+                                     sh '''
+                                        sleep 15
+                                        '''
+                                 }
+                             }
+                        }
+                    }
+                }
+            }
+        }
+        stage('Push All') {
+            parallel {
+                stage('pushing to dockerhub') {
+                    when {
+                        expression {
+                            params.registry == 'all'
+                        }
+                    }
+                    steps {
+                        script {
+                             dir("${WORKSPACE}/build") {
+                                 docker.withRegistry('','Docker-Hub-Credentials' ) {
+                                     sh '''
+                                        #!/usr/bin/env bash
+                                        docker build -t  "${DOCKER_REGISTRY}" .
+                                        '''
+                                 }
+                             }
+                        }
+                    }
+                }
+                stage('pushing to dockerhub Nexus') {
+                    when {
+                        expression {
+                            params.registry == 'all'
+                        }
+                    }
+                    steps {
+                        script {
+                             dir("${WORKSPACE}/build") {
+                                 docker.withRegistry('','Docker-Hub-Credentials' ) {
+                                     sh '''
+                                        sleep 10
+                                        '''
+                                 }
+                             }
+                        }
+                    }
+                }
+                stage('pushing to dockerhubECR') {
+                    when {
+                        expression {
+                            params.registry == 'all'
+                        }
+                    }
+                    steps {
+                        script {
+                             dir("${WORKSPACE}/build") {
+                                 docker.withRegistry('','Docker-Hub-Credentials' ) {
+                                     sh '''
+                                        sleep 15
+                                        '''
+                                 }
+                             }
+                        }
+                    }
+                }
+            }
+        }
+        stage('deploy') {
+            when {
+                expression { 
+                    params.registry == 'dockerhub' 
+                }
+            }
+            steps {
+                script {
+                    dir("${WORKSPACE}/build") {
+                       docker.withRegistry('','Docker-Hub-Credentials' ) {
+                           sh '''
+                            ls
+                            '''
+                       } 
+                    }
+                }
+            }
+        }
+    }
+} 
+
+
+
+
+pipeline {
+    agent {
+        label 'master'
+    }
+    options {
+    buildDiscarder(logRotator(numToKeepStr: '20'))
+    disableConcurrentBuilds()
+    timeout (time: 10, unit: 'MINUTES')
+    timestamps()
+    }
+    environment {
+
+            AWS_ACCOUNT_ID="YOUR_ACCOUNT_ID_HERE"
+            AWS_DEFAULT_REGION="CREATED_AWS_ECR_CONTAINER_REPO_REGION" 
+            IMAGE_REPO_NAME="ECR_REPO_NAME"
+
+            ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
+            DOCKER_REGISTRY = "leonardtia/devops-test-repo:${team}_${name}_${app}_${tag}"
+            NEXUS_REGISTRY = "leonardtia/devops-test-repo:${team}_${name}_${app}_${tag}"
+            // DOCKER_REGISTRY = "leonardtia/devops-test-repo:${tag}"
+            dockerImage = ''
+        }
+        parameters {
+            choice(name: 'team', choices: ['devops', 'developer', 'tester'], description: 'Select your team')
+            string(defaultValue: "", description: 'Enter your last_name', name: 'name')
+            choice(name: 'app', choices: ['client', 'api', 'db'], description: 'Select an app')
+            choice(name: 'registry', choices: ['nexus', 'dockerhub', 'ecr', 'all'], description: 'Select a registry')
+            string(defaultValue: "https://github.com/leonardtia1/dockerfile.git", description: 'supply a github repository', name: 'repository')
+            string(defaultValue: "main", description: 'supply the branch for the docker image', name: 'branch')
+            choice(name: 'project', choices: ['klm', 'jnlp'], description: 'Select the project name')
+            string(defaultValue: "develop", description: 'supply a tag ', name: 'tag')
+            choice(name: 'environment', choices: ['dev', 'qa', 'stg', 'prod'], description: 'Select the environment')
+        }
+        stages {
+            stage ('checkout') {
+            steps {
+                dir("${WORKSPACE}/build") {
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: "*/${branch}"]],
+                    doGenerateSubmoduleConfigurations: false,
+                    extensions: [[$class: 'LocalBranch']],
+                    submoduleCfg: [],
+                    userRemoteConfigs: [[
+                    url: "${repository}",
+                    credentialsId: 'GitHub-Credentials'
+                    ]]
+                ])
+                }
+            }
+        }
+        stage('Builds') {
+            parallel {
+                stage('Building dockerhub image') {
+                    when {
+                        expression {
+                            params.registry == 'ecr' || params.registry == 'all'
+                        }
+                    }
+                    steps {
+                        script {
+                             dir("${WORKSPACE}/build") {
+                                 docker.withRegistry('','Docker-Hub-Credentials' ) {
+                                     sh '''
+                                        #!/usr/bin/env bash
+                                        docker build -t  "${DOCKER_REGISTRY}" .
+                                        '''
+                                 }
+                             }
+                        }
+                    }
+                }
+                stage('Building Nexus image') {
+                    when {
+                        expression {
+                            params.registry == 'nexus' || params.registry == 'all'
+                        }
+                    }
+                    steps {
+                        script {
+                             dir("${WORKSPACE}/build") {
+                                 docker.withRegistry('','Docker-Hub-Credentials' ) {
+                                     sh '''
+                                        sleep 10
+                                        '''
+                                 }
+                             }
+                        }
+                    }
+                }
+                stage('Building ECR image') {
+                    when {
+                        expression {
+                            params.registry == 'ecr' || params.registry == 'all'
+                        }
+                    }
+                    steps {
+                        script {
+                             dir("${WORKSPACE}/build") {
+                                 docker.withRegistry('','Docker-Hub-Credentials' ) {
+                                     sh '''
+                                        sleep 15
+                                        '''
+                                 }
+                             }
+                        }
+                    }
+                }
+            }
+        }
+        stage('Push All') {
+            parallel {
+                stage('pushing to dockerhub') {
+                    when {
+                        expression {
+                            params.registry == 'all' || params.registry == 'dockerhub'
+                        }
+                    }
+                    steps {
+                        script {
+                             dir("${WORKSPACE}/build") {
+                                 docker.withRegistry('','Docker-Hub-Credentials' ) {
+                                     sh '''
+                                        #!/usr/bin/env bash
+                                        docker push  "${DOCKER_REGISTRY}"
+                                        '''
+                                 }
+                             }
+                        }
+                    }
+                }
+                stage('pushing to Nexus') {
+                    when {
+                        expression {
+                            params.registry == 'all' || params.registry == 'nexus'
+                        }
+                    }
+                    steps {
+                        script {
+                             dir("${WORKSPACE}/build") {
+                                 docker.withRegistry('','Docker-Hub-Credentials' ) {
+                                     sh '''
+                                        sleep 10
+                                        '''
+                                 }
+                             }
+                        }
+                    }
+                }
+                stage('pushing to ECR') {
+                    when {
+                        expression {
+                            params.registry == 'all' || params.registry == 'ecr'
+                        }
+                    }
+                    steps {
+                        script {
+                             dir("${WORKSPACE}/build") {
+                                 docker.withRegistry('','Docker-Hub-Credentials' ) {
+                                     sh '''
+                                        sleep 15
+                                        '''
+                                 }
+                             }
+                        }
+                    }
+                }
+            }
+        }
+        stage('deploy') {
+            when {
+                expression { 
+                    params.registry == 'dockerhub' 
+                }
+            }
+            steps {
+                script {
+                    dir("${WORKSPACE}/build") {
+                       docker.withRegistry('','Docker-Hub-Credentials' ) {
+                           sh '''
+                            ls
+                            '''
+                       } 
+                    }
+                }
+            }
+        }
+    }
+} 
+
+
+
+
