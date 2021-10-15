@@ -1,0 +1,15 @@
+  - name: Install httpd
+    yum: name=httpd state=present
+  - name: ensure apache is running (and enable it at boot)
+    service: name=httpd state=started enabled=yes
+ 
+  - name : Deploy index.html file
+    copy: src=index.html  dest={{dest_path}}
+    notify: restart httpd
+  - name : Deploy index1.html file
+    copy: src=index1.html  dest={{dest_path}}
+  - name : Deploy index2.html file
+    notify: restart httpd
+    copy: src=index2.html  dest={{dest_path}}
+    notify: restart httpd
+

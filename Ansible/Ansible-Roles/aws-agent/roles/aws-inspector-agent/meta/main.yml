@@ -1,0 +1,7 @@
+---
+galaxy_info:
+  author: Tia
+  description: Installs the AWS Inspector Agent on AWS VMs.
+
+
+

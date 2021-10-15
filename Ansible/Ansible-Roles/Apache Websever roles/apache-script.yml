@@ -1,0 +1,12 @@
+---
+- hosts: app
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+     - name: Transfer the script
+       copy: src=apache.sh dest=/tmp mode=0777 # 0777 is the permission
+
+     - name: Execute the script
+       command: sudo sh /tmp/apache.sh
+

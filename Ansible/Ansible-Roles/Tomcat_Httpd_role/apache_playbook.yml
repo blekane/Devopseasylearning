@@ -1,0 +1,27 @@
+---
+- hosts: all
+  become: true
+  become_user: root
+  vars:
+   src_path: /etc/ansible
+   dest_path: /var/www/html
+  tasks:
+  - name: Install httpd
+    yum: name=httpd state=present
+  - name: ensure apache is running (and enable it at boot)
+    service: name=httpd state=started enabled=yes
+ 
+  - name : Deploy index.html file
+    copy: src={{src_path}}/index.html  dest={{dest_path}}
+    notify: restart httpd
+  - name : Deploy index1.html file
+    copy: src={{src_path}}/index1.html  dest={{dest_path}}
+  - name : Deploy index2.html file
+    notify: restart httpd
+    copy: src={{src_path}}/index2.html  dest={{dest_path}}
+    notify: restart httpd
+  
+  handlers:
+  - name: restart httpd
+    service: name=httpd state=started
+

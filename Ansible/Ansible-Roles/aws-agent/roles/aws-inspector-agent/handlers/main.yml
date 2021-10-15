@@ -1,0 +1,10 @@
+- name: checking the vm machine type 
+  shell: dmidecode | grep Version | grep -o amazon
+  register: pingout
+  ignore_errors: yes
+
+- name: restart awsagent
+  service: 
+    name: awsagent 
+    state: restarted
+  when:  pingout.rc  == 0

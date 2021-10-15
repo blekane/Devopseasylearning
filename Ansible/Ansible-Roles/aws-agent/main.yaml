@@ -1,0 +1,7 @@
+- hosts: localhost
+  gather_facts: yes
+  become: yes
+  tasks:
+    - name: "aws inspector agent"
+      include_role:
+        name: aws-inspector-agent

@@ -1,0 +1,42 @@
+---
+- name: Update all packages to their latest version
+  apt:
+    name: "*"
+    state: latest
+  when: ansible_distribution == 'Ubuntu'
+- name: Update all packages to their latest version
+  yum:
+    name: "*"
+    state: latest
+  when: ansible_distribution == 'RedHat'
+
+- name: checking the vm machine type 
+  shell: dmidecode | grep Version | grep -o amazon
+  register: pingout
+  ignore_errors: yes
+
+
+- name: Download aws-inspector
+  get_url:
+    url: "{{ install_script_url }}"
+    dest: "/tmp/aws-inspector-agent-install"
+  when:  pingout.rc  == 0
+  
+- name: making  inspector-agent script executable
+  shell: chmod +x /tmp/aws-inspector-agent-install
+  when:  pingout.rc  == 0
+
+- name: Run inspector-agent installation script
+  shell: bash /tmp/aws-inspector-agent-install
+  when:  pingout.rc  == 0
+
+- name: start awsagent
+  service: 
+    name: awsagent 
+    state: started
+  when:  pingout.rc  == 0
+
+  
+
+
+

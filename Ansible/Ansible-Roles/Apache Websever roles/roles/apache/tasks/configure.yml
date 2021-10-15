@@ -1,0 +1,9 @@
+---
+# configure httpd.conf and sending sample html file
+- name: httpd.conf
+  copy: src=httpd.conf dest=/etc/httpd/conf/httpd.conf
+  notify:
+    - restart apache service
+
+- name: send index.html
+  copy: src=index.html dest=/var/www/html/index.html
