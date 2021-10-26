@@ -1,0 +1,42 @@
+---
+- hosts: localhost
+  gather_facts: yes
+  become: yes
+  tasks:
+    - name: "update all install packages"
+      include_role:
+        name: update 
+
+    - name: "Install Jenkins"
+      include_role:
+        name: jenkins
+
+    - name: "Install Maven"
+      include_role:
+        name: maven 
+
+    - name: "Install Tomcat"
+      include_role:
+        name: tomcat
+
+
+
+- hosts: localhost
+  gather_facts: yes
+  become: yes
+  tasks:
+    - name: "Helm role"
+      include_role:
+        name: helm
+      run_once: yes
+
+    - name: "MetalLB role"
+      include_role:
+        name: metallb
+      run_once: yes
+      tags: metallb
+
+    - name: "Healthcheck role"
+      include_role:
+        name: healthcheck
+      run_once: yes

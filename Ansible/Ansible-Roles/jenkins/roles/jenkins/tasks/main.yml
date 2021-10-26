@@ -1,0 +1,27 @@
+- name: Add a key
+  shell: wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key |  apt-key add -
+
+- name: add jenkins key to source list
+  shell: sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ >  /etc/apt/sources.list.d/jenkins.list'
+
+- name: apt update
+  apt:
+      name: '*'
+      state: latest
+
+- name: Install java
+  apt:
+      name: openjdk-11-jdk
+      state: present
+
+- name: Install jenkins
+  apt:
+      name: jenkins
+      state: latest
+
+- name: daemon-reload to pick up config changes
+  ansible.builtin.systemd:
+      daemon_reload: yes
+
+
+

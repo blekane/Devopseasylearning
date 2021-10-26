@@ -178,7 +178,7 @@ sentinel auth-pass mymaster a-very-complex-password-here
 ## Starting Redis in sentinel mode
 
 ```sh
-cd .\storage\redis\clustering\
+cd ./storage/redis/clustering\
 
 #sentinel-0
 docker run -d --rm --name sentinel-0 --net redis \

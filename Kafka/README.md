@@ -110,3 +110,6 @@ INFO binding to port 0.0.0.0/0.0.0.0:2181 (org.apache.zookeeper.server.NIOServer
 ```
 bin/kafka-server-start.sh config/server.properties
 ```
+
+
+

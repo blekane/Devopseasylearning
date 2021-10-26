@@ -1,5 +1,4 @@
 
-
 ```yaml
 #How to define multiple when conditions in Ansible
 tasks:
