@@ -640,3 +640,77 @@ EXPOSE 8080
   - name: restart httpd
     service: name=httpd state=restarted
     when: ansible_os_family == "RedHat"
+
+```
+
+## Variables
+```yml
+- hosts: all
+  vars:
+    greeting: Hello world! 
+
+  tasks:
+  - name: Ansible Basic Variable Example
+    debug:
+      msg: "{{ greeting }}"
+
+
+- hosts: all
+  vars:
+    continents:
+      - Africa
+      - Asia
+      - South America
+      - North America
+      - Europe
+      
+  tasks:
+  - name: Ansible List variable Example
+    debug:
+      msg: "{{ continents [1] }}"
+
+
+- hosts: all
+  vars:
+    continents: [Africa, Asia, South America, North America, Europe]
+
+  tasks:
+  - name: Ansible array variables example
+    debug: 
+      msg: "{{ item }}"
+    with_items:
+      - "{{ continents }}"
+
+
+
+hosts: switch_f01
+
+vars:
+   http_port: 8080
+   default_gateway: 
+   vlans:
+      id: 10
+      port: 20
+
+ tasks:
+   name: Configure default gateway
+   system_configs:
+   default_gateway_ip: “{{ default_gateway  }}“
+
+
+   name: Label port on vlan 10
+   vlan_config:
+	vlan_id: “{{ vlans[‘id’]  }}“
+     port_id: 1/1/ {{ vlans[‘port’]  }}
+
+
+---
+- hosts: all
+  vars:
+    - username: sammy
+    - home: /home/sammy
+  tasks:
+    - name: print variables
+      debug:
+        msg: "Username: {{ username }}, Home dir: {{ home }}"
+```

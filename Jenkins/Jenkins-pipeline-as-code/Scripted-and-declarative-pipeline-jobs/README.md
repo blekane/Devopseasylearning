@@ -1,7 +1,7 @@
 ### Sripted and Declarative Pipeline
 - repos [here](https://github.com/pipelineascodecourse)
 - source code [here](https://github.com/pipelineascodecourse/source_code)
-
+- pipeline-shared-lib [here](https://github.com/pipelineascodecourse/pipeline-shared-lib)
 
 ### Good pipeline option
 ```groovy
