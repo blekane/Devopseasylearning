@@ -63,6 +63,8 @@ services:
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
+    networks:
+      - frontend
   db:
     image: 'jc21/mariadb-aria:latest'
     environment:
@@ -72,6 +74,9 @@ services:
       MYSQL_PASSWORD: 'npm'
     volumes:
       - ./data/mysql:/var/lib/mysql
+networks:
+  frontend:
+    driver: bridge
 
 # Install with grafana
 version: '3'
