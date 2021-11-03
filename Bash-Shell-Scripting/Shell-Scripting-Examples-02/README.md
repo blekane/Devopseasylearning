@@ -1323,7 +1323,7 @@ echo "All Done"
 
 which docker 2>&1 1>/dev/nul && { echo; echo "Docker is installed on this host"; echo "The Docker version is: $(docker -v)"; } || { apt update; apt install docker.io -y; }
 
-which apache2 2>&1 1>/dev/nul && { echo; echo "Apache2 is installed on this host"; echo "The DApache2 version is: $(apache2 -v)"; } || { apt install apche2 -y; }
+which apache2 2>&1 1>/dev/nul && { echo; echo "Apache2 is installed on this host"; echo "The Apache2 version is: $(apache2 -v)"; } || { apt install apche2 -y; }
 
 which git 2>&1 1>/dev/nul && { echo; echo "Git is installed on this host"; echo "The Git version is: $(git --version)"; } || { apt install git -y; }
 
@@ -1333,9 +1333,211 @@ echo "All Done"
 ```
 
 
+## Redirection Operators and STDIN, STDOUT & STDERR
+- Output redirection `>`(overwrite) and `>>` (append)
+- Input redirection `<`
+- Combinning redirection
+    - `|` to send the standard output of one command to another command as standard input `ls -l |grep -i root`
+- STDIN (standard input), STDOUT (standard output) & STDERR (standard error)
+    - 0: STDIN
+    - 1: STDOUT `ls -l 1>demo.txt`or `ls -l >demo.txt`: store only the output in demo.txt and display the error
+    - 2: STDERR ---> `ls -l 2>demo.txt`: store only the error output in demo.txt if there is any and display the output
+- `ls -l 1>demo.txt 2>error.txt`, `sdffgfgfhrtg 1>demo.txt 2>error.txt` store the error in error.txt and the outup in demo.txt
+- `java --version 1>jva_ver.txt 2>jva_ver.txt` store both in the same file
+- `java --version  &> jva_ver.txt` or `java --version  &>jva_ver.txt`store both in the same file
+- `java --version  1>jva_ver.txt 2>&1` store both in the same file
+- `java --version  2>&1 1>/dev/nul` or `java --version  &>/dev/nul` redirct everything to dev null(trash)
+
+```sh 
+#!/bin/bash
+
+which docker 2>&1 1>/dev/nul && { echo; echo "Docker is installed on this host"; echo "The Docker version is: $(docker -v)"; } || { apt update; apt install docker.io -y; }
+
+which apache2 &>/dev/nul && { echo; echo "Apache2 is installed on this host"; echo "The Apache2 version is: $(apache2 -v)"; } || { apt install apche2 -y; }
+
+which git 2>/dev/nul 1>/dev/nul && { echo; echo "Git is installed on this host"; echo "The Git version is: $(git --version)"; } || { apt install git -y; }
+
+which tree &>/dev/nul && { echo; echo "Tree is installed on this host"; echo "The tree version is: $(tree --version)"; } || { apt install tree -y; }
+
+echo "All Done"
+```
+
+```sh
+#!/bin/bash
+
+which docker 2>&1 1>/dev/nul && { echo; echo "Docker is installed on this host" >>text.txt; echo "The Docker version is: $(docker -v)" >>text.txt; } || { apt update; apt install docker.io -y; }
+
+which apache2 &>/dev/nul && { echo; echo "Apache2 is installed on this host" >>text.txt; echo "The Apache2 version is: $(apache2 -v)" >>text.txt; } || { apt install apche2 -y; }
+
+which git 2>/dev/nul 1>/dev/nul && { echo; echo "Git is installed on this host" >>text.txt; echo "The Git version is: $(git --version)" >>text.txt; } || { apt install git -y; }
+
+which tree &>/dev/nul && { echo; echo "Tree is installed on this host" >>text.txt; echo "The tree version is: $(tree --version)" >>text.txt; } || { apt install tree -y; }
+
+echo "All Done"
+```
+
+```sh
+#!/bin/bash
+
+which docker 2>&1 1>/dev/nul && { echo; echo "Docker is installed on this host" &>>text.txt; echo "The Docker version is: $(docker -v)" &>>text.txt; } || { apt update; apt install docker.io -y; }
+
+which apache2 &>/dev/nul && { echo; echo "Apache2 is installed on this host" &>>text.txt; echo "The Apache2 version is: $(apache2 -v)" &>>text.txt; } || { apt install apche2 -y; }
+
+which git 2>/dev/nul 1>/dev/nul && { echo; echo "Git is installed on this host" &>>text.txt; echo "The Git version is: $(git --version)" &>>text.txt; } || { apt install git -y; }
+
+which tree &>/dev/nul && { echo; echo "Tree is installed on this host" &>>text.txt; echo "The tree version is: $(tree --version)" &>>text.txt; } || { apt install tree -y; }
+
+echo "All Done"
+```
+
+## Usage of grep command
+- Basic options: -i -w -v -o -n -c -A -B -C -r -l -h
+    - `-i` To ignore case for matching/searching
+    - `-w` To match a whole word
+    - `-v` To display the lines which are not having given string or text
+    - `-o` To print/display only matched parts from matched lines
+    - `-n` To display the matched line numbers
+    - `-c` To display matched number of lines
+    - `-A` To display N lines after match (grep –A 3 “string” file)
+    - `-B` To display N lines before match
+    - `-C` To display N lines around match (before and after)
+    - `-r` To search under current directory and its sub-directory
+    - `-l` To display only file names
+    - `-h` To hide file names
+
+- `grep "bash" one.sh two.sh  .... n.sh`: to grep `bash` in multiple files
+- `grep "bash" *`: to grep `bash` in all files in the curent location
+- `grep -r -i "bash" *`: to grep `bash` in all files in the curent location and sub directories or recursive
+- `grep -r "bash" *`: to grep `bash` recursive in all directories
+- `grep -i "bash" *`: to grep `bash` and `Bash` in all files in the curent location 
+- `grep -w "line" test.txt`: this will grep only `line` in test.txt and it will not grep `lines` or `lineaction` for instance
+- `grep -ino "bash" *`: line number, exat match and ignore case case sentitive
+- `grep -lr "bash" *`: display only files name and recursive
 
 
-# if and if-else Conditional Statements
+- Advanced Options: -f -e and –E
+    - `-f` Takes search string/pattern from a file, one per line
+    - `-e` To search multiple strings/patterns. Pattern is a string and it represents more than one string.
+    - `-E` To work with patterns
+    - grep -E[options] [patterns] file/files
+- `cat /etc/passwd |grep -e "root" -e "bash" -e "sbin" -e "systemd" -e "nologin"` or `cat /etc/passwd |grep -E "root|bash|sbin|systemd|nologin"`
+- `cat > test.txt`
+    bash
+    root
+    systemd
+    bash
+    nologin
+    `ctrl+d`
+- `cat /etc/passwd |grep -f test.txt`: grep from a file
+
+
+- Rules to create patterns:
+    - `xy|pq` Matches for xy or pq ----> `cat /etc/sudoers |grep -E -i "^%|all$"`, `cat /etc/sudoers |grep -E -i "Defaults|all"`
+    - `^xyz` Matches for the lines which are starting with `xyz` ----> `cat /etc/sudoers |grep -E "^%"`, `ls -lrt |grep -E "^-"`, `ls -lrt |grep -E "^d"`
+    - `xyz$` Matches for the lines which are ending with `xyz` ----> `cat /etc/sudoers |grep -E -i "all$"`
+    - `^$` Matches for the lines which are empty ---->`cat /etc/sudoers |grep "^$" |wc -l`
+
+```sh
+root@ubuntu:~# cat /etc/passwd |grep root
+root:x:0:0:root:/root:/bin/bash
+nm-openvpn:x:118:124:NetworkManager OpenVPN,,,:/var/lib/openvpn/chroot:/usr/sbin/nologin
+root@ubuntu:~# cat /etc/passwd |grep -w root
+root:x:0:0:root:/root:/bin/bash
+root@ubuntu:~# cat /etc/passwd |grep -n root
+1:root:x:0:0:root:/root:/bin/bash
+37:nm-openvpn:x:118:124:NetworkManager OpenVPN,,,:/var/lib/openvpn/chroot:/usr/sbin/nologin
+root@ubuntu:~# cat /etc/passwd |grep -nw root
+1:root:x:0:0:root:/root:/bin/bash
+root@ubuntu:~# cat /etc/passwd |grep -c root
+2
+root@ubuntu:~# cat /etc/passwd |grep -cw root
+1
+root@ubuntu:~# cat /etc/passwd |grep -A 1 root
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+--
+nm-openvpn:x:118:124:NetworkManager OpenVPN,,,:/var/lib/openvpn/chroot:/usr/sbin/nologin
+hplip:x:119:7:HPLIP system user,,,:/run/hplip:/bin/false
+root@ubuntu:~# cat /etc/passwd |grep -B 1 root
+root:x:0:0:root:/root:/bin/bash
+--
+saned:x:117:123::/var/lib/saned:/usr/sbin/nologin
+nm-openvpn:x:118:124:NetworkManager OpenVPN,,,:/var/lib/openvpn/chroot:/usr/sbin/nologin
+root@ubuntu:~# cat /etc/passwd |grep -C 1 root
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+--
+saned:x:117:123::/var/lib/saned:/usr/sbin/nologin
+nm-openvpn:x:118:124:NetworkManager OpenVPN,,,:/var/lib/openvpn/chroot:/usr/sbin/nologin
+hplip:x:119:7:HPLIP system user,,,:/run/hplip:/bin/false
+```
+
+## Comparison Operators with test command
+
+**Numbers:**
+- `[[ int1 -eq int2 ]]` -- It return true if they are equal else false
+- `[[ int1 -ne int2 ]]` -- It return false if they are not equal else true
+- `[[ int1 -lt int2 ]]` -- It return true if int1 is less than int2 else false
+- `[[ int1 –le int2 ]]` -- It return true if int1 is less than or equal to int2 else false
+- `[[ int1 -gt int2 ]]` -- It return true if int1 is greater than int2 else false
+- `[[ int1 -ge int2 ]]` -- It return true if int1 is greater than or equal to int2 else false
+- `[[ ! int1 -eq int2 ]]` -- It reverse the resul- 
+
+**Strings:**
+- `[[ -z str ]]` -- It return true if the length of the str is zero else false
+- `[[ -n str ]]` -- It return true if the length of the str is no-zero else false
+- `[[ str1 == str2 ]]` -- It return true if both the strings are equal else false
+- `[[ str1 != str2 ]]` -- It return true if both the strings are equal else false
+
+## File test Operators with test command
+- `[[ -d file ]]` -- It return true if the file/path is directory else false
+- `[[ -f file ]]` -- It return true if the file/path is a file else false
+- `[[ -e file ]]` -- It return true if the file/path is exists else false
+- `[[ -r file ]]` -- It return true if the file/path is readable else false
+- `[[ -w file ]]` -- It return true if the file/path is writable else false
+- `[[ -x file ]]` -- It return true if the file/path is executable else false
+
+
+## Advanced file test operators are listed below
+- `a` : True if the file exists.
+- `b` : True if the file exists and is a block special file.
+- `c` : True if the file exists and is a character special file.
+- `d` : True if the file exists and is a directory.
+- `e` : True if the file exists.
+- `f` : True if the file exists and is a regular file.
+- `g` : True if the file exists and its SGID bit is set.
+- `h` : True if the file exists and is a symbolic link.
+- `k` : True if the file exists and its sticky bit is set.
+- `p` : True if the file exists and is a named pipe (FIFO).
+- `r` : True if the file exists and is readable.
+- `s` : True if the file exists and has a size greater than zero.
+- `t` : True if file descriptor is open and refers to a terminal.
+- `u` : True if the file exists and its SUID (set user ID) bit is set.
+- `w` : True if the file exists and is writable.
+- `x` : True if the file exists and is executable.
+- `O` : True if the file exists and is owned by the effective user ID.
+- `G` : True if the file exists and is owned by the effective group ID.
+- `L` : True if the file exists and is a symbolic link.
+- `N` : True if the file exists and has been modified since it was last read.
+- `S` : True if the file exists and is a socket.
+
+## Command Chaining Operators
+- This concept is useful to write simple and short shell scripts.
+- Chaining of Linux commands means, combining several commands and make them execute based upon the behavior of operator used in between them.
+- The different Command Chaining Operators are:
+    - Semi-colon Operator ;
+    - Logical AND Operators &&
+    - Logical OR Operator ||
+    - Logical AND – OR Operators && ||
+- Note:
+    - cmd1 ; cmd2 – Run cmd1 and then cmd2, regardless of the success or failure of cmd1
+    - cmd1 && cmd2 – Run cmd2 only if cmd1 succeeded
+    - cmd1 || cmd2 – Run cmd2 only if cmd1 failed
+    - cm1 && cmd2 || cmd3 – Run cmd2 if cm1 is success else run
+
+
+# if elif elif else conditional statement
+
 **Syntax:**
 ```sh
 Cmd1 && Cmd2
@@ -1343,7 +1545,7 @@ if Cmd1
 then
     Cmd2
 fi
-
+#------------------------------------------------------------------------------
 Cmd1 && { Cmd2 ; Cmd3 ; }
 if Cmd1
 then
@@ -1351,7 +1553,7 @@ then
     Cmd3
 fi
 
-
+#------------------------------------------------------------------------------
 Cmd1 && Cmd2 || Cmd3
 if Cmd1
 then
@@ -1359,7 +1561,7 @@ then
 else
     Cmd3
 fi
-
+#------------------------------------------------------------------------------
 Cmd1 && { Cmd2 ; Cmd3 ; } || Cmd4
 if Cmd1
 then
@@ -1368,4 +1570,450 @@ then
 else
     Cmd4
 fi
+```
+
+```sh
+#!/bin/bash
+
+which docker 2>&1 1>/dev/nul && { echo; echo "Docker is installed on this host"; echo "The Docker version is: $(docker -v)"; } || { apt update; apt install docker.io -y; }
+
+which apache2 &>/dev/nul && { echo; echo "Apache2 is installed on this host"; echo "The Apache2 version is: $(apache2 -v)"; } || { apt install apche2 -y; }
+
+which git 2>/dev/nul 1>/dev/nul && { echo; echo "Git is installed on this host"; echo "The Git version is: $(git --version)"; } || { apt install git -y; }
+
+which tree &>/dev/nul && { echo; echo "Tree is installed on this host"; echo "The tree version is: $(tree --version)"; } || { apt install tree -y; }
+
+echo "All Done"
+
+#------------------------------------------------------------------------------
+
+#!/bin/bash
+
+if [ -n "$(which docker)" &>/dev/nul ]; then
+    echo
+    echo "Docker is installed on this host"
+    echo "The Docker version is: $(docker -v)"
+else
+   apt update
+   apt install docker.io -y
+fi
+
+if [ -n "$(which apache2)" &>/dev/nul ]; then
+    echo
+    echo "Apache2 is installed on this host"
+    echo "The Apache2 version is: $(apache2 -v)"
+else
+   apt install apche2 -y
+fi
+
+if [ -n "$(which git)" &>/dev/nul ]; then
+    echo
+    echo "Git is installed on this host"
+    echo "The Git version is: $(git --version)"
+else
+   apt install git -y
+fi
+
+if [ -n "$(which tree)" &>/dev/nul ]; then
+    echo
+    echo "Tree is installed on this host"
+    echo "The tree version is: $(tree --version)"
+else
+   apt install tree -y
+fi
+
+echo "All Done"
+
+#------------------------------------------------------------------------------
+
+#!/bin/bash
+if which docker &>/dev/nul
+then
+    echo
+    echo "Docker is installed on this host"
+    echo "The Docker version is: $(docker -v)"
+else
+   apt update
+   apt install docker.io -y
+fi
+
+if which apache2 &>/dev/nul 
+then
+    echo
+    echo "Apache2 is installed on this host"
+    echo "The Apache2 version is: $(apache2 -v)"
+else
+   apt install apche2 -y
+fi
+
+if which git &>/dev/nul 
+then
+    echo
+    echo "Git is installed on this host"
+    echo "The Git version is: $(git --version)"
+else
+   apt install git -y
+fi
+
+if which tree &>/dev/nul 
+then
+    echo
+    echo "Tree is installed on this host"
+    echo "The tree version is: $(tree --version)"
+else
+   apt install tree -y
+fi
+
+echo "All Done"
+``` 
+
+```sh
+#!/bin/bash
+
+die() {
+echo "$@" >&2
+  exit 2
+}
+
+[ -z "${KERNEL}" ] && die "Variable KERNEL is not set" 
+
+[ -z "${MEMORY}" ] && die "Variable MEMORY is not set" 
+
+[ -z "${DISKUSAGE}" ] && die "Variable DISKUSAGE is not set" 
+
+[ -z "${IP}" ] && die "Variable IP is not set" 
+
+[ -z "${NIC}" ] && die "Variable NIC is not set" 
+
+[ -z "${SSH}" ] && die "Variable SSH is not set" 
+
+if [[ -n "${KERNEL}" ]] && [[ -n "${MEMORY}" ]] && [[ -n "${DISKUSAGE}" ]] && [[ -n "${IP}" ]] && [[ -n "${NIC}" ]] && [[ -n "${SSH}" ]] && [[ -n "${SSH}" ]]; then
+    echo "All variables are must set and the length is not 0 before this script can run"
+fi
+
+#------------------------------------------------------------------------------
+
+#!/bin/bash
+
+die() {
+echo "$@" >&2
+  exit 2
+}
+
+if [ -z "${KERNEL}" ]; then 
+    die "Variable KERNEL is not set" 
+fi
+
+if [ -z "${MEMORY}" ]; then
+    die "Variable MEMORY is not set" 
+fi
+
+if [ -z "${DISKUSAGE}" ]; then
+    die "Variable DISKUSAGE is not set" 
+fi
+
+if [ -z "${IP}" ]; then 
+    die "Variable IP is not set" 
+fi
+
+if [ -z "${NIC}" ]; then 
+    die "Variable NIC is not set" 
+fi
+
+if [ -z "${SSH}" ]; then 
+    die "Variable SSH is not set" 
+fi
+
+if [[ -n "${KERNEL}" ]] && [[ -n "${MEMORY}" ]] && [[ -n "${DISKUSAGE}" ]] && [[ -n "${IP}" ]] && [[ -n "${NIC}" ]] && [[ -n "${SSH}" ]] && [[ -n "${SSH}" ]]; then
+    echo "All variables are must set and the length is not 0 before this script can run"
+fi
+
+#RESULT
+All variables are must set and the length is not 0 before this script can run
+root@ubuntu:~/script#
+```
+
+## Comment in shell script
+```sh
+#!/bin/bash
+die() {
+echo "$@" >&2
+  exit 2
+}
+
+if [ -z "${KERNEL}" ]; then 
+    die "Variable KERNEL is not set" 
+fi
+<<COMMENT
+if [ -z "${MEMORY}" ]; then
+    die "Variable MEMORY is not set" 
+fi
+
+if [ -z "${DISKUSAGE}" ]; then
+    die "Variable DISKUSAGE is not set" 
+fi
+
+if [ -z "${IP}" ]; then 
+    die "Variable IP is not set" 
+fi
+
+if [ -z "${NIC}" ]; then 
+    die "Variable NIC is not set" 
+fi
+
+if [ -z "${SSH}" ]; then 
+    die "Variable SSH is not set" 
+fi
+COMMENT
+
+if [[ -n "${KERNEL}" ]] && [[ -n "${MEMORY}" ]] && [[ -n "${DISKUSAGE}" ]] && [[ -n "${IP}" ]] && [[ -n "${NIC}" ]] && [[ -n "${SSH}" ]] && [[ -n "${SSH}" ]]; then
+    echo "All variables are must set and the length is not 0 before this script can run"
+fi
+
+
+#------------------------------------------------------------------------------
+#!/bin/bash
+die() {
+echo "$@" >&2
+  exit 2
+}
+
+if [ -z "${KERNEL}" ]; then 
+    die "Variable KERNEL is not set" 
+fi
+<<A
+if [ -z "${MEMORY}" ]; then
+    die "Variable MEMORY is not set" 
+fi
+
+if [ -z "${DISKUSAGE}" ]; then
+    die "Variable DISKUSAGE is not set" 
+fi
+A
+if [ -z "${IP}" ]; then 
+    die "Variable IP is not set" 
+fi
+
+if [ -z "${NIC}" ]; then 
+    die "Variable NIC is not set" 
+fi
+
+if [ -z "${SSH}" ]; then 
+    die "Variable SSH is not set" 
+fi
+
+if [[ -n "${KERNEL}" ]] && [[ -n "${MEMORY}" ]] && [[ -n "${DISKUSAGE}" ]] && [[ -n "${IP}" ]] && [[ -n "${NIC}" ]] && [[ -n "${SSH}" ]] && [[ -n "${SSH}" ]]; then
+    echo "All variables are must set and the length is not 0 before this script can run"
+fi
+
+#------------------------------------------------------------------------------
+#!/bin/bash
+die() {
+echo "$@" >&2
+  exit 2
+}
+<<AAAAAA
+if [ -z "${KERNEL}" ]; then 
+    die "Variable KERNEL is not set" 
+fi
+
+if [ -z "${MEMORY}" ]; then
+    die "Variable MEMORY is not set" 
+fi
+
+if [ -z "${DISKUSAGE}" ]; then
+    die "Variable DISKUSAGE is not set" 
+fi
+A
+if [ -z "${IP}" ]; then 
+    die "Variable IP is not set" 
+fi
+
+if [ -z "${NIC}" ]; then 
+    die "Variable NIC is not set" 
+fi
+
+if [ -z "${SSH}" ]; then 
+    die "Variable SSH is not set" 
+fi
+
+if [[ -n "${KERNEL}" ]] && [[ -n "${MEMORY}" ]] && [[ -n "${DISKUSAGE}" ]] && [[ -n "${IP}" ]] && [[ -n "${NIC}" ]] && [[ -n "${SSH}" ]] && [[ -n "${SSH}" ]]; then
+    echo "All variables are must set and the length is not 0 before this script can run"
+fi
+<<AAAAAA
+```
+
+## Logical AND OR and NOT operators - ( &&, || and ! )
+- Logical AND Operator && or -a
+    - will compare two inputs & if both are true, it will return true else false.
+- Logical OR Operator || or -o
+    - Will check two conditions will return true, if any of them is true & return false when both are false.
+- Logical NOT Operator !
+    - will return true when the condition is false & return false if the condition is true.
+
+
+## What is the difference between [ ] and [[ ]] And also (( )) ?
+Difference between [ and [[
+- [[ is the improvement version of [
+- [[ have several benefits compare to [
+- They are:
+    - No need to use quotes .
+    - We can also use < and > operators for strings while using `[[ ]]`.
+    - [[ $x = y ]] && [[ $x = yes ]] ---->>> [[ $x = y && $x = yes ]]
+
+1. We need `" "` for string and variable if using `[ ]`
+```sh
+#!/usr/bin/env bash
+
+read -p "Do you want to start Docker? yes or no: " DOCKER
+
+if [ "$DOCKER" == "yes" ]; then
+    echo "Stating Docker ..........."
+    systemctl start docker
+else
+    echo "Skipping .........."
+fi
+
+#------------------------------------------------------------------------------
+
+#!/usr/bin/env bash
+
+read -p "Do you want to start Docker? yes or no: " DOCKER
+
+if [ "${DOCKER}" == "yes" ]; then
+    echo "Stating Docker ..........."
+    systemctl stat Docker
+else
+    echo "Skipping .........."
+fi
+
+```
+
+2. We do not need `" "` for string and variable if using `[[ ]]` or `(( ))`
+```sh
+#!/usr/bin/env bash
+
+read -p "Do you want to start Docker? yes or no: " DOCKER
+
+if [[ $DOCKER == yes ]]; then
+    echo "Stating Docker ..........."
+    systemctl start docker
+else
+    echo "Skipping .........."
+fi
+
+#------------------------------------------------------------------------------
+
+#!/usr/bin/env bash
+
+read -p "Do you want to start Docker? yes or no: " DOCKER
+
+if [[ ${DOCKER} == yes ]]; then
+    echo "Stating Docker ..........."
+    systemctl start docker
+else
+    echo "Skipping .........."
+fi
+
+#------------------------------------------------------------------------------
+
+#!/usr/bin/env bash
+
+read -p "Do you want to start Docker? yes or no: " DOCKER
+
+if (( ${DOCKER} == yes )); then
+    echo "Stating Docker ..........."
+    systemctl start docker
+else
+    echo "Skipping .........."
+fi
+
+```
+
+3. Best practice: use `"{ }"` while using `[[ ]]` or `(( ))`
+```sh
+#!/usr/bin/env bash
+
+read -p "Do you want to start Docker? yes or no: " DOCKER
+
+if (( "${DOCKER}" == "yes" )); then
+    echo "Stating Docker ..........."
+    systemctl start docker
+else
+    echo "Skipping .........."
+fi
+
+#------------------------------------------------------------------------------
+
+#!/usr/bin/env bash
+
+read -p "Do you want to start Docker? yes or no: " DOCKER
+
+if [[ "${DOCKER}" == "yes" ]]; then
+    echo "Stating Docker ..........."
+    systemctl start docker
+else
+    echo "Skipping .........."
+fi
+```
+
+4. Use `[[ ]]` while using `||` and `&&`
+```sh
+#!/usr/bin/env bash
+
+read -p "Do you want to start Docker? yes or no: " DOCKER
+
+if [[ "${DOCKER}" == "yes" || "${DOCKER}" == "no" ]]; then
+    echo "Stating Docker ..........."
+    systemctl start docker
+else
+    echo "Skipping .........."
+fi
+```
+
+4. Use `[ ]` while using `-o` and `-a`
+```sh
+#!/usr/bin/env bash
+
+read -p "Do you want to start Docker? yes or no: " DOCKER
+
+if [ "${DOCKER}" == "yes" -o "${DOCKER}" == "no" ]; then
+    echo "Stating Docker ..........."
+    systemctl start docker
+else
+    echo "Skipping .........."
+fi
+```
+
+5. `[[ ]]` support regular expression
+```sh
+#!/usr/bin/env bash
+
+read -p "Do you want to start Docker? yes or no: " DOCKER
+
+if [[ "${DOCKER}" =~ yes|Yes|Y|y|YES ]]; then
+    echo "Stating Docker ..........."
+    systemctl start docker
+else
+    echo "Skipping .........."
+fi
+
+#------------------------------------------------------------------------------
+
+#!/usr/bin/env bash
+
+read -p "Do you want to start Docker? yes or no: " DOCKER
+
+if [[ "${DOCKER}" =~ yes|Yes|Y|y|YES ]]
+then
+    echo "Stating Docker ..........."
+    systemctl start docker
+elif [[ "${DOCKER}" =~ N|No|no|n|NO ]]
+then
+    echo "Skipping .........."
+else
+    echo "ERROR"
+fi
+
+#------------------------------------------------------------------------------
 ```
