@@ -2015,5 +2015,487 @@ else
     echo "ERROR"
 fi
 
-#------------------------------------------------------------------------------
 ```
+
+## One time task execution with at | scheduling job with at command to execute once
+at command is very useful for scheduling one time tasks.
+
+**Example:**
+- Shutdown system at the specified time
+- Taking a one-time backup.
+
+```
+apt install at -y
+```
+
+**Syntax:**
+```
+echo "bash backup.sh" | at 9:00 AM  OR  echo "bash backup.sh" | at at now + 30 minutes,
+Or
+Run first: at 9:00 AM then enter and give the cmd (bash backup.sh) or script to run and
+press ctrl+D.
+```
+
+**Commands used with at:**
+
+- `at` : execute commands at specified time. 
+- `atq` : lists the pending jobs of users.
+- `atrm + job number` : delete jobs by their job number.
+
+**Examples of at command:**
+
+Ex-1: Schedule task at coming 10:00 AM.
+- at 10:00 AM
+Ex-2: Schedule task at 10:00 AM on coming Sunday.
+- at 10:00 AM Sun
+Ex-3: Schedule task at 10:00 AM on coming 25’th July.
+- at 10:00 AM July 25
+Ex-4: Schedule task at 10:00 AM on coming 22’nd June 2025.
+- at 10:00 AM 6/22/2015
+- at 10:00 AM 6.22.2015
+Ex-5: Schedule task at 10:00 AM on the same date at next month.
+- at 10:00 AM next month
+Ex-6: Schedule task at 10:00 AM tomorrow.
+- at 10:00 AM tomorrow
+Ex-7: Schedule task to execute just after 1 hour.
+- at now + 1 hour
+Ex-8: Schedule task to execute just after 30 minutes.
+- at now + 30 minutes
+Ex-9: Schedule task to execute just after 1 and 2 weeks.
+- at now + 1 week
+- at now + 2 weeks
+Ex-10: Schedule task to execute just after 1 and 2 years.
+- at now + 1 year
+- at now + 2 years
+Ex-1: Schedule task to execute at midnight.
+- at midnight
+
+## Shell Script to send Automatic Mail Alert when RAM Memory gets Low
+mail must be set up first
+```sh
+#!/bin/bash
+TO="dowithscripting@gmail.com"
+TH_L=400
+free_RAM=$(free -mt | grep -E "Total" | awk '{print $4}')
+
+if [[ $free_RAM -lt $TH_L ]]
+then
+  echo -e "Server is running with low RAM Size\nAvaialbe RAM is: $free_RAM" | /bin/mail -s "RAM INFO $(date)" $TO
+fi
+
+Cronjob:
+-------
+crontab -e
+then write below and save it (for every min)
+* * * * *  /bin/bash send_automatic_mail_alert_when_ram_size_is_low.sh
+```
+
+## What is an Array and How to define or declare it ?
+- What is an array ?
+    - An Array is the data structure of the bash shell, which is used to store multiple data’
+    - Simple array: myarray=( ls pwd date 2 5.6 ) #No limit for length of an array
+- How to Define/declare an array ?
+    - There are different ways to define an array in bash shell scripting.
+        - Empty Array: myArray=()
+        - mycmds=( ls pwd date 2 5.6 )
+        - myNewArray=( ls -lrt hostname -s )
+        - myNewArray=( "ls –lrt" "hostname –s" )
+        - declare -a NewArray
+        - NewArray=( 1 3 4 5 bash scripting)
+
+```sh
+#!/usr/bin/env bash
+
+declare -a NewArray
+NewArray=( 1 3 4 5 bash scripting)
+echo "${NewArray[4]}"
+echo "${NewArray[0-4]}"
+echo "${NewArray[-1]}"
+```
+
+```sh
+#!/bin/bash
+
+for each in 1 2 3 4 5
+do
+  echo "Welcome to shell scripting"
+  echo "We done with very basics"
+  echo "Now we are starting loops concepts"
+done
+
+#------------------------------------------------------------------------------
+#!/bin/bash
+
+if [[ -x httpd_info.sh ]]
+then
+  echo "httpd_info.sh is having execution permission" 
+else
+  echo "httpd_info.sh is not having execution permission"
+fi
+
+
+if [[ -x httpd_ver_port.sh ]]
+then
+   echo "httpd_ver_port.sh is having execution permission" 
+else
+   echo "httpd_ver_port.sh is not having execution permission"
+fi
+
+
+#for each in httpd_info.sh httpd_ver_port.sh check_ex_per.sh
+for each in $(ls)
+do
+  if [[ -x $each ]]
+  then
+    echo "$each is having execution permission" 
+  else
+    echo "$each is not having execution permission"
+  fi
+done
+#------------------------------------------------------------------------------
+
+check_ex_per_of_files_for_given_dir.sh
+
+#!/bin/bash
+
+if [[ $# -ne 1 ]]
+then
+	echo "Usage: $0 <any_path>"
+	exit 
+fi
+
+given_path=$1
+for each in $(ls $given_path)
+do
+  if [[ -x $each ]]
+  then
+      echo "$each is having execution permission" 
+  else
+      echo "$each is not having execution permission"
+  fi
+done
+#------------------------------------------------------------------------------
+
+#!/bin/bash
+#for each_value in 1 2 3
+for each_file in $(ls)
+do
+   echo "this is a loop"
+   echo "for this iteration each_value is: $each_file"
+done
+```
+
+
+## Installing multiple packages with for loop and command line arguments
+```sh
+#!/bin/bash
+#Author: Narendra 
+#Installing mutliple pkags
+
+$# = number of arguments
+$@ = all arguments
+
+if [[ $# -eq 0 ]]
+then
+  echo "Usage: $0 pkg1 pkg2 ...."
+  exit 1
+fi
+
+
+if [[ $(id -u) -ne 0 ]]
+then
+  echo "Please run from root user or with sudo privilage"
+  exit 2
+fi
+
+for each_pkg in $@
+do
+  if which $each_pkg &> /dev/null
+  then
+     echo "Already $each_pkg is installed"
+  else
+     echo "Installing $each_pkg ......"
+     yum install $each_pkg -y &> /dev/null 
+     if [[ $? -eq 0 ]]
+     then
+       echo "Successfully installed $each_pkg pkg"
+     else
+       echo "Unable to install vim $each_pkg"
+     fi
+  fi
+done
+```
+
+
+##  Difference between $@ and $* (to print all arguments)
+```sh
+#!/bin/bash
+
+echo -e "The below output is for \$*"
+for each in $*
+do
+  echo $each
+done
+
+echo -e "The below output is for \$@"
+for each in $@
+do
+  echo $each
+done
+```
+```
+root@ubuntu:~/script# ./test.sh 1 2 3 4 5 hi 
+The below output is for $*
+1
+2
+3
+4
+5
+hi
+The below output is for $@
+1
+2
+3
+4
+5
+hi
+root@ubuntu:~/script# 
+```
+
+```sh
+#!/bin/bash
+
+echo -e "The below output is for $*"
+for each in $*
+do
+  echo $each
+done
+
+echo -e "The below output is for $@"
+for each in $@
+do
+  echo $each
+done
+```
+
+```
+root@ubuntu:~/script# ./test.sh 1 2 3 4 5 hi 
+The below output is for 1 2 3 4 5 hi
+1
+2
+3
+4
+5
+hi
+The below output is for 1 2 3 4 5 hi
+1
+2
+3
+4
+5
+hi
+root@ubuntu:~/script# 
+```
+
+## Loop Control commands / statements
+```sh
+#!/bin/bash
+#ls
+<< mcom
+for each_file in $(ls)
+do
+   echo "$each_file"
+done
+mcom
+
+<< scom
+cnt=1
+for each_file in $(ls *.txt)
+do
+  if [[ $cnt -eq 1 ]]
+  then 
+     echo "$each_file"
+     ((cnt++))
+  fi
+done
+scom
+
+echo "starting for loop"
+cnt=1
+for each_file in $(ls *.txt)
+do
+	if [[ $cnt -eq 1 ]]
+	then
+           echo "$each_file"
+	   break
+	fi
+done
+
+echo "for loop is over"
+
+#------------------------------------------------------------------------------
+#!/bin/bash
+echo "starting for loop"
+<< mycom
+for each in $(seq 1 10)
+do
+  if [[ $each -gt 5 ]]
+  then
+	 break
+  fi 
+  echo "$each"
+done
+mycom
+
+<< com
+for each in $(seq 1 10)
+do
+  if [[ $each -ne 5 ]]
+  then
+     echo "$each"
+  fi
+
+done
+
+com
+
+for each in $(seq 1 10)
+do
+   if [[ $each -eq 5 ]]
+   then
+	   continue
+   fi	 
+
+   echo "$each"
+done
+
+echo "for loop is over"
+```
+
+## Case Statement
+```sh
+#!/bin/bash
+clear
+echo "--------------------------------"
+echo "Welcome to Arithmetic Calculator"
+echo "--------------------------------"
+echo -e "[a]ddition\n[b]Subtraction\n[c]Multiplication\n[d]Division\n"
+read -p "Enter your choice: " choice
+case $choice in
+   [aA])
+        read -p "Enter first number: " num1
+        read -p "Enter second number: " num2
+        result=$((num1+num2))
+        echo "The result for your choice is: $result"
+        ;;
+   [bB])
+        read -p "Enter first number: " num1
+        read -p "Enter second number: " num2
+        result=$((num1-num2))
+        echo "The result for your choice is: $result"
+        ;;
+   [cC])
+        read -p "Enter first number: " num1
+        read -p "Enter second number: " num2
+        result=$((num1*num2))
+        echo "The result for your choice is: $result"
+        ;;
+   [dD])
+        read -p "Enter first number: " num1
+        read -p "Enter second number: " num2
+        result=$((num1/num2))
+        echo "The result for your choice is: $result"
+        ;;
+   *)
+       echo "Wrong choice"
+       ;;
+esac
+
+#----------------------------------------------------------------------------
+
+#!/bin/bash
+mycode() {
+   read -p "Enter first number: " num1
+   read -p "Enter second number: " num2
+}
+
+clear
+echo "--------------------------------"
+echo "Welcome to Arithmetic Calculator"
+echo "--------------------------------"
+echo -e "[a]ddition\n[b]Subtraction\n[c]Multiplication\n[d]Division\n"
+read -p "Enter your choice: " choice
+case $choice in
+   [aA])
+        mycode
+        result=$((num1+num2))
+        echo "The result for your choice is: $result"
+        ;;
+   [bB])
+        mycode
+        result=$((num1-num2))
+        echo "The result for your choice is: $result"
+        ;;
+   [cC])
+        mycode
+        result=$((num1*num2))
+        echo "The result for your choice is: $result"
+        ;;
+   [dD])
+        mycode
+        result=$((num1/num2))
+        echo "The result for your choice is: $result"
+        ;;
+   *)
+       echo "Wrong choice"
+       ;;
+esac
+```
+
+## Functions
+```sh
+#!/bin/bash
+
+
+read_inputs()
+{
+  read -p "Enter first num: " num1
+  read -p "Enter second num: " num2
+}
+
+addition()
+{
+  sum=$((num1+num2))
+  echo "The addition of $num1 and $num2 is: $sum"
+}
+
+subtraction()
+{
+  sub=$((num1-num2))
+  echo "The sub of $Num1 and $num2 is: $sub"
+}
+
+read_inputs
+addition
+subtraction
+
+#----------------------------------------------------------------------------
+
+#!/bin/bash
+display()
+{
+  y=55
+  echo "The variable value of x is: $x"
+  local x=67
+  local p=78
+}
+
+x=5
+display
+
+echo "The value of a variable y is: $y"
+echo "The x value after calling display function: $x"
+echo "The value of p is: $p"
+```
+
+## How to create csv file using shell script
