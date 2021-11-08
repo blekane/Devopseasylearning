@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+   
+  sentinel1:
+    image: redis:sentinel 
+    hostname: sentinel1
+    container_name: sentinel1
+    restart: always
+    networks:
+        redis:
+          aliases:
+            - sentinel3
+ 
+  sentinel2:
+    image: redis:sentinel 
+    hostname: sentinel2
+    container_name: sentinel2
+    restart: always
+    networks:
+        redis:
+          aliases:
+            - sentinel2
+ 
+  sentinel3:
+    image: redis:sentinel 
+    hostname: sentinel2
+    container_name: sentinel3
+    restart: always
+    networks:
+        redis:
+          aliases:
+            - sentinel3
+
+networks:
+  redis:
+    external: true 
+

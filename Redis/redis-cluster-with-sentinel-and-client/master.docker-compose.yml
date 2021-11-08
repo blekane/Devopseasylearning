@@ -1,0 +1,62 @@
+version: "3.9"
+services:
+       
+  master:
+    image: redis:6.2.1 
+    container_name: master
+    hostname: master
+    expose: 
+      - 6379
+    ports:
+      - "6379:6379"
+    restart: always
+    volumes:
+      - redis-data:/data:rw
+      - ${PWD}/redis-master-conf:/etc/redis
+    # environment:
+    #   - REDIS_REPLICATION_MODE=master
+    #   - REDIS_PASSWORD=a-very-complex-password-here
+    networks:
+        redis:
+          aliases:
+            - master
+
+  app:
+    image: redis-client:v1.1.0 
+    hostname: redis-client
+    container_name: redis-client
+    environment:
+      - REDIS_HOST=master
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=a-very-complex-password-here
+    expose: 
+      - 80
+    ports:
+      - "8070:80"
+    depends_on:
+      - master
+    restart: always
+    networks:
+        redis:
+          aliases:
+            - redis-client
+
+  sentinel1:
+    image: redis:sentinel 
+    hostname: sentinel1
+    container_name: sentinel1
+    depends_on:
+      - master
+    restart: always
+    networks:
+        redis:
+          aliases:
+            - sentinel1
+  
+volumes:
+  redis-data:
+networks:
+  redis:
+    external: true 
+
+ 
