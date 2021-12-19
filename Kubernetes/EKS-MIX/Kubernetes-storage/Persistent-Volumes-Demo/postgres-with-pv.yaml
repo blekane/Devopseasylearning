@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  labels:
+    app: postgres
+data:
+  POSTGRES_DB: postgresdb
+  POSTGRES_USER: admin
+  POSTGRES_PASSWORD: admin123
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+spec:
+  serviceName: postgres
+  selector:
+    matchLabels:
+      app: postgres
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:10.4
+          imagePullPolicy: "IfNotPresent"
+          ports:
+          - containerPort: 5432
+          envFrom:
+          - configMapRef:
+              name: postgres-config
+          volumeMounts:
+          - name: data # we create a volume mount first
+            mountPath: /var/lib/postgresql/data #This where postgres store data
+      volumes:
+      - name: data # we refer the volume mount here so that it can use the persistentVolumeClaim tp persist data
+        persistentVolumeClaim:
+          claimName: example-claim # name of the claim that the pod need to use
+---
+apiVersion: v1
+kind: Service # use the service to expose the pod
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  selector:
+    app: postgres
+  ports:
+    - protocol: TCP
+      name: http
+      port: 5432
+      targetPort: 5432

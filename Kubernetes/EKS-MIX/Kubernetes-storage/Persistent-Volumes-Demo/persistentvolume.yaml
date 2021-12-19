@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: example-volume
+  labels:
+    type: local
+spec:
+  #we use local node storage here!
+  #kubectl get storageclass
+  storageClassName: hostpath # This allow us to persist data on the host
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data" #this is where we want the volume to be mounted on the filesystem or the host OS

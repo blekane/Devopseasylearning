@@ -1475,13 +1475,13 @@ hplip:x:119:7:HPLIP system user,,,:/run/hplip:/bin/false
 ## Comparison Operators with test command
 
 **Numbers:**
-- `[[ int1 -eq int2 ]]` -- It return true if they are equal else false
-- `[[ int1 -ne int2 ]]` -- It return false if they are not equal else true
-- `[[ int1 -lt int2 ]]` -- It return true if int1 is less than int2 else false
-- `[[ int1 –le int2 ]]` -- It return true if int1 is less than or equal to int2 else false
-- `[[ int1 -gt int2 ]]` -- It return true if int1 is greater than int2 else false
-- `[[ int1 -ge int2 ]]` -- It return true if int1 is greater than or equal to int2 else false
-- `[[ ! int1 -eq int2 ]]` -- It reverse the resul- 
+- `[[ int1 -eq int2 ]]`     -- It return true if they are equal else false
+- `[[ int1 -ne int2 ]]`     -- It return false if they are not equal else true
+- `[[ int1 -lt int2 ]]`     -- It return true if int1 is less than int2 else false
+- `[[ int1 –le int2 ]]`     -- It return true if int1 is less than or equal to int2 else false
+- `[[ int1 -gt int2 ]]`     -- It return true if int1 is greater than int2 else false
+- `[[ int1 -ge int2 ]]`     -- It return true if int1 is greater than or equal to int2 else false
+- `[[ ! int1 -eq int2 ]]`   -- It reverse the resul- 
 
 **Strings:**
 - `[[ -z str ]]` -- It return true if the length of the str is zero else false

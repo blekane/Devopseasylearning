@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: example-claim # PersistentVolumeClaim name
+spec:
+  storageClassName: hostpath # storage classes name
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Mi # to claim 50Mi so that an application can use it

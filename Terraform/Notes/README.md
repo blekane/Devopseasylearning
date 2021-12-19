@@ -51,7 +51,7 @@ This state file do not have any resource.
 }
 ```
 
-### Terraform plan command 
+### Terraform plan command
 * When your run `Terraform plan` command, always check this line: `Plan: 1 to add, 0 to change, 0 to destroy.`
 * This is because if terraform want to destroy something, it will be listed on this line.
 * Avoid deleting resource manual through AWS console while using Terraform because this will create a challenge. When you will run `terraform apply` command it will always try to create resources that were deleted manually through the console.
@@ -72,7 +72,7 @@ When we run terraform apply command, it refreshes the state file first to match 
 terraform refresh
 ```
 ```tf
-# current state 
+# current state
 "instance_state": "running",
 "instance_type": "t2.micro",
 
@@ -95,8 +95,8 @@ terraform refresh
 * if you make a manual change that is not defined in the state file, terraform will not do anything with that resource.
 
 ### Provider and Resources
-* Terraform supports multiple providers. 
-* We have to specify the provider details for which we want to launch the infrastructure 
+* Terraform supports multiple providers.
+* We have to specify the provider details for which we want to launch the infrastructure
 * With the provider, we also have to add the tokens which will be used for authentication.
 * On adding a provider, terraform init will download plugins associated with the provider.
 
@@ -123,7 +123,7 @@ terraform refresh
 * The provide add as a middle or interface between terraform and the service provider
 * Provider have multiple versioning. For instance, Windows have a lot of version such Windows 10, 7, XP, server and so on.
 * Provider plugins are released separately from Terraform itself.
-* They have a different set of version numbers. 
+* They have a different set of version numbers.
 
 ### Explicitly Setting Provider Version
 * During terraform init, if version argument is not specified, the most recent provider will be downloaded during initialization.
@@ -170,7 +170,7 @@ version    = ">=2.10,<=2.30"
 ```tf
 provider "aws" {
     region = "us-east-1"
-    version = ">=2.8,<=2.30"   
+    version = ">=2.8,<=2.30"
 }
 resource "aws_s3_bucket" "terraform_s3" {
     bucket = "terraform-bucket-232"
@@ -180,7 +180,7 @@ resource "aws_s3_bucket" "terraform_s3" {
 
 ### Terraform Providers
 There are two major categories for terraform providers
-* HashiCorp Distributed provider 
+* HashiCorp Distributed provider
 * 3rd party provider
   * HashiCorp Distributed providers can be downloaded automatically during terraform init.
   * terraform init cannot automatically download providers that are not distributed by HashiCorp
@@ -205,12 +205,12 @@ module "vpc" {
 module "storage" {
   source = "git::ssh://username@example.com/storage.git"
 }
-```  
+```
 
 * The value of the ref argument can be any reference that would be accepted by the git checkout command, including branch and tag names.
 * By default, Terraform will clone and use the default branch (referenced by HEAD) in the selected repository. You can override this using the ref argument:
 
-```tf 
+```tf
 module "vpc" {
   source = "git::https://example.com/vpc.git?ref=v1.2.0"
 }
@@ -315,7 +315,7 @@ cidr_block = "${cidrsubnet(var.cidr_block, 10, count.index)}"
       + "10.0.0.192/26",
       + "10.0.1.0/26",
       + "10.0.1.64/26",
- 
+
   + public_cidrs    = [
       + "10.0.0.0/26",
       + "10.0.0.64/26",
@@ -484,7 +484,7 @@ Plan: 1 to add, 0 to change, 0 to destroy.
 ### Resource: aws_db_instance
 - [Provides an RDS instance resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance#allocated_storage)
 
-- `allow_major_version_upgrade` - (Optional) Indicates that major version upgrades are allowed. 
+- `allow_major_version_upgrade` - (Optional) Indicates that major version upgrades are allowed.
 
 - `auto_minor_version_upgrade` - (Optional) Indicates that minor engine upgrades will be applied automatically to the DB instance during the maintenance window. Defaults to true.
 
@@ -523,3 +523,154 @@ var.list[*].id
 * Launch the recording and start creating resources.
 * Stop the recording when the resources creation is done
 * Open Recorder dashboard and click Terraform to get the code
+
+
+### Format Function
+- Function [here](https://www.terraform.io/docs/language/functions/format.html)
+- How to use format function in Terraform [here](https://stackoverflow.com/questions/67039404/how-to-use-format-function-in-terraform)
+
+I am trying to register an application in Azure AD using TF and i would like to define some redirect URIs using the arg as mentioned in the link -->
+```
+https://(project code)-yellow-(resourcegroup).azurewebsites.net/oauth2-redirect.html
+https://(project code)-blue-(resourcegroup).azurewebsites.net/oauth2-redirect.html
+https://(project code)-green-(resourcegroup).azurewebsites.net/oauth2-redirect.html
+```
+
+You can pass the project_id and resourcegroup as input parameters to your TF code:
+```t
+variable "project_id" {}
+variable "resource_group" {}
+```
+Then your reply_urls could be:
+```t
+reply_urls  = [
+       format("https://%s-yellow-%s.azurewebsites.net/oauth2-redirect.html", var.project_id, var.resource_group),
+       format("https://%s-blue-%s.azurewebsites.net/oauth2-redirect.html", var.project_id, var.resource_group),
+       format("https://%s-green-%s.azurewebsites.net/oauth2-redirect.html", var.project_id, var.resource_group)
+]
+```
+- `%s` is for string
+- `%d` Convert to integer number and produce decimal representation.
+- `%02d` is for `count.index + 1` , 0`0 + 1`, 0`1 + 1`, 0`2 + 1`
+```t
+option      = format("redis node %02d for %s cluster", count.index + 1, var.environment)
+```
+
+### Conditionals
+```t
+resource "aws_instance" "web" {
+  subnet = "${var.env == "production" ? var.prod_subnet : var.dev_subnet}"
+}
+
+resource "aws_instance" "vpn" {
+  count = "${var.something ? 1 : 0}"
+}
+``
+
+- Equality: == and !=
+- Numerical comparison: >, <, >=, <=
+- Boolean logic: &&, ||, unary !
+
+
+### Module Sources
+* Generic Git Repository. For example, to use HTTPS or SSH:
+```tf
+module "vpc" {
+  source = "git::https://example.com/vpc.git"
+}
+
+module "storage" {
+  source = "git::ssh://username@example.com/storage.git"
+}
+```
+
+* Here we’re downloading the production branch of the module in the tf_vpc repository.
+```tf
+module "vpc" {
+source = "git::https://github.com/turnbullpress/tf_vpc.git?ref=production"
+}
+```
+
+
+* The value of the ref argument can be any reference that would be accepted by the git checkout command, including branch and tag names.
+* By default, Terraform will clone and use the default branch (referenced by HEAD) in the selected repository. You can override this using the ref argument:
+* v1.2.0 = tag in git
+
+```tf
+module "vpc" {
+  source = "git::https://example.com/vpc.git?ref=v1.2.0"
+}
+```
+
+### Module Sources example
+* ref=development: we are refer to the development branch
+```tf
+source = "./vpc"
+source = "../../terraform/ec2/"
+source = "github.com/leonardtia1/test-module/terraform/ec2"
+source = "git::https://github.com/leonardtia1/test-module.git"
+source = "git::https://github.com/leonardtia1/test-module.git?ref=development"
+source = "git::ssh://github.com/leonardtia1/test-module.git"
+```
+
+### Tags
+* Here we’re downloading the production branch of the module in the tf_vpc repository.
+```tf
+module "vpc" {
+source = "git::https://github.com/turnbullpress/tf_vpc.git?ref=production"
+}
+```
+* Committing and pushing our vpc module
+```tf
+$ pwd
+~/terraform/web/vpc
+$ git add .
+$ git commit -m "First commit of VPC module"
+$ git tag -a "v0.0.1" -m "First release of vpc module"
+$ git remote add origin git@github.com:turnbullpress/tf_vpc.git
+$ git push -u origin master --tags
+```
+* Updating our vpc module configuration
+```tf
+module "vpc" {
+source = "github.com/turnbullpress/tf_vpc.git?ref=v0.0.1"
+name = "web"
+cidr = "10.0.0.0/16"
+public_subnet = "10.0.1.0/24"
+}
+```
+
+* We’ll need to get our module again since we’ve changed its source. Getting the new vpc module.
+```tf
+$ terraform get
+Get: git::https://github.com/turnbullpress/tf_vpc.git?ref=v0.0.1
+```
+
+* Any time we want to use the vpc module, we can now just reference the module on GitHub. This also means we can manage multiple versions of the module—for example, we could create `v0.0.2` of the module, and then use the `ref` parameter to refer to that.
+* This allows us to test a new version of a module without changing the old one.
+
+```tf
+$ pwd
+~/terraform/web/vpc
+$ git add .
+$ git commit -m "First commit of VPC module"
+$ git tag -a "v0.0.2" -m "Second release of vpc module"
+$ git remote add origin git@github.com:turnbullpress/tf_vpc.git
+$ git push -u origin master --tags
+```
+
+```tf
+module "vpc" {
+source = "github.com/turnbullpress/tf_vpc.git?ref=v0.0.2"
+name = "web"
+cidr = "10.0.0.0/16"
+public_subnet = "10.0.1.0/24"
+}
+```
+
+### Git Basics - Tagging
+```
+git tag -a v1.4 -m "my version 1.4"
+git tag
+git show v1.4
+```

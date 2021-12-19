@@ -25,7 +25,7 @@ else
         systemctl start jenkins 
         systemctl enable jenkins
         systemctl status jenkins 
-    ;;
+        ;;
     CentOS) 
         sudo wget -O /etc/yum.repos.d/jenkins.repo \
             https://pkg.jenkins.io/redhat-stable/jenkins.repo
@@ -38,7 +38,7 @@ else
         firewall-cmd --permanent --add-port=8080/tcp   2& > /dev/null 
         firewall-cmd --reload 2& > /dev/null
         systemctl status jenkins 
-    ;;
+        ;;
     Amazon)
         sudo wget -O /etc/yum.repos.d/jenkins.repo \
             https://pkg.jenkins.io/redhat-stable/jenkins.repo
@@ -51,7 +51,7 @@ else
         firewall-cmd --permanent --add-port=8080/tcp   2& > /dev/null   
         firewall-cmd --reload 2& > /dev/null
         systemctl status jenkins 
-    ;;
+        ;;
     *)
        echo "your operating system is UNKNOWN"
        exit 1

@@ -39,6 +39,9 @@ C:\Program Files\PostgreSQL\13\bin
 psql -U [username] -h [hostname]
 psql -U postgres -h localhost
 ```
+postgres pasword = 12345
+master= Vanessa50======
+
 ### Pgadmin zoom in and out
 ```
 ctrl +

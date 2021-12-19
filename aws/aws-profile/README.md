@@ -92,3 +92,35 @@ alias awsp='echo $AWS_PROFILE'
 alias awsg='aws sts get-caller-identity'
 alias s3='aws s3 ls'
 ```
+
+### AWS ADMIN ACCESS
+```JSON
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "*",
+            "Resource": "*"
+        }
+    ]
+}
+```
+
+### AWS BUCKET PUBLIC ACCESS
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "*"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::BUCKET_NAME/*"
+        }
+    ]
+}
+```

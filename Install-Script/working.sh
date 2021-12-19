@@ -43,6 +43,9 @@ Options:
    -s, --sonarqube
     run sonarqube container
 
+   --nginx, --nginx, --nginx-manager
+    run nginx manager container
+
   -n, --nexus
     run sonarqube container
 
@@ -54,6 +57,9 @@ Options:
 
   -rmi, --docker-rmi
      Delete all images
+
+  -st, -start, --start_containers)
+      Start containers
 
   -all, --del
      Stop ,delete all containers and all images
@@ -95,15 +101,20 @@ options() {
      -s|--sonarqube)
       sonarqube
       ;;
-    -n|--nexus)
-      nexus
-      ;;
      -post|--postgres)
       postgres
       ;;
+    -nginx|--nginx|--nginx-manager)
+      nginx_manager
+      ;;
 
 
-
+    -datadog|-dog|--start_datadog_container)
+      start_datadog_container
+      ;;
+    -st|-start|--start_containers)
+      start_containers
+      ;;
     -rm|--docker-rm)
       remove_containers
       ;;
@@ -121,12 +132,26 @@ options() {
 
 # PACKAGES INSTALLION
 packages() {
-    apt update -y && apt upgrade -y
-    which docker &>/dev/nul || { apt install docker.io -y; } 
+OS=`cat /etc/os-release |grep PRETTY_NAME | awk -F= '{print$2}' | awk -F '"' '{print$2}' |awk '{print$1}'`
+
+if [[ "${OS}" == "Ubuntu" ]]
+then
+    apt update -y 
+    # apt upgrade -y
+    which docker &>/dev/nul || { apt install docker.io -y; systemctl start docker; systemctl enable docker; } 
     which docker-compose &>/dev/nul || { apt install docker-compose -y; } 
     which git &>/dev/nul || apt install git -y
     which curl &>/dev/nul || apt install curl -y 
-    which unzip &>/dev/nul || apt install unzip -y 
+    which unzip &>/dev/nul || apt install unzip -y
+else
+    yum update -y 
+    # yum upgrade -y
+    which docker &>/dev/nul || { apt install docker.io -y; systemctl start docker; systemctl enable docker; } 
+    which docker-compose &>/dev/nul || { yum install docker-compose -y; } 
+    which git &>/dev/nul || yum install git -y
+    which curl &>/dev/nul || yum install curl -y 
+    which unzip &>/dev/nul || yum install unzip -y
+fi
 }
 
 
@@ -149,13 +174,82 @@ remove_all() {
     # docker system prune -a
     docker images
     docker ps -a 
+
+    echo
+    echo "Checking running containers................Please wait.................."
+    sleep 3
+    docker ps
+}
+
+
+start_containers() {
+  # bash ${0} -jenkins_2
+  # bash ${0} -nginx
+  start_datadog_container
+  nginx_manager
+  jenkins_container
+  # nexus
+  # sonarqube
+  # postgres
+  
+}
+
+die() {
+  exit 2
+}
+
+start_datadog_container() {
+    
+    if [ -z "${DATADOG_API_KEY}" ]
+    then 
+      echo -e "
+      \033[1;36m
+      DATADOG_API_KEY is not set. Please Please ask the DATADOG_API_KEY from your admin, set it on your terminal as a variable and export as env
+      Example: DATADOG_API_KEY=hhggshhcvgsggd && export DATADOG_API_KEY
+      \033[0m
+      "
+      die
+
+    elif [[ "$(docker ps |grep -E -o dd-agent)" == "dd-agent" ]]
+    then
+      echo -e "
+      \033[1;36m
+      Hummm ........ The Datadog agent is running .........
+      \033[0m
+      "
+      die
+
+    else
+      echo
+      echo "Starting Datadog container................Please wait.................."
+      sleep 3
+
+      docker run -d \
+          --name dd-agent \
+          -v /var/run/docker.sock:/var/run/docker.sock:ro \
+          -v /proc/:/host/proc/:ro \
+          -v /sys/fs/cgroup/:/host/sys/fs/cgroup:ro \
+          -e DD_API_KEY=${DATADOG_API_KEY} \
+          -e DD_SITE="datadoghq.com" \
+          gcr.io/datadoghq/agent:7
+    fi
+
+    echo
+    echo "Checking running containers................Please wait.................."
+    sleep 3
+    docker ps
 }
 
 
 # JENKINS INSTALLATION THE CONTAINER
 jenkins_container() {
     echo
+    echo "Creating configuration file................Please wait.................."
+    sleep 5
+
     echo "Installing Jenkins"
+    echo "1 - Create directories ${DIR}/jenkins/"
+    mkdir -p $DIR/jenkins/
 
     echo "2 - Create docker-compose file"
     echo "
@@ -167,7 +261,6 @@ jenkins_container() {
         user: 0:0
         ports:
           - '8070:8080'
-          - '443:8443'
           - '50000:50000'
         volumes:
           - 'jenkins_data:/var/jenkins_home/'
@@ -326,6 +419,7 @@ echo "
 # JENKINS INSTALLATION IN THE VM
 jenkins() {
 
+    mkdir $DIR
     cd $DIR/
     git clone https://github.com/leonardtia1/Devops-easy-learning-software-installation.git
     chmod +x $DIR/Devops-easy-learning-software-installation/jenkins-script-installation.sh
@@ -362,8 +456,10 @@ jenkins() {
 # SONARQUBE INSTALLATION
 sonarqube() {
     echo
-    echo "Installing Sonarqube"
+    echo "Creating configuration file................Please wait.................."
+    sleep 5
 
+    echo "Installing Sonarqube"
     echo "1 - Create directories ${DIR}/sonarqube/"
     mkdir -p $DIR/sonarqube/
 
@@ -432,8 +528,10 @@ sonarqube() {
 # NEXUS INSTALLATION
 nexus() {
     echo
-    echo "Installing Nexus"
+    echo "Creating configuration file................Please wait.................."
+    sleep 5
 
+    echo "Installing Nexus"
     echo "1 - Create directories ${DIR}/nexus/"
     mkdir -p $DIR/nexus/
 
@@ -520,8 +618,10 @@ nexus() {
 # POSTGRES AND PGADMIN INSTALLATION
 postgres() {
     echo
+    echo "Creating configuration file................Please wait.................."
+    sleep 5
+    
     echo "Installing Postgres and Pgdamin"
-
     echo "1 - Create directories ${DIR}/postgres/"
     mkdir -p $DIR/postgres/
 
@@ -623,8 +723,202 @@ postgres() {
     docker ps
 }
 
-options $@
 
+# SONARQUBE INSTALLATION
+sonarqube() {
+    echo
+    echo "Creating configuration file................Please wait.................."
+    sleep 5
+
+    echo "Installing Sonarqube"
+    sleep 5
+    echo "1 - Create directories ${DIR}/sonarqube/"
+    mkdir -p $DIR/sonarqube/
+
+    echo "2 - Create docker-compose file"
+    echo "
+    version: '3'
+    services:
+      sonarqube:
+        image: 'sonarqube'
+        container_name: sonarqube
+        ports:
+          - '9000:9000'
+        volumes:
+          - 'sonarqube_data:/opt/sonarqube'
+        networks:
+         - generator
+    volumes:
+      sonarqube_data:
+        driver: local
+        driver_opts:
+          o: bind
+          type: none
+          device: ${DIR}/sonarqube/
+    networks:
+      generator:
+       driver: bridge
+
+    " >$DIR/docker-compose-sonarqube.yml
+
+    echo "3 - Run sonarqube "
+    docker-compose -f $DIR/docker-compose-sonarqube.yml up -d
+
+    echo
+    echo "Checking login information--------Please wait ---------"
+    sleep 5
+    
+    echo -e "
+    \033[1;36m
+    Use the below URL to access Sonarqube if Sonarqube is runing in Vmware or VirtualBox
+    http://${LOCALHOST_IP}:9000
+    \033[0m
+    "
+
+    echo -e "
+    \033[1;36m
+    Use the below URL to access Sonarqube if Sonarqube is runing in AWS EC2 or Azure
+    NB: The below will print your public IP if your Virtual machine is not in the cloud
+    http://${CLOUD_PUBLIC_IP}:9000 
+    \033[0m
+    "
+
+    echo -e "
+    \033[1;36m
+    Sonarqube default username and password
+    username: admin
+    password: admin
+    \033[0m
+    "
+    echo
+    echo "Checking running containers................Please wait.................."
+    sleep 3
+    docker ps
+}
+
+
+# NGINX MANAGER INSTALLATION
+nginx_manager() {
+    echo
+    echo "Creating configuration file................Please wait.................."
+    sleep 5
+
+    echo "1 - Create directories ${DIR}/nginx/"
+    mkdir -p $DIR/nginx/
+
+    echo "2 - Create docker-compose file"
+    echo "
+    version: '2'
+    services:
+      nginx:
+        image: 'jc21/nginx-proxy-manager:latest'
+        container_name: nginx
+        restart: always
+        ports:
+          # Public HTTP Port:
+          - '80:80'
+          # Public HTTPS Port:
+          - '443:443'
+          # Admin Web Port:
+          - '81:81'
+        networks:
+         - generator
+        environment:
+          # These are the settings to access your db
+          DB_MYSQL_HOST: "mariadb"
+          DB_MYSQL_PORT: 3306
+          DB_MYSQL_USER: "npm"
+          DB_MYSQL_PASSWORD: "npm"
+          DB_MYSQL_NAME: "npm"
+          DISABLE_IPV6: 'true'
+        volumes:
+          - ./data:/data
+          - ./letsencrypt:/etc/letsencrypt
+        depends_on:
+          - mariadb
+      mariadb:
+        image: yobasystems/alpine-mariadb:latest
+        container_name: mariadb
+        restart: always
+        environment:
+          MYSQL_ROOT_PASSWORD: 'npm'
+          MYSQL_DATABASE: 'npm'
+          MYSQL_USER: 'npm'
+          MYSQL_PASSWORD: 'npm'
+        networks:
+         - generator
+        volumes:
+          - ./data/mysql:/var/lib/mysql
+
+    volumes:
+      data:
+        driver: local
+        driver_opts:
+          o: bind
+          type: none
+          device: ${DIR}/nginx/
+      letsencrypt:
+        driver: local
+        driver_opts:
+          o: bind
+          type: none
+          device: ${DIR}/nginx/
+    networks:
+      generator:
+       driver: bridge
+
+    " >$DIR/docker-compose-nginx-manager.yml
+
+    echo "3 - Run nginx "
+    docker-compose -f $DIR/docker-compose-nginx-manager.yml up -d
+
+    echo "Checking login information--------Please wait ---------"
+    sleep 5
+
+    echo -e "
+    \033[1;36m
+    Use the below URL to access nginx if nginx is runing in Vmware or VirtualBox
+    http://${LOCALHOST_IP}:81
+    \033[0m
+    "
+
+    echo -e "
+    \033[1;36m
+    Use the below URL to access nginx if nginx is runing in AWS EC2 or Azure
+    NB: The below will print your public IP if your Virtual machine is not in the cloud
+    http://${CLOUD_PUBLIC_IP}:81 
+    \033[0m
+    "
+
+    echo -e "
+    \033[1;36m
+    Nginx default username and password
+    Email:    admin@example.com
+    Password: changeme
+    \033[0m
+    "
+    
+    echo
+    echo "Checking running containers................Please wait.................."
+    sleep 10
+    docker ps
+}
+
+
+recap () {
+  echo
+  docker ps -a |wc -l && echo "Stop Containers"
+  
+  echo
+  docker ps |wc -l && echo "Running Containers"
+  
+  echo
+  docker images |wc -l && echo "All docker Containers"
+  echo
+}
+
+options $@
+recap
 
 
 
