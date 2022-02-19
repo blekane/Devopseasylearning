@@ -439,3 +439,26 @@ else
 endif
 ```
 
+
+
+```Makefile
+
+
+build:
+	docker build -t devopseasylearning2021/tia:static-website-example2 .
+
+push:
+	docker push devopseasylearning2021/tia:static-website-example2
+
+run:
+	docker run --name static-website-example2 -p 8021:80 -d devopseasylearning2021/tia:static-website-example2
+	
+
+build:
+        docker build -t devopseasylearning2021/tia:static-website-example2 .
+
+push:
+        docker push devopseasylearning2021/tia:static-website-example2
+
+run:
+        docker run --name static-website-example2 -p 8021:80 -d devopseasylearning2021/tia:static-website-example2

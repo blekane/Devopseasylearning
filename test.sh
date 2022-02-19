@@ -633,3 +633,206 @@ echo
 echo "The number op CPU on this server is: $(nproc)"
 echo
 echo "$VAR1 is $VAR2 years old and he from $VAR3"
+
+
+
+'''
+Just a little happy new year script assignment for those who have requested. (It no mandatory though.)
+
+Please write a script that will run on Centos (Red Hat) and Ubuntu servers. The script is going to do the following:
+- Update the system
+- Installed wget
+- Installed curl
+- Installed apache or HTTPD webserver
+- Checked the memory, the root filesystem available
+- Check if the user administrator exists. If yes, the script should not create the user. If not, the script should create a user.
+'''
+
+#! /bin/bash
+#Author: Group 3
+#Date: December 30 2021
+
+echo "*****************Group 3 ***********"
+
+sleep 2
+
+UBUNTU=`cat /etc/*release |grep ID_LIKE |awk -F= '{print$2}'`
+CENTOS=`cat /etc/*release |grep ID_LIKE |awk -F= '{print$2}'`
+
+if [[ $UBUNTU == "debian" ]]
+then
+    echo "This is Ubuntu server"
+    sleep 3
+    echo
+
+    echo "Updating the system"
+    sleep 3
+    apt update -y
+    sleep 2
+    echo
+
+    echo "Installing wget"
+    apt-get install wget #where is -y?
+    sleep 2
+    echo
+
+    echo "Installing curl"
+    apt install curl #where is -y?
+    sleep 2
+    echo
+
+    echo "Installing Apache"
+    apt-get install apache2 -y
+    sleep 2
+    echo
+
+    echo "The file system available"
+    FILESYSTEM_AVAILABLE=`df -h | awk '{print $1"\t "$4}'` ## I need the exact value of the file system available
+    echo "$FILESYSTEM_AVAILABLE"
+    sleep 2
+    echo
+    
+    echo "Check if a user exits"
+    sleep 1
+    USERNAME=`cat /etc/passwd | grep administrator | awk -F: '{print$1}'`
+
+    if [[ $USERNAME == administrator ]] # you might need a quote on administrator
+    then
+        echo "user $USERNAME found"
+    else
+        useradd administrator
+        echo "user $USERNAME has been added"
+    fi
+
+# you didn't close the if statment
+
+
+else [[ $CENTOS == "fedora" ]]  # this should be a new if statment. The output should not be fedora with quote ("fedora")
+    echo "This is CentOs server"
+    sleep 3
+
+    echo "Updating the system"
+    sleep 3
+    yum update -y
+    sleep 2
+
+    echo "This is Ubuntu server" # duplicate of code
+    sleep 3
+
+    echo "Updating the system"  # duplicate of code
+    sleep 3
+    apt update -y
+    sleep 2
+
+    echo "Installing wget"
+    yum install wget -y
+    sleep 2
+
+    echo "Installing curl"
+    yum install curl
+    sleep 2
+
+    echo "Installing Apache"
+    yum install httpd -y
+    sleep 2
+
+    echo "The file system available"
+    FILESYSTEM_AVAILABLE=`df -h | awk '{print $1"\t "$4}'` ## I need the exact value of the file system available
+    echo "$FILESYSTEM_AVAILABLE"
+    sleep 2
+    
+    echo "Check if a user exits"
+    sleep 1
+    USERNAME=`cat /etc/passwd | grep administrator | awk -F: '{print$1}'`
+
+    if [[ $USERNAME == administrator ]]
+    then
+        echo "user $USERNAME found"
+    else
+        useradd administrator
+        echo "user $USERNAME has been added"
+    fi
+
+fi # well close
+
+
+
+
+
+jeanbaptistedonkeng@gmail.com
+bfranklin2716@gmail.com 
+blandinekamdem04@gmail.com 
+carrineyannicknintideme@gmail.com
+cedrickengue@gmail.com
+christ7289@gmail.com
+yotioclaude7@gmail.com
+fkyankey@gmail.com 
+franois12@yahoo.fr 
+zambougeorges27@gmail.com
+
+kouakepn@yahoo.fr
+njoya_tolale@yahoo.fr
+henryene.02@gmail.com
+igormoumbe1@gmail.com
+sandrine.kamwa@gmail.com 
+michelawono@gmail.com
+kellymefenya2422@gmail.com
+lefogue@gmail.com
+kemvouachille@gmail.com
+muketelp@gmail.com
+juan.marietta@yahoo.fr 
+kemvoumichelle@gmail.com
+amythioune29@gmail.com
+nelxofficial@gmail.com
+patricktemgoua@gmail.com
+pierretaboulatangue@gmail.com
+raissatankeu@yahoo.fr
+r.goune@outlook.com
+sousmanethioune7@gmail.com
+stephaniealimeta@gmail.com 
+stchatchou@yahoo.com 
+yougang2000@yahoo.fr
+willyvaldesk@gmail.com
+bruce_akono@icloud.com
+bldvistes@gmail.com
+cyprien.tchatchou@gmail.com
+ijeberry2010@gmail.com
+valdezebanda@gmail.com
+lewath@yahoo.fr
+christiankam66@gmail.com
+kakovanel@gmail.com
+DZALIALFRED@GMAIL.COM
+philoyoum@gmail.com
+fouateuderrick@gmail.com
+zemkouonoel@gmail.com
+papyssn@yahoo.com
+Idikandji@outlook.com
+princessokereke@gmail.com
+arianemegne412@gmail.com
+adelanoumbo1@gmail.com
+stevetalek24@gmail.com
+djeagouduclair@gmail.com
+tchindamireille2012@gmail.com
+arnauldnjamen04@gmail.com
+laurenotedji@gmail.com
+chendjoulevis@gmail.com
+ericajet02@yahoo.com
+fayesamboudiang@hotmail.com
+alowasoh@gmail.com 
+sandrakamtchoum@gmail.com 
+amiemarieleegreen@gmail.com
+kareendevops@gmail.com
+jtchuenteu@gmail.com 
+juanpolobiky@gmail.com
+abdoulayethiam091@gmail.com
+ingrid.yamndzi@gmail.com
+nzombeng12@yahoo.com
+kantinstephanetongue@gmail.com
+nellycarolle@gmail.com
+gaellepone@gmail.com
+jwandji76@gmail.com
+bertinecesao@outlook.com
+simplicewk@gmail.com
+lucy4miracle@yahoo.com
+jenfoko@gmail.com
+prodigyladis@gmail.com

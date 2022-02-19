@@ -8,7 +8,7 @@ WORKDIR /student_home
 RUN apt-get update -y
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ 'Europe/Tallinn'
-    RUN echo $TZ > /etc/timezone && \
+RUN echo $TZ > /etc/timezone && \
     apt-get update && apt-get install -y tzdata && \
     rm /etc/localtime && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
@@ -66,9 +66,9 @@ RUN wget https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx \
 ENV TERRAFORM_VERSION 1.0.0
 WORKDIR /tmp
 RUN wget -q https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
-      && unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
-      && mv terraform /usr/local/bin \
-      && rm -f terraform terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+    && unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+    && mv terraform /usr/local/bin \
+    && rm -f terraform terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 
 
 ### TERRAGRUNT INSTALLATIN
@@ -99,5 +99,5 @@ COPY --from=docker/compose:latest /usr/local/bin/docker-compose /usr/bin/docker-
 
 
 
-
+#https://docs.docker.com/develop/develop-images/multistage-build/
 

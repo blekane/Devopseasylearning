@@ -51,6 +51,27 @@ ln -s pip3.9 pip3
 pip3 --version
 ```
 
+### Install python on Unbuntu
+wget https://www.python.org/ftp/python/3.9.0/Python-3.9.0.tgz
+tar -xvzf Python-3.9.0.tgz
+apt install -y python3-pip -y
+apt install -y build-essential libssl-dev libffi-dev python3-dev 
+
+cd Python-3.9.0
+./configure
+make
+make altinstall
+ls -ltr /usr/local/bin/
+
+python3.9 --version
+
+cd /usr/local/bin/
+ln -s python3.9 python3
+python3.9 --version
+
+ln -s pip3.9 pip3
+pip3 --version
+
 ### Install python3 on AWS EC2
 ```sh
 yum -y update
@@ -98,7 +119,7 @@ which python
 
 ```py
 # This will use python3
-#!/usr/local/bin/python3
+#!/usr/bin/python3
 print("Line 1")
 print("Line 2")
 print("")
@@ -157,7 +178,7 @@ IndentationError: unexpected indent
 if 3 > 1:
     print("We are using if condition")
     print("We are comparing 3 and 1")
- print("We are happy with indentations")
+  print("We are happy with indentations")
 
  # Output
 File "hello.py", line 4
@@ -182,6 +203,15 @@ answer = input("Answer: ")
 question5 = input("Once again thanks.")'''
 
 '''
+if 3 > 1:
+    print("We are using if condition")
+    print("We are comparing 3 and 1")
+    print("We are happy with indentations")
+'''
+print("We are using if condition")
+
+
+'''
 name = input("Enter your name: ")
 print("Hello " + name +"!" )
 '''
@@ -203,15 +233,38 @@ print("hello world")
 - Triple quote is to print the entire text.
 - This means we are assigninig all this text to introduction
 ```py
-Introduction = '''The traditional American school year is designed around a nine-month schedule requiring 180 days in the classroom.
+INTRODUCTION = '''
+The traditional American school year is designed around a nine-month schedule requiring 180 days in the classroom.
 This schedule was established when the United States was still a largely agrarian nation.
-Many people are advocating a shift away from this 9-month school year in favor of year-round education.
+Many people are advocating a shift away from this 9-month school year in favor of year-round education. 
 Some think it will better prepare them for college, and others think that it will not make a difference if the school
-year is extended. There are many points that lead to the conclusion of why the academic school year should be extended
+year is extended. There are many points that lead to the conclusion of why the academic school year should be extended 
 with no summer vacation. It will improve education, benefit low-income families, and will also allow kids to graduate
-earlier as well.'''
+earlier as well.
+'''
+print(INTRODUCTION)
 
-print(Introduction)
+
+INTRODUCTION = '''
+The traditional American school year is designed around a nine-month schedule requiring 180 days in the classroom.\n
+This schedule was established when the United States was still a largely agrarian nation. \n
+Many people are advocating a shift away from this 9-month school year in favor of year-round education. \n
+Some think it will better prepare them for college, and others think that it will not make a difference if the school \n
+year is extended. There are many points that lead to the conclusion of why the academic school year should be extended \n
+with no summer vacation. It will improve education, benefit low-income families, and will also allow kids to graduate 
+earlier as well.
+'''
+
+print(INTRODUCTION)
+```
+
+```py
+CONTITION = '''
+We are using if condition
+We are comparing 3 and 1
+We are happy with indentations
+'''
+print(CONTITION)
 ```
 
 ### Keywords in Python
@@ -220,6 +273,10 @@ print(Introduction)
 ```py
 import keyword
 print(keyword.kwlist)
+
+# Output
+['False', 'None', 'True', 'and', 'as', 'assert', 'async', 'await', 'break', 'class', 'continue', 'def', 'del', 'elif', 'el 'else', 'except', 'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 'nonlocal', 'not', 'or', s', 
+'pass', 'raise', 'return', 'try', 'while', 'with', 'yield']
 ```
 
 ### Operators
@@ -241,11 +298,11 @@ print(keyword.kwlist)
 ```py
 # this well change hello to upper character
 s = "Hello"
-s.upper()
+print(s.upper())
 
 # this will change hello world to lower character
 c = "HELLO WORLD"
-c.lower()
+print(c.lower())
 ```
 
 ### How to add two strings
@@ -374,6 +431,8 @@ print(x,y,lan_name)
 print(f"The x value is {x}; the y value is {y} and the language value is {lan_name}.")
 print(f"The x value is {x}; \nThe y value is {y} \nThe language value is {lan_name}.")
 
+print("The x value is {0}; the y value is {1} and the language value is {2}.".format(x, y, lan_name))
+
 #OUTPUT
 3 5.7 python scripting
 The x value is 3; the y value is 5.7 and the language value is python scripting.
@@ -499,4 +558,116 @@ g = e.replace("and", "because")
 print(g)
 ```
 
+### Python simple comment
+```py
+# creating variable
+Data = 5
+# outermost for loop
+for i in range(4):
+   # second for loop
+   for k in range(5):
+       # innermost for loop
+       for l in range(8):
+           # increment num by 1
+           num +=1
+```
 
+### Python inline comments
+```py
+Num = 50  # variable declared
+for i in range(4): # outermost for loop
+   for k in range(5):  # second for loop
+       for l in range(8): # innermost for loop
+           num +=1 # increment by 1
+```
+
+### Python multiline comments
+```py
+# Declaring variable
+# name of variable is data
+# assigned value of 5 to the variable
+Data = 5
+
+# Author : Tom Smith
+# Date : 17/09/2021
+# Published : yes
+
+class car:  # created class named car
+   def main():   # contains main function
+       return  True # Return true
+```
+
+### Python multiline comment using triple quoted string literals
+```py
+class car:
+   '''This is car class
+   it will have all the functionalities related to cars
+   It return true for all cars'''
+```
+
+```py
+class car:
+   """This is car class
+   it will have all the functionalities related to cars
+   It return true for all cars"""
+```
+### Example of problem with triple quotation marks
+```py
+# defining string value inside double quotation marks
+mystring = '''
+Wellcome to
+golinux, 
+here you can find
+programming tutorials
+'''
+# printing
+print(mystring)
+
+OR
+
+# defining string value inside double quotation marks
+mystring = """
+    Wellcome to
+    golinux, 
+    here you can find
+    programming tutorials
+"""
+# printing
+print(mystring)
+```
+
+### Examples with explicit line break operator
+```py
+# defining string value inside single quotation marks
+mystring1 = 'Wellcome to \
+golinux, \
+here you can find \
+programming tutorials'
+# defining string value inside double quotation marks
+mystring2 = "Wellcome to \
+golinux, \
+here you can find \
+programming tutorials"
+# printing
+print(mystring1)
+print(mystring2)
+```
+
+```py
+# defining string value inside triple quotation marks
+mystring1 = '''Wellcome to \
+golinux, \
+here you can find \
+programming tutorials'''
+# printing
+print(mystring1)
+
+
+# defining string value inside triple quotation marks
+mystring2 = """Wellcome to \
+golinux, \
+here you can find \
+programming tutorials"""
+# printing
+print(mystring2)
+```

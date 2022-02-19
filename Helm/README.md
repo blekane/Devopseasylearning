@@ -1,5 +1,7 @@
 ### Helm Documentation Links
 
+* [kubeapps app](https://hub.kubeapps.com/)
+
 * [Helm Charts Github](https://github.com/helm/charts/tree/master/stable)
 
 * [Helm release](https://github.com/helm/helm/releases)

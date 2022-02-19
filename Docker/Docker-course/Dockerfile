@@ -1,4 +1,7 @@
 
+
+##https://docs.docker.com/develop/develop-images/multistage-build/
+
 #Web content location in the container for HTTPD, NGINX AND TOMCAT
 #HTTPD: /usr/local/apache2/htdocs/
 #NGINX: /usr/share/nginx/html/
@@ -264,9 +267,9 @@ ARG JENKINS_HOME=/var/jenkins_home
 ENV TIA_HOME /var/tia/devops
 
 RUN mkdir -p $JENKINS_HOME \
-  && chown ${uid}:${gid} $JENKINS_HOME \
-  && groupadd -g ${gid} ${group} \
-  && useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -s /bin/bash ${user}
+    && chown ${uid}:${gid} $JENKINS_HOME \
+    && groupadd -g ${gid} ${group} \
+    && useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -s /bin/bash ${user}
 
 USER ${user}
 
@@ -361,4 +364,7 @@ COPY ./contrib ${IMAGE_CONFIG_DIR}
 # It will be started and maintained by the base image
 RUN mkdir -p /etc/service/jenkins
 COPY ./contrib/run.sh /etc/service/jenkins/run
+
+
+
 

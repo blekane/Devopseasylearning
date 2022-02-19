@@ -2,6 +2,8 @@
 
 - **Lab reference 1:** https://kubernetes.io/docs/tutorials/kubernetes-basics/create-cluster/cluster-interactive/
 
+* Base64 encode [here](https://www.base64encode.org/)
+
 - **Lab reference 1:** ](https://www.katacoda.com/courses/kubernetes/)playground
 
 * [Kubernetes Documentation](https://kubernetes.io/docs/concepts/)

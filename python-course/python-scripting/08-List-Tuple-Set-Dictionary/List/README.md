@@ -17,7 +17,7 @@ False
 True
 ```
 
-### Stsing Index
+### String Index
 ```py
 a='Hello Word'
 print(a[0])

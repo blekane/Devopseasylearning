@@ -186,7 +186,6 @@ print(string3)
 Python scripting for Devops course
 ```
 
-
 ### String conversion
 ```py
 string="Python scripting for Devops course automation"
@@ -272,6 +271,33 @@ print(string1.strip('3.9').strip('5').strip('thon'))
 5Python
 Python3.9
 Py
+```
+
+```py
+string1 = "  5Python3.9 "
+print(string1.strip())
+print(string1.strip('3.9'))
+print(string1.strip().strip('3.9'))
+print(string1.strip().strip('5').strip('3.9'))
+print()
+
+RESULT = string1.strip().strip('5').strip('Python')
+print(RESULT)
+
+if RESULT == 3.9:
+    print("The python version is equal: {0}".format(RESULT))
+else:
+    print("The python version is not eqaul: {0}".format(RESULT))
+
+
+#OUTPUT  
+5Python3.9
+  5Python3.9 
+5Python      
+Python       
+
+3.9
+The python version is not eqaul: 3.9
 ```
 
 ### Strip and split operations on strings

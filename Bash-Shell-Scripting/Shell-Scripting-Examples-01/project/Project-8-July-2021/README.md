@@ -1,10 +1,21 @@
 ## Hand on:
-Write a script that will run on Centos and Ubuntu servers.  The script is going to do the following: 
+Write a script that will run on Centos and Ubuntu servers.The script is going to do the following: 
 - update the system 
 - installed wget
 - installed curl
 - installed apache or httpd webserver
 -  Download and host the following website: https://linux-devops-course.s3.amazonaws.com/WEB+SIDE+HTML/static-website-example.zip 
+
+
+Just a little happy new year script assignment for those who have requested. (It no mandatory though.)
+
+Please write a script that will run on Centos (Red Hat) and Ubuntu servers. The script is going to do the following:
+- Update the system
+- Installed wget
+- Installed curl
+- Installed apache or HTTPD webserver
+- Checked the memory, the root filesystem available
+- Check if the user administrator exists. If yes, the script should not create the user. If not, the script should create a user.
 
 
 ## How to Compare Strings in Bash

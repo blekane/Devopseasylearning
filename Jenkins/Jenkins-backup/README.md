@@ -72,4 +72,3 @@ kubectl cp <BACKUP_NAME>.tar <POD_NAME>:/var/jenkins_home/jobs/ -n cicd
 6- Restart Jenkins
 ```
 
-

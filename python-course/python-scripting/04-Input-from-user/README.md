@@ -183,3 +183,33 @@ else:
 # this program will give and error because the temperature can be either a number or a float.
 # This means we must use the word float before input.
 ```
+
+## Covid
+```py
+def COVID():
+
+    FIRST_NAME = input("Enter the first name: ")
+    LAST_NAME = input("Enter the last name: ")
+    AGE = input("Enter age: ")
+    FEVER = input("Do you have fever (y or n)?: ")
+    COUGH = input("Do you have a cough? (y or n): ")
+    BREATHING = input("Do you have any difficulty breathing? (y or n): ")
+    CONTACT = input(
+        "Have you been in contact with someone who has been tested positive with the Coronavirus? (y or n): ")
+    TRAVEL = input(
+        "Did you travel outside the United States for the past 2 weeks? (y or n): ")
+    HOUSE = input("Is anyone in your house cough, fever, difficulty breathing or have been in contact with someone who has been tested positive for Coronavirus? (y or n): ")
+
+    if FEVER == "n" and COUGH == "n" and BREATHING == "n" and CONTACT == "n" and TRAVEL == "n" and HOUSE == "n":
+        print("Hello {} {}, You  are {} years old, and you do not need to be tested for COVID-19".format(FIRST_NAME, LAST_NAME, AGE))
+
+    elif FEVER == "y" or COUGH == "y" or BREATHING == "y" or CONTACT == "y" or TRAVEL == "y" or HOUSE == "y":
+        print("Hello {} {}, You  are {} years old, and You need to be tested for COVID-19".format(FIRST_NAME, LAST_NAME, AGE))
+
+    else:
+        print("Hello {} {}, please check your answers".format(
+            FIRST_NAME, LAST_NAME))
+
+
+COVID()
+```

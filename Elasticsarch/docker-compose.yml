@@ -37,14 +37,3 @@ volumes:
 networks:
   es-network:
     driver: bridge
-
-
-
-GET /_cluster/health
-GET /_nodes
-
-GET /_nodes/<node_id>
-
-GET /_nodes/<metric>
-
-GET /_nodes/<node_id>/<metric>

@@ -341,3 +341,273 @@ elif marks <= 80 or marks <= 100:
 else:
     print("Invalid input")
 ```
+
+### Python if statement
+
+```py
+if condition:
+   statements-1
+   statements-2
+statements-3
+```
+
+```py
+#!/usr/bin/env python3
+
+import sys
+
+# Only integers allowed
+try:
+    num = int(input("Enter any number: "))
+except:
+    print("Only numbers allowed")
+    sys.exit(1)
+
+# if block condition
+if num > 5:
+    # if block starts, notice the indentation
+    print("You have entered the if block")
+    print("The provided number is greater than 5")
+    print("Exiting if block")
+
+# if block ends, notice the indentation
+print("Now we are in main function")
+```
+
+```py
+import sys
+
+# Only strings allowed
+
+FIRST_NAME = str(input("Enter your first name: "))
+LAST_NAME = str(input("Enter your last name: "))
+
+# if block condition
+if FIRST_NAME == "Tia":
+    print(f"Welcome {FIRST_NAME} {LAST_NAME}!")
+elif FIRST_NAME == "tia":
+    print(f"Welcome {FIRST_NAME} {LAST_NAME}!")
+else:
+    print(f"Hummmmmm")
+```
+
+### Python if..else statement
+```py
+if condition:
+   statements-1
+else:
+   statements-2
+```
+
+```py
+
+import sys
+
+# Only integers allowed
+try:
+    num = int(input("Enter any number: "))
+except:
+    print("Only numbers allowed")
+    sys.exit(1)
+
+# if block condition
+if num > 5:
+    # if block starts, notice the indentation
+    print("You have entered the if block")
+    print("The provided number is greater than 5")
+    print("Exiting if block")
+# else block
+else:
+    # else block starts, notice the indentation
+    print("You have entered the else block")
+    print("The provided number is less than 5")
+    print("Exiting else block")
+
+# if..else block ends, notice the indentation
+print("Now we are in main function")
+```
+
+### Python if..elif..else statement
+```py
+if condition-1:
+    sequence of statements-1
+elif condition-n:
+    sequence of statements-n
+else:
+    default sequence of statements
+```
+
+```py
+#!/usr/bin/env python3
+
+import sys
+
+# Only integers allowed
+try:
+    num = int(input("Enter any number: "))
+except:
+    print("Only numbers allowed")
+    sys.exit(1)
+
+# if block condition
+if num > 5:
+    # if block starts, notice the indentation
+    print("You have entered the if block")
+    print("The provided number is greater than 5")
+    print("Exiting if block")
+elif num == 5:
+    # elif block starts, notice the indentation
+    print("You have entered the elif block")
+    print("The provided number is equal to 5")
+    print("Exiting elif block")
+else:
+    # else block starts, notice the indentation
+    print("You have entered the else block")
+    print("The provided number is less than 5")
+    print("Exiting else block")
+
+# if..elif..else block ends, notice the indentation
+print("Now we are in main function")
+```
+
+### Python Nested if statement
+```py
+#!/usr/bin/env python3
+
+import sys
+
+# Only integers allowed
+try:
+    num = int(input("Enter any number: "))
+except:
+    print("Only numbers allowed")
+    sys.exit(1)
+
+# if block condition
+if num > 5:
+    # if block starts, notice the indentation
+    print("You have entered the if block")
+    print("The provided number is greater than 5")
+    print("Exiting if block")
+elif num == 5:
+    # elif block starts, notice the indentation
+    print("You have entered the elif block")
+    print("The provided number is equal to 5")
+    print("Exiting elif block")
+else:
+    # else block starts, notice the indentation
+    print("You have entered the else block")
+    if num == 1:
+        # nested if block starts, notice the indentation
+        print("You have entered into nested if block")
+        print("The provided number is equal to 1")
+        print("Exiting nested if block")
+    elif num == 2:
+        # nested if..elif block starts, notice the indentation
+        print("You have entered into nested if..elif block")
+        print("The provided number is equal to 2")
+        print("Exiting nested if..elif block")
+    else:
+        # nested if..elif..else block continues, notice the indentation
+        print("The provided number is less than 5")
+        print("Exiting nested if..elif..else block")
+
+# if..elif..else block ends, notice the indentation
+print("Now we are in main function")
+```
+
+### Python Nested If Example
+Syntax
+```py
+if expression1:
+   statement(s)
+   if expression2:
+      statement(s)
+   elif expression3:
+      statement(s)
+   elif expression4:
+      statement(s)
+   else:
+      statement(s)
+else:
+   statement(s)
+```
+
+
+```py 
+#!/usr/bin/env python3
+age = int(input(" Please Enter Your Age Here:  "))
+if age < 18:
+    print(" You are Minor ") 
+    print(" You are not Eligible to Work ") 
+else:
+    if age >= 18 and age <= 60:
+        print(" You are Eligible to Work ")
+        print(" Please fill in your details and apply")
+    else:
+        print(" You are too old to work as per the Government rules")
+        print(" Please Collect your pension!")
+```
+
+```py
+#!/usr/bin/python
+
+var = 100
+if var < 200:
+   print "Expression value is less than 200"
+   if var == 150:
+      print "Which is 150"
+   elif var == 100:
+      print "Which is 100"
+   elif var == 50:
+      print "Which is 50"
+   elif var < 50:
+      print "Expression value is less than 50"
+else:
+   print "Could not find true expression"
+
+print "Good bye!"
+```
+
+## Python logical operator with if condition
+In the `if` condition, you can define multiple conditions using python logical operators. Use logical `and`, `or`, `not `operator in your python scripts to define multiple condition. These operators can be used with if or elif condition
+
+In all the syntax I shared above, replace condition with
+
+- For `and` operator: condition-1 and condition-2
+- For `or` operator: condition-1 or condition-2
+- For `not `operator: not condition
+
+### Example-1
+```py
+#!/usr/bin/env python3
+
+import sys
+
+# Only integers allowed
+try:
+    num = int(input("Enter any number: "))
+except:
+    print("Only numbers allowed")
+    sys.exit(1)
+
+# if block condition
+if num > 5 and num < 10:
+    # if block starts, notice the indentation
+    print("You have entered the if block")
+    print("The provided number is greater than 5 and less than 10")
+    print("Exiting if block")
+elif num == 4 or num == 5:
+    # elif block starts, notice the indentation
+    print("You have entered the elif block")
+    print("The provided number is equal to 4 or 5")
+    print("Exiting elif block")
+else:
+    # else block starts, notice the indentation
+    print("You have entered the else block")
+    print("The provided number is less than 5")
+    print("Exiting else block")
+
+# if..elif..else block ends, notice the indentation
+print("Now we are in main function")
+```

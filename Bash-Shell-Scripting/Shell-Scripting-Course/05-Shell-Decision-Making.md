@@ -234,8 +234,8 @@ fi
 ENVIRONMENT_PROD=prod
 ENVIRONMENT_NONPROD=nonprod
 
-DOCKER_REGISTRY_PROD=288210522308.dkr.ecr.us-east-1.amazonaws.com
-DOCKER_REGISTRY_NONPROD=288210522308.dkr.ecr.us-east-1.amazonaws.com
+DOCKER_REGISTRY_PROD=xxxxxxxx.dkr.ecr.us-east-1.amazonaws.com
+DOCKER_REGISTRY_NONPROD=xxxxxxxxxxx.dkr.ecr.us-east-1.amazonaws.com
 DOCKER_REPO=jenkins
 
 PARAM_ENV=`echo $1 | awk -F= '{print $1}'`
@@ -264,6 +264,7 @@ else
     exit 1
 fi
 ```
+python3 python.py --env prod --tag jenkins-nonprod
 ```sh
 else 
     echo ""

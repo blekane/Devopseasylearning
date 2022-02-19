@@ -12,6 +12,7 @@ simply run below command and provide the password and path of the required shell
 Command is: chsh
 ```
 
+
 ## Configure mail on Ubuntu
 
 1. step1: Get Gmail Id and Password
@@ -760,6 +761,7 @@ then
 else
     echo "NOT FOUND"
 fi
+
 
 
 
