@@ -60,6 +60,10 @@ systemctl stop datadog-agent
 systemctl restart datadog-agent
 ```
 
+## Start Datadog
+docker run -d --name dd-agent -v /var/run/docker.sock:/var/run/docker.sock:ro -v /proc/:/host/proc/:ro -v /sys/fs/cgroup/:/host/sys/fs/cgroup:ro -e DD_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxx -e DD_SITE="datadoghq.com" gcr.io/datadoghq/agent:7
+
+
 ### Datadog config file and integrations
 1. agent configuration file
 ```

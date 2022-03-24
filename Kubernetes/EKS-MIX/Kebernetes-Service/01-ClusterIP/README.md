@@ -3,7 +3,8 @@
 - Pods use ClusterIP to communicate together
 - It is the same as the `host network` in docker
 - Kubernetes will assign a cluster-internal IP address to ClusterIP service. 
-- This makes the service only reachable within the cluster.
+- This makes the service only reachable within the cluster only.
+- nobody can access this application ouside the cluster
 - You cannot make requests to service (pods) from outside the cluster.
 - You can optionally set cluster IP in the service definition file.
 

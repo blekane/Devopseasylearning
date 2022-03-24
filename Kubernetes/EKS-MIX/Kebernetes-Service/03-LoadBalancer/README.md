@@ -1,12 +1,13 @@
 
 # LoadBalancer
-- LoadBalancer service is an extension of `NodePort service`. NodePort and ClusterIP - Services, to which the external load balancer routes, are automatically created.
+- LoadBalancer service is an extension of `NodePort service`. NodePort and ClusterIP - Services, to which the external load balancer routes, are automatically created. The cloud provider automatically assig you a public IP
+- This is only available in the cloud and not on premisse
 - It integrates NodePort with cloud-based load balancers.
 - It exposes the Service externally using a cloud provider’s load balancer.
-- Each cloud provider (AWS, Azure, GCP, etc) has its own native load balancer - implementation. The cloud provider will create a load balancer, which then automatically - routes requests to your Kubernetes Service.
+- Each cloud provider (AWS, Azure, GCP, etc) has its own native load balancer implementation. The cloud provider will create a load balancer, which then automatically routes requests to your Kubernetes Service.
 - Traffic from the external load balancer is directed at the backend Pods. The cloud - provider decides how it is load balanced.
-- The actual creation of the load balancer happens asynchronously.
-- Every time you want to expose a service to the outside world, you have to create a new - LoadBalancer and get an IP address.
+- Every time you want to expose a service to the outside world, you have to create a new LoadBalancer and get an external IP address.
+- The application will be accessible on every node in the cluster using that external IP address.
 
 ### Use Cases
 When you are using a cloud provider to host your Kubernetes cluster.

@@ -1,17 +1,17 @@
 #!/bin/bash
 
+cat << EOF > /tmp/users.txt
+tia
+EOF
 username=$(cat /tmp/users.txt | tr '[A-Z]' '[a-z]')
-
-cat /etc/group |grep -E -w -o admin &>/dev/nul ||  groupadd admin
-cat /etc/sudoers |grep -E -w -o admin &>/dev/nul || echo "%admin  ALL=(ALL)       ALL" >> /etc/sudoers  
 function user_add() {
     for users in $username
     do
+        ls /home |grep -w $users &>/dev/nul || mkdir -p /home/$users 
         cat /etc/passwd |awk -F: '{print$1}' |grep -w $users &>/dev/nul ||  useradd $users
-        usermod -aG admin $users
-        # cat /etc/group |grep -E -w -o docker &>/dev/nul ||  usermod -aG docker $users
+        chown -R $users:$users /home/$users
+        usermod -s /bin/bash -aG docker $users
         echo -e "$users\n$users" |passwd "$users"
-        # passwd --expire $users
     done
 }
 
@@ -46,11 +46,6 @@ user_unlock() {
     done
 }
 
-docker_run() {
-    docker rm -f $USER || true
-    docker run -d --name $USER --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v /var/run/docker.sock:/var/run/docker.sock -v "${HOME}":/student_home -w "/student_home" ${IMAGE_TAG}
-    docker exec -it $USER bash
-}
 
 options() {
   case $@ in
@@ -72,6 +67,9 @@ options() {
       -r|--run|--run)
       docker_run
       ;;
+      -m|--mkdir)
+      mkdir
+      ;;
     *)
       echo "Unknown option"
       exit 1
@@ -79,3 +77,5 @@ options() {
 }
 
 options $@
+
+

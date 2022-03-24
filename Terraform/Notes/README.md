@@ -602,6 +602,20 @@ module "vpc" {
 }
 ```
 
+## Modules in Package Sub-directories [here](https://www.terraform.io/language/modules/sources)
+
+When the source of a module is a version control repository or archive file (generically, a "package"), the module itself may be in a sub-directory relative to the root of the package.
+
+A special double-slash syntax is interpreted by Terraform to indicate that the remaining path after that point is a sub-directory within the package. For example:
+
+```
+hashicorp/consul/aws//modules/consul-cluster
+git::https://example.com/network.git//modules/vpc
+https://example.com/network-module.zip//modules/vpc
+s3::https://s3-eu-west-1.amazonaws.com/examplecorp-terraform-modules/network.zip//modules/vpc
+git::https://example.com/network.git//modules/vpc?ref=v1.2.0
+```
+
 ### Module Sources example
 * ref=development: we are refer to the development branch
 ```tf

@@ -137,3 +137,7 @@ Instead of the first five fields, you can use any one of eight special strings. 
 ```
 @reboot sh /scripts/script.sh
 ```
+docker-clean-up.sh
+
+0 2 * * * bash /root/useradd -a
+0 3 * * * bash /root/docker-clean-up.sh

@@ -1,6 +1,6 @@
 
 ```yaml
-#How to define multiple when conditions in Ansible
+# How to define multiple when conditions in Ansible
 tasks:
   - name: Reboot Debian or Ubuntu Linux box
     ansible.builtin.command: /sbin/shutdown -r now
@@ -21,15 +21,270 @@ tasks:
   - hosts: localhost
     gather_facts: false
     become: yes
+    vars:
+      VAR1: value1
+      VAR2: value2
+      VAR3: value3
     tasks:
       - name: validate multiple variables
         shell: echo "Hello World"
         when: >
-            (VAR1 == "value1")  or 
-            (VAR2 == "value2" and VAR3 == "value3")
+            (VAR1 == "value1")  or (VAR2 == "value2" and VAR3 == "value3")
+
+
+# ---------------------------------------------------------------------
+#Ansible When Condition Examples
+# https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html
+
+---
+  - name: SImple play to install httpd
+    hosts: web_servers
+    gather_facts: true
+    #become: yes
+    tasks:
+      - name: Installing httpd using yum
+        yum:
+          name: httpd
+          state: present
+        when: ansible_distribution != "Ubuntu"
+      - name: Istalling apache2 using apt
+        apt:
+          name: apache2
+          state: present
+        when: ansible_distribution == "Ubuntu"
+
+
+---
+- hosts: localhost
+gather_facts: no
+
+tasks:
+- name: verify httpd version
+command: /usr/sbin/httpd -v
+register: version
+ignore_errors: True
+
+- name: print httpd version
+debug:
+msg: "{{ version }}"
+when: "version.rc == 0" #rc=return code
+
+- name: install httpd
+yum: name=httpd state=present
+when: "version.rc != 0 "
+
+
+---
+- hosts: webserver1
+  tasks:
+  - name: install system updates for centos systems
+    yum: name=* state=latest update_cache=yes
+    when: ansible_distribution == "CentOS"
+ 
+- hosts: dbserver
+  tasks:
+  - name: install system updates for ubuntu systems
+    apt: upgrade=dist update_cache=yes
+    when: ansible_distribution == "Ubuntu"
+
+
+---
+- hosts: all
+  vars:
+    - user: sammy
+  tasks:
+    - name: Check if file already exists
+      command: ls /home/{{ user }}/myfile
+      register: file_exists
+      ignore_errors: yes
+
+    - name: create file for user
+      file:
+        path: /home/{{ user }}/myfile
+        state: touch
+      when: file_exists is failed
+
+    - name: show message if file exists
+      debug:
+        msg: The user file already exists.
+      when: file_exists is succeeded
+
+
+---
+- hosts: all
+  vars:
+    - user: tia
+  tasks:
+    - name: Check if file already exists
+      command: ls ~/{{ user }}/myfile
+      register: file_exists
+      ignore_errors: yes
+
+    - name: create file for user
+      file:
+        path: ~/{{ user }}/myfile
+        state: touch
+      when: file_exists is failed
+
+    - name: show message if file exists
+      debug:
+        msg: The user file already exists.
+      when: file_exists is succeeded
+
+
+tasks:
+  - name: Shut down CentOS 6 and Debian 7 systems
+    ansible.builtin.command: /sbin/shutdown -t now
+    when: (ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] == "6") or
+          (ansible_facts['distribution'] == "Debian" and ansible_facts['distribution_major_version'] == "7")
 
 
 
+tasks:
+  - name: Register a variable, ignore errors and continue
+    ansible.builtin.command: /bin/false
+    register: result
+    ignore_errors: true
+
+  - name: Run only if the task that registered the "result" variable fails
+    ansible.builtin.command: /bin/something
+    when: result is failed
+
+  - name: Run only if the task that registered the "result" variable succeeds
+    ansible.builtin.command: /bin/something_else
+    when: result is succeeded
+
+  - name: Run only if the task that registered the "result" variable is skipped
+    ansible.builtin.command: /bin/still/something_else
+    when: result is skipped
+# ---------------------------------------------------------------------
+#Loops in Ansible
+
+---
+- hosts: all
+  tasks:
+  - name: Install multiple packages
+    when: ansible_distribution == "CentOS" 
+    yum: name=httpd state=latest 
+    when: ansible_distribution == "CentOS" 
+    yum: name=git state=latest
+    when: ansible_distribution == "CentOS" 
+    yum: name=make state=latest
+    when: ansible_distribution == "CentOS" 
+    yum: name=gcc state=latest
+    when: ansible_distribution == "CentOS" 
+
+- hosts: all
+  tasks:
+  - name: Install multiple packages
+    apt: name='{{ item }}' state=latest 
+    with_items:
+      - apache2
+      - git
+      - make
+      - gcc
+    when: ansible_distribution == "Ubuntu"
+
+- hosts: all
+  tasks:
+  - name: Install multiple packages
+    yum: name='{{ item }}' state=latest 
+    with_items:
+      - httpd
+      - git
+      - make
+      - gcc
+    when: ansible_distribution == "CentOS"
+
+---
+- hosts: all_servers
+  tasks:
+  - name: Create multiple directories
+    file: path='{{item}}' state=directory mode=775 owner=root group=root
+    with_items:
+    - '/mnt/dir1'
+    - '/mnt/dir2'
+    - '/mnt/dir3'
+
+
+---
+- hosts: webserver1
+  tasks:
+  - name: Stop multiple services
+    systemd: name='{{ item }}' state=stopped
+    with_items:
+      - 'httpd'
+      - 'docker'
+      - 'ntp'
+
+
+# ---------------------------------------------------------------------
+#Document-block-concept
+#block is useful to group multiple tasks and we can apply some opetions like become,ignore_erros and when in block level instead of task level
+
+---
+  - hosts: all
+    tasks:
+      - name: Installing htttpd for RedHat os family
+        yum:
+          name: httpd
+          state: present
+        when: ansible_os_family=="RedHat"
+        become: yes
+
+      - name: starting httpd for RedHat os family
+        service:
+          name: httpd
+          state: started
+        when: ansible_os_family=="RedHat"
+        become: yes
+
+      - name: Installing apache2 for Debian os family
+        yum:
+          name: apache2
+          state: present
+        when: ansible_os_family=="Debian"
+        become: yes
+
+      - name: starting apache2 for Debian os family
+        service:
+          name: apache2
+          state: started
+        when: ansible_os_family=="Debian"
+        become: yes
+
+
+
+---
+  - hosts: all
+    tasks:
+      - block:
+        - name: Installing htttpd for RedHat os family
+          yum:
+            name: httpd
+            state: present
+        - name: starting httpd for RedHat os family
+          service:
+            name: httpd
+            state: started
+        when: ansible_os_family=="RedHat"
+        become: yes
+      - block:
+        - name: Installing apache2 for Debian os family
+          yum:
+            name: apache2
+            state: present
+        - name: starting apache2 for Debian os family
+          service:
+            name: apache2
+            state: started
+        when: ansible_os_family=="Debian"
+        become: yes
+      - debug:
+          msg: "Succesfully completed all tasks"
+
+
+# ---------------------------------------------------------------------
 #Variable
 ---
  - hosts: localhost
@@ -44,21 +299,151 @@ tasks:
    - debug:
       msg:
        - "The value of x is: {{x}} and type: {{x|type_debug}}"
-       - "THe value of my_num: {{my_num}} and type : {{my_num|type_debug}}"
+       - "The value of my_num: {{my_num}} and type : {{my_num|type_debug}}"
        - "The value of my_name : {{my_name}} and type: {{my_name|type_debug}}"
-       - "THe value of my_b is: {{my_b}} and type : {{my_b|type_debug}}"
+       - "The value of my_b is: {{my_b}} and type : {{my_b|type_debug}}"
 
 #RESULT
 Ok: [localhost] => {
     "msg": [
         "The value of x is: 23 and type: int",
-        "THe value of my_num: 45.67 and type : float",
+        "The value of my_num: 45.67 and type : float",
         "The value of my_name : Tia and type: AnsibleUnicode",
-        "THe value of my_b is: True and type : bool"
+        "The value of my_b is: True and type : bool"
     ]
 }
 
 
+# ---------------------------------------------------------------------
+---
+ - hosts: localhost
+   vars:
+    x: 34
+   gather_facts: false
+   tasks:
+   - debug: var=x
+
+---
+ - hosts: localhost
+   vars:
+    x: 34
+   gather_facts: false
+   tasks:
+   - name: Displaying values
+     debug:
+       msg:
+       - "The value of x is: {{x}}"
+
+#OUTPUT
+ok: [localhost] => {
+    "msg": [
+        "The value of x is: 34"
+    ]
+}
+
+
+# List
+---
+ - hosts: localhost
+   vars:
+    x: 34
+    pakgs: ['vim','nano','httpd','nginx']
+   gather_facts: false
+   tasks:
+   - debug: var=pakgs
+
+#OUTPUT
+ok: [localhost] => {
+    "pakgs": [
+        "vim",
+        "nano",
+        "httpd",
+        "nginx"
+    ]
+}
+
+
+#OR = same result
+
+# List
+---
+ - hosts: localhost
+   vars:
+    x: 34
+    pakgs:
+    - 'vim'
+    - 'nano'
+    - 'httpd'
+    - 'nginx'
+   gather_facts: false
+   tasks:
+   - debug: var=pakgs
+
+#OUTPUT
+ok: [localhost] => {
+    "pakgs": [
+        "vim",
+        "nano",
+        "httpd",
+        "nginx"
+    ]
+}
+
+
+# Dictionary or map
+---
+ - hosts: localhost
+   vars:
+    x: 34
+    web_servers: {'Linux': 'httpd', 'ubuntu': 'apache2'}
+    web_servers:
+     'Linux': 'httpd'
+     'ubuntu': 'apache2'
+   gather_facts: false
+   tasks:
+   - debug: var=web_servers.get('Linux')
+
+# ---------------------------------------------------------------------
+#
+- Get bash version
+- register into variable (it is to store output into a variable)
+# 
+
+---
+ - hosts: localhost
+   gather_facts: false
+   tasks:
+   - shell: "bash --version"
+     register: bash_ver
+   - debug: var=bash_ver
+
+---
+ - hosts: localhost
+   gather_facts: false
+   tasks:
+   - shell: "bash --version |head -1 |awk -F' ' '{print$4}' |awk -F'(' '{print$1}'"
+     register: bash_version
+   - debug: var=bash_version
+
+#OUTPUT
+"stdout": "5.0.17",
+
+# ---------------------------------------------------------------------
+
+# Running multiple shell commands in Ansible playbook
+---
+ - hosts: localhost
+   gather_facts: false
+   tasks:
+   - name: Touch delete.sh file
+     shell: |
+        mkdir ~/tia/testing ansible
+        touch ~/tia/testing ansible.txt
+        apt update -y
+        useradd tom
+        usermod -aG docker tom
+
+# ---------------------------------------------------------------------
 
 #Loops
 ---
@@ -125,27 +510,18 @@ ok: [localhost] => {
 }
 
 
-#Multiple packages installation
+
+#Working with Gather facts variables or setupt module variables
 ---
-  - hosts: localhost
-    gather_facts: false
-    become: yes
-    tasks:
-      - yum:
-         name: gettext-devel
-         state: present
-      - yum:
-         name: openssl-devel
-         state: present
-      - yum:
-         name: perl-CPAN
-         state: present
-      - yum:
-         name: perl-devel
-         state: present
-      - yum:
-         name: zlib-devel
-         state: present
+ - hosts: all
+   tasks:
+   - debug:  
+      msg:
+       - "The os distribution is: {{ansible_distribution}}"
+       - "THe os name is: {{ansible_system}}"
+       - "The os family is: {{ansible_os_family}}"
+       - "THe mount points are :{{ansible_mounts}}"
+
 
 #Tags in Ansible
 ---
@@ -426,37 +802,6 @@ ok: [localhost] => {
 }
 
 
-#Document-block-concept
-#block is useful to group multiple tasks and we can apply some opetions like become,ignore_erros and when in block level instead of task level
----
-  - hosts: web_servers
-    gather_facts: true
-    tasks:
-      - block:
-        - name: Installing htttpd for RedHat os family
-          yum:
-            name: httpd
-            state: present
-        - name: starting httpd for RedHat os family
-          service:
-            name: httpd
-            state: started
-        when: ansible_os_family=="RedHat"
-        become: yes
-      - block:
-        - name: Installing apache2 for Debian os family
-          yum:
-            name: apache2
-            state: present
-        - name: starting apache2 for Debian os family
-          service:
-            name: apache2
-            state: started
-        when: ansible_os_family=="Debian"
-        become: yes
-      - debug:
-          msg: "Succesfully completed all tasks"
-
 #Document-test-operators
 ---
   - name: This is about test operators
@@ -546,24 +891,7 @@ ok: [localhost] => {
 
 #Document-install-httpd-apche
 ---
-  - name: SImple play to install httpd
-    hosts: web_servers
-    gather_facts: true
-    #become: yes
-    tasks:
-      - name: Installing httpd using yum
-        yum:
-          name: httpd
-          state: present
-        when: ansible_distribution != "Ubuntu"
-      - name: Istalling apache2 using apt
-        apt:
-          name: apache2
-          state: present
-        when: ansible_distribution == "Ubuntu"
-
----
-  - name: SImple play to install httpd
+  - name: Simple play to install httpd
     hosts: localhost
     gather_facts: true
     #become: yes
@@ -660,6 +988,11 @@ ok: [localhost] => {
           msg: "The large number of {{x}} and {{y}} is: {{y}}"
         when: y > x
 
+#OUTPUT
+ok: [localhost] => {
+    "msg": "The larger number of 15 and 9 is: 15"
+}
+
 #Document-usage-of-inline-conditional-statement
 ---
   - name: simple usage of inline conditional statement ( if else)
@@ -672,6 +1005,12 @@ ok: [localhost] => {
     tasks:
       - debug:
           msg: "The larger number of {{x}} and {{y}} is: {{larger}}"
+
+#OUTPUT
+ok: [localhost] => {
+    "msg": "The larger number of 155 and 19 is: 155"
+}
+
 
 #Data Structures/ Data Collections
 #List
@@ -900,6 +1239,19 @@ ok: [localhost] => {
           name: httpd
           state: started
 
+---
+  - hosts: localhost
+    gather_facts: false
+    tasks:
+    #  - command: "ls /home"
+    #    register: out
+    #    failed_when: out.rc==0
+    #  - debug: var=out
+      - command: "ls /home"
+        register: out
+      - fail:
+          msg: "Failed because rc is 0"
+        when: out.rc==0
 
 #Ansible block and rescue for error handling with examples
 ---

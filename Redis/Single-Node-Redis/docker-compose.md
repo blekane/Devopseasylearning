@@ -1,7 +1,5 @@
-
-
+```yml
 version: "3.7"
-aimvector/redis-client:v1.1.0
 services:
     redis:
       container_name: redis

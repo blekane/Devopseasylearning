@@ -1,7 +1,12 @@
-### Kubernetes Service [here](https://medium.com/devops-mojo/kubernetes-service-types-overview-introduction-to-k8s-service-types-what-are-types-of-kubernetes-services-ea6db72c3f8c)
+### Kubernetes Service [here](https://medium.com/devops-mojo/kubernetes-service-types-overview-introduction-to-k8s-service-types-what-are-types-of-kubernetes-services-ea6db72c3f8c) and [here](https://www.learnitguide.net/2020/05/kubernetes-services-explained-examples.html)
 
-- A service is used to expose the deployment so that it can be see outside.
-- It expose our deployment or pod to internet with the help of kube-prox
+Services | ClusterIP vs NodePort vs LoadBalancer Service [here](https://www.youtube.com/watch?v=zCW1TewkoOk)
+
+- A service is used to expose the deployment or your application so that it can be see outside.
+- It expose our deployment or pod to internet with the help of kube-proxy
+- services are used because port IP address can change at any point of time because we can delete pods, restart port and so no. this means we cannot rely on pod IP to reach the application
+- when the service it created, an IP address is assign to that service and it will not change as long as the service exist so that user can use that IP address to access the application and service forward the request to pods. if the port IP address change, it doe not matter because the service will route the traffic to the appropriete pod
+- service will take care of load balancing
 
 ### Kubernete have 4 types of services
 - ClusterIP
