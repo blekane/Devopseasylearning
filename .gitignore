@@ -20,3 +20,12 @@ backend/.idea/*
 /Kubernetes/EKS-MIX/README.md
 /Devops-easy-learning
 test
+
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
