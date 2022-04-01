@@ -1,1 +1,0 @@
-* [AWS RDS MySQL using Terraform](http://100daysofdevops.com/21-days-of-aws-using-terraform-day-8-introduction-to-aws-rds-mysql-using-terraform/)
