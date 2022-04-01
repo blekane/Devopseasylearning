@@ -1,1 +1,0 @@
-* [Creating AWS EC2 Instance using Terraform](http://100daysofdevops.com/21-days-of-aws-using-terraform-day-3-creating-aws-ec2-instance-using-terraform/)

@@ -1,1 +1,0 @@
-* [S3 backend doc](https://www.terraform.io/docs/backends/types/s3.html)
