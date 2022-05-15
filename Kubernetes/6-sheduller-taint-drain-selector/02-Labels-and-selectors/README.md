@@ -1,5 +1,5 @@
 
-# Labels, selectors and annotations in Kubernetes
+## Labels, selectors and annotations in Kubernetes
 - Labels and selectors are use to group and select objects in the cluster
 - While labels and selectors are use to group and select objects in the cluster, annotations are use to record other details such as:
     - Phone number

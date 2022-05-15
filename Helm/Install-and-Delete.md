@@ -57,7 +57,7 @@ helm install jenkins-test ./mychart/ --set fullnameOverride=jenkins-test --names
 
 **2- Delete the release with Helm 3**
 
-If we delete a release with `helm uninstall jenkins-test` with `--purge`, will not be able to install the it with the same release name. It is a good idea to use `helm uninstall jenkins-test --purge` do delete a release with the release name in the cluster
+If we delete a release with `helm uninstall jenkins-test` without `--purge`, will not be able to install the it with the same release name. It is a good idea to use `helm uninstall jenkins-test --purge` do delete a release with the release name in the cluster
 ```
 helm uninstall jenkins-test 
 helm del --purge jenkins-test
@@ -67,7 +67,7 @@ helm uninstall jenkins-test --purge
 
 **3- Delete the release with Helm 2**
 
-If we delete a release with `helm delete jenkins-test` with `--purge`, will not be able to install the it with the same release name. It is a good idea to use `helm delete jenkins-test --purge` do delete a release with the release name in the cluster
+If we delete a release with `helm delete jenkins-test` without `--purge`, will not be able to install the it with the same release name. It is a good idea to use `helm delete jenkins-test --purge` do delete a release with the release name in the cluster
 ```
 helm delete jenkins-test
 helm del --purge jenkins-test

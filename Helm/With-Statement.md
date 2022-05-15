@@ -426,10 +426,10 @@ spec:
               path: /
               port: http
           resources:
-            {{- toYaml .Values.resources | nindent 20 }} # 12 space from left to right. This is because the resource block need to be under resources
+            {{- toYaml .Values.resources | nindent 12 }} # 12 space from left to right. This is because the resource block need to be under resources
             {{- with .Values.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 2 }} # 8 space from left to right 
+        {{- toYaml . | nindent 8 }} # 8 space from left to right 
         {{- end }}
         {{- with .Values.affinity }}
       affinity:

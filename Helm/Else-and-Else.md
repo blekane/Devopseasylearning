@@ -48,38 +48,70 @@ INTEGER1 is not equal to INTEGER2
 ```yml
 {{- if eq .Values.myApp.color "blue" }}
 ... 
+... 
+... 
 {{- end }}
+
+
 
 {{- if ne .Values.myApp.color "blue" }}
 ... 
+... 
+... 
+... 
 {{- end }}
+
+
 
 {{- if and (eq .Values.myApp.color "blue") (eq .Values.myApp.shape "square") }}
 ... 
+... 
+... 
+... 
 {{- end }}
+
+
 
 {{- if not ... }}
 ... 
+... 
+... 
+... 
 {{- end }}
+
 
 {{- if not .Values.myApp.something }}
 ... 
+... 
+... 
+... 
 {{ end }}
 
+
 {{- if or .Values.myApp.config.local .Values.myApp.config.nfs }}
-   ...
+...
+... 
+... 
+... 
 {{- end }}
 
+
 {{- if and .Values.appearance .Values.appearance.color }} 
-   ...
+...
+... 
+... 
+... 
 {{- end }}
 ```
+
 ### Example 1
 Value file
 ```yml
 myApp:
   color: blue
   shape: square
+image:
+  tag: covid15
 ```
 ```yml
 apiVersion: v1
@@ -145,6 +177,8 @@ Value file
 myApp:
   color: blue
   shape: square
+image:
+  tag: covid15
 ```
 ```yml
 apiVersion: v1
@@ -190,12 +224,12 @@ myApp:
   color: blue3
   shape: square
 
-environment:
+Environment:
   env1: nonprd1
   env2: qa1
   env3: pro1
 
-replicaCount: 1
+ReplicaCount: 1
 image:
   repository: leonardtia/devops-test-repo
   tag: covid19
@@ -206,15 +240,15 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-configmap
 data:
-{{- if eq .Values.environment.env1 "nonprd" }}
+{{- if eq .Values.Environment.env1 "nonprd" }}
   example1: {{ .Values.image.tag | quote }}
-{{- else if eq .Values.environment.env1 "qa" }}
+{{- else if eq .Values.Environment.env1 "qa" }}
   example2: {{ .Values.image.tag | quote }}
-{{- else if eq .Values.environment.env1 "prod" }}
+{{- else if eq .Values.Environment.env1 "prod" }}
   example3: {{ .Values.image.tag | quote }}
 {{- else }}
   myvalue: "Sample Config Map"
-  example1: {{ .Values.replicaCount }}
+  example1: {{ .Values.ReplicaCount }}
   example2: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "jenkins-nonoprod" }}"
 {{- end }}
 
@@ -225,15 +259,15 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-configmap
 data:
-  {{- if eq .Values.environment.env1 "nonprd" }}
+  {{- if eq .Values.Environment.env1 "nonprd" }}
   example1: {{ .Values.image.tag | quote }}
-  {{- else if eq .Values.environment.env1 "qa" }}
+  {{- else if eq .Values.Environment.env1 "qa" }}
   example2: {{ .Values.image.tag | quote }}
-  {{- else if eq .Values.environment.env1 "prod" }}
+  {{- else if eq .Values.Environment.env1 "prod" }}
   example3: {{ .Values.image.tag | quote }}
   {{- else }}
   myvalue: "Sample Config Map"
-  example1: {{ .Values.replicaCount }}
+  example1: {{ .Values.ReplicaCount }}
   example2: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "jenkins-nonoprod" }}"
   {{- end }}
 ```
@@ -252,95 +286,104 @@ data:
 
 ### Example 4
 ```yml
-environment: prod
-replicaCount:
+Environment: dev
+ReplicaCount:
   dev: 1
   qa: 1
+  stage: 2
   prod: 3
+DevImage:
+  repository: leonardtia/dev
+  tag: dev-covid19
+ProdImage:
+  repository: leonardtia/prod
+  tag: prod-covid19
+QaImage:
+  repository: leonardtia/qa
+  tag: qa-covid19
+StageImage:
+  repository: leonardtia/stage
+  tag: stage-covid19
 ``
 
-```yml
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-configmap
 data:
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: backend-restapp
-  labels:
-    app: backend-restapp
-    tier: backend
-spec:
-  {{- if eq .Values.environment "dev" }}
-  replicas: {{ .Values.replicaCount.dev}}
-  {{- else if eq .Values.environment "qa" }}
-  replicas: {{ .Values.replicaCount.qa }}
-  {{- else if eq .Values.environment "prod" }}
-  replicas: {{ .Values.replicaCount.prod}}
+  {{- if eq .Values.Environment "prod" }}
+    image: "{{ .Values.ProdImage.repository }}:{{ .Values.ProdImage.tag | default "jenkins-prod" }}"
+    replicast: {{ .Values.ReplicaCount.prod }}
+  {{- else if eq .Values.Environment "dev" }}
+    image: "{{ .Values.DevImage.repository }}:{{ .Values.DevImage.tag | default "jenkins-dev" }}"
+    replicast: {{ .Values.ReplicaCount.dev }}
+  {{- else if eq .Values.Environment "stage" }}
+    image: "{{ .Values.StageImage.repository }}:{{ .Values.StageImage.tag | default "jenkins-stage" }}"
+    replicast: {{ .Values.ReplicaCount.stage }}
+  {{- else if eq .Values.Environment "qa" }}
+    image: "{{ .Values.QaImage.repository }}:{{ .Values.QaImage.tag | default "jenkins-qa" }}"
+    replicast: {{ .Values.ReplicaCount.qa }}
+  {{- else }}
+    myvalue: "Replicaset Value for each Environment"
+    dev: {{ .Values.ReplicaCount.dev }}
+    qa: {{ .Values.ReplicaCount.qa }}
+    prod: {{ .Values.ReplicaCount.prod }}
+    stage: {{ .Values.ReplicaCount.stage }}
   {{- end }}
-  selector:
-    matchLabels:
-      app: backend-restapp
-  template:
-    metadata:
-      labels:
-        app: backend-restapp
-        tier: backend
-    spec:
-      containers:
-        - name: backend-restapp
-          image: leonardtia/devops-pro-repos:contactform
-          ports:
-          - containerPort: 8080
-```
+
 OR
-```yml
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-configmap
 data:
-spec:
-  {{ if eq .Values.environment "dev" }}
-  replicas: {{ .Values.replicaCount.dev}}
-  {{ else if eq .Values.environment "qa" }}
-  replicas: {{ .Values.replicaCount.qa }}
-  {{ else if eq .Values.environment "prod" }}
-  replicas: {{ .Values.replicaCount.prod}}
-  {{ end }}
-```
+  {{- if eq .Values.Environment "prod" }}
+  image: "{{ .Values.ProdImage.repository }}:{{ .Values.ProdImage.tag | default "jenkins-prod" }}"
+  replicast: {{ .Values.ReplicaCount.prod }}
+  {{- else if eq .Values.Environment "dev" }}
+  image: "{{ .Values.DevImage.repository }}:{{ .Values.DevImage.tag | default "jenkins-dev" }}"
+  replicast: {{ .Values.ReplicaCount.dev }}
+  {{- else if eq .Values.Environment "stage" }}
+  image: "{{ .Values.StageImage.repository }}:{{ .Values.StageImage.tag | default "jenkins-stage" }}"
+  replicast: {{ .Values.ReplicaCount.stage }}
+  {{- else if eq .Values.Environment "qa" }}
+  image: "{{ .Values.QaImage.repository }}:{{ .Values.QaImage.tag | default "jenkins-qa" }}"
+  replicast: {{ .Values.ReplicaCount.qa }}
+  {{- else }}
+  myvalue: "Replicaset Value for each Environment"
+  dev: {{ .Values.ReplicaCount.dev }}
+  qa: {{ .Values.ReplicaCount.qa }}
+  prod: {{ .Values.ReplicaCount.prod }}
+  stage: {{ .Values.ReplicaCount.stage }}
+  {{- end }}
 
-**Result**
-```yml
+OR
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: demo-configmap
+  name: {{ .Release.Name }}-configmap
 data:
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: backend-restapp
-  labels:
-    app: backend-restapp
-    tier: backend
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: backend-restapp
-  template:
-    metadata:
-      labels:
-        app: backend-restapp
-        tier: backend
-    spec:
-      containers:
-        - name: backend-restapp
-          image: leonardtia/devops-pro-repos:contactform
-          ports:
-          - containerPort: 8080
-```
+{{- if eq .Values.Environment "prod" }}
+  image: "{{ .Values.ProdImage.repository }}:{{ .Values.ProdImage.tag | default "jenkins-prod" }}"
+  replicast: {{ .Values.ReplicaCount.prod }}
+{{- else if eq .Values.Environment "dev" }}
+  image: "{{ .Values.DevImage.repository }}:{{ .Values.DevImage.tag | default "jenkins-dev" }}"
+  replicast: {{ .Values.ReplicaCount.dev }}
+{{- else if eq .Values.Environment "stage" }}
+  image: "{{ .Values.StageImage.repository }}:{{ .Values.StageImage.tag | default "jenkins-stage" }}"
+  replicast: {{ .Values.ReplicaCount.stage }}
+{{- else if eq .Values.Environment "qa" }}
+  image: "{{ .Values.QaImage.repository }}:{{ .Values.QaImage.tag | default "jenkins-qa" }}"
+  replicast: {{ .Values.ReplicaCount.qa }}
+{{- else }}
+  myvalue: "Replicaset Value for each Environment"
+  dev: {{ .Values.ReplicaCount.dev }}
+  qa: {{ .Values.ReplicaCount.qa }}
+  prod: {{ .Values.ReplicaCount.prod }}
+  stage: {{ .Values.ReplicaCount.stage }}
+{{- end }}
+
+
 
